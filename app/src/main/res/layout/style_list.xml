@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:dslv="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cccccc"
+        android:orientation="vertical">
+        <!--this ia a cut line-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ListView
+            android:id="@+id/left_listView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scrollbars="none"></ListView>
+
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#cccccc"></LinearLayout>
+
+        <com.example.heyong.exercisesbase.dslv.DragSortListView
+            android:id="@+id/right_dslv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            dslv:click_remove_id="@id/click_remove"
+            dslv:drag_enabled="true"
+            dslv:drag_handle_id="@id/drag_handle"
+            dslv:float_alpha="0.6"
+            dslv:remove_enabled="true"
+            dslv:remove_mode="clickRemove"></com.example.heyong.exercisesbase.dslv.DragSortListView>
+    </LinearLayout>
+</LinearLayout>
