@@ -12,7 +12,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     /**
      * id date content
      */
-    private static final int version = 2;
+    private static final int version = 3;
 
     public DatabaseOpenHelper(Context context) {
         super(context, DBname, null, version);
@@ -35,19 +35,22 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         String sql = "create table  " + ChooseQuestion + "(" +
                 "id integer PRIMARY KEY AUTOINCREMENT," +
                 "question text," +
-                "answer text" +
+                "answer text," +
+                "table_name text"+
                 ")";
         db.execSQL(sql);
         sql = "create table " + AnswerQuestion + "(" +
                 "id integer PRIMARY KEY AUTOINCREMENT," +
                 "question text," +
-                "answer text" +
+                "answer text," +
+                "table_name text"+
                 ")";
         db.execSQL(sql);
         sql = "create table "+ MODEL + "(" +
                 "id integer PRIMARY KEY AUTOINCREMENT," +
                 "content text," +
-                "date text"+
+                "date text,"+
+                "table_name text"+
                 ")";
         db.execSQL(sql);
     }

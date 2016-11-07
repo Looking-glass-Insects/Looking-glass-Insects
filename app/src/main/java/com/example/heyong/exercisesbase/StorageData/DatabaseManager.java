@@ -5,6 +5,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
+import android.util.Log;
+
 import com.example.heyong.exercisesbase.Bean.Note;
 import com.example.heyong.exercisesbase.Bean.QuestionType;
 import com.example.heyong.exercisesbase.StorageData.DatabaseOpenHelper;
@@ -16,6 +19,7 @@ import java.util.List;
  */
 
 public class DatabaseManager {
+    static final String TAG = "DatabaseManager";
     private Context context ;
     private DatabaseOpenHelper databaseOpenHelper ;
     protected SQLiteDatabase dbReadable;
@@ -24,7 +28,10 @@ public class DatabaseManager {
     private String ChooseQuestion = "choose";//选择题
     private String AnswerQuestion = "answer";//解答题
     public static final String MODEL = "model";//试题模板
-    public DatabaseManager(Context context) {
+
+    protected String TABLE_NAME;//本次的题库名
+
+    private DatabaseManager(Context context) {
         this.context = context;
         databaseOpenHelper = new DatabaseOpenHelper(context);
         databaseOpenHelper.getWritableDatabase();
@@ -34,6 +41,12 @@ public class DatabaseManager {
         ChooseQuestion = DatabaseOpenHelper.getChooseQuestion();
         AnswerQuestion = DatabaseOpenHelper.getAnswerQuestion();
     }
+
+    public DatabaseManager(Context context,String tableName){
+        this(context);
+        this.TABLE_NAME = tableName;
+    }
+
     private String getCorrectType (QuestionType type){
         String queType = null;
         if(type == QuestionType.CHOOSE)
@@ -46,6 +59,7 @@ public class DatabaseManager {
     /**
      * 存取数据
      */
+    @Deprecated
     public void writeQuestion(String question, String answer,QuestionType type){
         ContentValues cv = new ContentValues();
         cv.put("question", question);
@@ -53,18 +67,38 @@ public class DatabaseManager {
         String queType = getCorrectType(type);
         dbWritable.insert(queType, null, cv);
     }
+    public void writeQuestion(String question, String answer,QuestionType type,@Nullable String tableName){
+        ContentValues cv = new ContentValues();
+        cv.put("question", question);
+        cv.put("answer", answer);
+        cv.put("table_name",this.TABLE_NAME);
+        String queType = getCorrectType(type);
+        dbWritable.insert(queType, null, cv);
+    }
 
+
+    @Deprecated
     public void writeModel(String content,String date){
         ContentValues cv = new ContentValues();
         cv.put("content",content);
         cv.put("date",date);
         dbWritable.insert(MODEL,null,cv);
     }
+
+    public void writeModel(String content,String date,@Nullable String tableName){
+        ContentValues cv = new ContentValues();
+        cv.put("content",content);
+        cv.put("date",date);
+        cv.put("table_name",this.TABLE_NAME);
+        dbWritable.insert(MODEL, null, cv);
+    }
+
+
     /**
      * 将数据库中的数据读出来
      * @return 读到的集合
      */
-
+    @Deprecated
     public void readData(List<Note> noteList,QuestionType type){
         String queType = getCorrectType(type);
         Cursor cursor
@@ -81,6 +115,28 @@ public class DatabaseManager {
 
         }
     }
+
+
+    public void readData(List<Note> noteList,QuestionType type,@Nullable String tableName){
+        String queType = getCorrectType(type);
+        Log.i(TAG,"-->"+this.TABLE_NAME);
+        Cursor cursor
+                = dbReadable.rawQuery("SELECT * FROM "+queType+" WHERE table_name = \'" + this.TABLE_NAME + "\'  ORDER BY id DESC", null);
+
+        try{
+            while(cursor.moveToNext()){
+                Note note = new Note();
+                note.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                note.setQuestion(cursor.getString(cursor.getColumnIndex("question")));
+                note.setAnswer(cursor.getString(cursor.getColumnIndex("answer")));
+                noteList.add(note);
+            }
+        }catch(Exception e){
+           // Log.i(TAG,tableName);
+        }
+    }
+
+    @Deprecated
     public long allCaseNum(QuestionType type) {
         String queType = getCorrectType(type);
         String sql = "select count(*) from "+ queType;
@@ -90,8 +146,18 @@ public class DatabaseManager {
         cursor.close();
         return count;
     }
+
+    public long allCaseNum(QuestionType type,@Nullable String tableName){
+        String queType = getCorrectType(type);
+        String sql = "select count(*) from "+ queType + " WHERE table_name = \'" + this.TABLE_NAME + "\'";
+        Cursor cursor = dbReadable.rawQuery(sql, null);
+        cursor.moveToFirst();
+        long count = cursor.getLong(0);
+        cursor.close();
+        return count;
+    }
     public void readRandomData(List<Note> noteList,int count,QuestionType type){
-        long sum = allCaseNum(type);
+        long sum = allCaseNum(type,null);
         String queTyp = getCorrectType(type);
         if(sum<=0)return;
         if(count>sum)count = (int)sum - 1;
@@ -147,6 +213,8 @@ public class DatabaseManager {
         cv.put("answer", answer);
         dbWritable.update(queType, cv, "id = ?", new String[]{noteID +""});
     }
+
+    @Deprecated
     public void updateNote(Note note,QuestionType type){
         String queType = getCorrectType(type);
         ContentValues cv = new ContentValues();
@@ -155,14 +223,16 @@ public class DatabaseManager {
         int id = note.getId();
         dbWritable.update(queType ,cv,"id = ?",new String[]{id+""});
     }
+
     /**
      * 根据id查询数据
      * @param noteID 要查询的日记的id
      * @return 所查询到的结果
      */
+    @Deprecated
     public Note readData(int noteID,QuestionType type){
         String queType = getCorrectType(type);
-        Cursor cursor = dbReadable.rawQuery("SELECT * FROM "+ queType +" WHERE id = ?", new String[]{noteID+""});
+        Cursor cursor = dbReadable.rawQuery("SELECT * FROM " + queType + " WHERE id = ?", new String[]{noteID + ""});
         cursor.moveToFirst();
         Note note = new Note();
         note.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -175,17 +245,36 @@ public class DatabaseManager {
      * 根据id删除该条记录
      * @param noteID 要删除记录的id
      */
+    @Deprecated
     public void deleteNote(int noteID,QuestionType type){
         String queType = getCorrectType(type);
         dbWritable.delete(queType, "id = ?", new String[]{noteID + ""});
     }
+    public void deleteNote(int noteID,QuestionType type,@Nullable String tableName){
+        String queType = getCorrectType(type);
+        dbWritable.delete(queType, "id = ?", new String[]{noteID + ""});
+    }
+    @Deprecated
     public void deleteNote(String question,QuestionType type){
         String queType = getCorrectType(type);
         dbWritable.delete(queType, "question = ?", new String[]{question +""});
     }
+    public void deleteNote(String question,QuestionType type,@Nullable String tableName){
+        String queType = getCorrectType(type);
+        dbWritable.delete(queType, "question = ? AND table_name = ?", new String[]{question +"",this.TABLE_NAME});
+    }
+    @Deprecated
     public void deleteAll(QuestionType type){
         String queType = getCorrectType(type);
         String sql = "delete from "+ queType;
         dbWritable.execSQL(sql);
+    }
+    public void deleteAll(QuestionType type,@Nullable String tableName){
+        String queType = getCorrectType(type);
+        String sql = "delete from "+ queType + " WHERE table_name = \'" + this.TABLE_NAME +"\'";
+        dbWritable.execSQL(sql);
+    }
+    public String getTABLE_NAME() {
+        return TABLE_NAME;
     }
 }

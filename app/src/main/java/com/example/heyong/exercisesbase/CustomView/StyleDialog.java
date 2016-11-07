@@ -58,14 +58,15 @@ public class StyleDialog extends Dialog {
     private DragSortListView choose_sdlv;
     private DragSortListView answer_sdlv;
     private QuestionStyleManager manager;
-
+    private String tableName;
 
     private ViewHolder sheet;
 
-    public StyleDialog(Context context, QuestionStyleManager manager) {
+    public StyleDialog(Context context, QuestionStyleManager manager,String tableName) {
         super(context);
         build(context);
         this.manager = manager;
+        this.tableName = tableName;
     }
 
     @Override
@@ -74,10 +75,11 @@ public class StyleDialog extends Dialog {
         super.show();
     }
 
-    public StyleDialog(Context context, int theme, QuestionStyleManager manager) {
+    public StyleDialog(Context context, int theme, QuestionStyleManager manager,String tableName) {
         super(context, theme);
         build(context);
         this.manager = manager;
+        this.tableName = tableName;
     }
 
     public void reBuild() {
@@ -87,12 +89,12 @@ public class StyleDialog extends Dialog {
         adapter1.clear();
         mainViewPager.setCurrentItem(0);
 
-        DatabaseManager dbManager = new DatabaseManager(context);
+        DatabaseManager dbManager = new DatabaseManager(context,tableName);
         List<Note> choose_temp = new ArrayList<>();
-        dbManager.readData(choose_temp, QuestionType.CHOOSE);
+        dbManager.readData(choose_temp, QuestionType.CHOOSE,null);
 
         List<Note> answer_temp = new ArrayList<>();
-        dbManager.readData(answer_temp, QuestionType.ANSWER);
+        dbManager.readData(answer_temp, QuestionType.ANSWER,null);
 
         AddQueAdapter choose = (AddQueAdapter) choose_listView.getAdapter();
         choose.clear();

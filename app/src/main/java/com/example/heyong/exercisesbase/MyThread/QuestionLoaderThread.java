@@ -21,10 +21,10 @@ public class QuestionLoaderThread extends AsyncTask<String, Integer, Integer> {
     //public static final int FAILTAG = -1;//导入文件失败，文件不符合规格
     static final String TAG = "QuestionLoaderThread";
 
-    public QuestionLoaderThread(Context context) {
+    public QuestionLoaderThread(Context context,String tableName) {
         this.context = context;
         loader = new QuestionLoader(context);
-        dbManager = new DatabaseManager(context);
+        dbManager = new DatabaseManager(context,tableName);
     }
 
     /**
@@ -62,9 +62,9 @@ public class QuestionLoaderThread extends AsyncTask<String, Integer, Integer> {
         }
         for (String[] s : list) {
             if (s[0].equals(QuestionLoader.CHOOSE_QUE_TAG)) {
-                dbManager.writeQuestion(s[1], s[2], QuestionType.CHOOSE);
+                dbManager.writeQuestion(s[1], s[2], QuestionType.CHOOSE,null);
             } else if (s[0].equals(QuestionLoader.ANSWER_QUE_TAG)) {
-                dbManager.writeQuestion(s[1], s[2], QuestionType.ANSWER);
+                dbManager.writeQuestion(s[1], s[2], QuestionType.ANSWER,null);
             } else {
                 return QuestionLoader.FILEFORMATFAIL;//格式有问题
             }

@@ -22,8 +22,8 @@ public class QuestionStyleManager  {
     static final String TAG  = "QuestionStyleManager";
     public QuestionStyleManager(final MainActivity activity) {
         this.activity = activity;
-        dialog = new StyleDialog(activity, R.style.StyleDialog ,this);
-        manager = new ModelFileManager(activity);
+        dialog = new StyleDialog(activity, R.style.StyleDialog ,this,activity.tableName);
+        manager = new ModelFileManager(activity,activity.tableName);
     }
     public void freshUI(List<Note> l){
         activity.initUI(0,l);

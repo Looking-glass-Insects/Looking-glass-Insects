@@ -9,8 +9,10 @@ import java.io.Serializable;
 public class Note implements Serializable {
     private String question;
     private String answer;
+    private String TABLE_NAME;//从属题库名
     private int id = -1;
     public Note() {
+
     }
 
     public void setQuestion(String question) {

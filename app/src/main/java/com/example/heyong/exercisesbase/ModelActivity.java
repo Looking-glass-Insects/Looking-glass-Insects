@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -37,6 +38,7 @@ public class ModelActivity extends Activity {
     RightSlideCloseFrameLayout modelRoot;
     private ModelFileManager manager;
     private ModelActivityDialog dialog;
+    public String tableName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +62,12 @@ public class ModelActivity extends Activity {
                 return false;
             }
         });
-        manager = new ModelFileManager(this);
+        Intent intent = getIntent();
+        tableName = intent.getStringExtra("table_name");
+        assert tableName != null : "题库名为null";
+        manager = new ModelFileManager(this,tableName);
         List<Bean> list = new ArrayList<>();
-        manager.readModel(list);
+        manager.readModel(list,null);
         ModelSimpleAdapter adapter = new ModelSimpleAdapter(this, list);
         modelListView.setAdapter(adapter);
         bindPop(modelListView);

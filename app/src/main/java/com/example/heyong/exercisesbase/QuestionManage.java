@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -78,9 +79,12 @@ public class QuestionManage extends Activity {
         choose_relative = (RelativeLayout) findViewById(R.id.que_manage_choose_relative);
         answer_relative = (RelativeLayout) findViewById(R.id.que_manage_answer_relative);
         arrow = (ImageView)findViewById(R.id.arrow_imageView);
-        dbManager = new DatabaseManager(this);
+        Intent intent = getIntent();
+        String tableName = intent.getStringExtra("table_name");
+        assert tableName != null : "题库名为null";
+        dbManager = new DatabaseManager(this,tableName);
         data = new ArrayList<>();
-        dbManager.readData(data, QuestionType.CHOOSE);
+        dbManager.readData(data, QuestionType.CHOOSE,null);
         currentTag = QuestionType.CHOOSE;
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,9 +161,9 @@ public class QuestionManage extends Activity {
             public void onClick(View v) {
                 if (currentTag == QuestionType.CHOOSE) return;
                 currentTag = QuestionType.CHOOSE;
-                Toast.makeText(QuestionManage.this, "选择题，共" + dbManager.allCaseNum(currentTag) + "道", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuestionManage.this, "选择题，共" + dbManager.allCaseNum(currentTag,null) + "道", Toast.LENGTH_SHORT).show();
                 data.clear();
-                dbManager.readData(data, QuestionType.CHOOSE);
+                dbManager.readData(data, QuestionType.CHOOSE,null);
                 initUI(0);
 
             }
@@ -169,9 +173,9 @@ public class QuestionManage extends Activity {
             public void onClick(View v) {
                 if (currentTag == QuestionType.ANSWER) return;
                 currentTag = QuestionType.ANSWER;
-                Toast.makeText(QuestionManage.this, "简答题,共" + dbManager.allCaseNum(currentTag) + "道", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuestionManage.this, "简答题,共" + dbManager.allCaseNum(currentTag,null) + "道", Toast.LENGTH_SHORT).show();
                 data.clear();
-                dbManager.readData(data, QuestionType.ANSWER);
+                dbManager.readData(data, QuestionType.ANSWER,null);
                 initUI(0);
             }
         });
@@ -266,9 +270,9 @@ public class QuestionManage extends Activity {
     private void deletNote(int position) {
         Note n = data.get(position);
         if (n.getId() == -1) {
-            dbManager.deleteNote(n.getQuestion(), currentTag);
+            dbManager.deleteNote(n.getQuestion(), currentTag,null);
         } else {
-            dbManager.deleteNote(n.getId(), currentTag);
+            dbManager.deleteNote(n.getId(), currentTag,null);
         }
         SwipeDismissAdapter adapter = (SwipeDismissAdapter) listView.getAdapter();
         data.remove(position);
@@ -292,7 +296,7 @@ public class QuestionManage extends Activity {
                         if (id == -1) { // 新数据
                             Note n = new Note(question, answer);
                             data.add(n);
-                            dbManager.writeQuestion(question, answer, currentTag);
+                            dbManager.writeQuestion(question, answer, currentTag,null);
                             initUI(0);
                         } else {
                             Note temp = data.get(QuestionManage.this.id);
@@ -380,7 +384,7 @@ public class QuestionManage extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case Dialog.BUTTON_POSITIVE:
-                        dbManager.deleteAll(currentTag);
+                        dbManager.deleteAll(currentTag,null);
                         data.clear();
                         initUI(0);
                         //Toast.makeText(getContext(), "确认" + which, Toast.LENGTH_SHORT).show();

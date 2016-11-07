@@ -42,6 +42,8 @@
             android:text="设置"
             android:textAlignment="center"
             android:textSize="20dp" />
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="10dp"
@@ -49,6 +51,85 @@
             android:orientation="vertical">
             <!--this ia a cut line-->
         </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/ll_left_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/user"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="变更登录用户"
+                    android:layout_gravity="right"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#cccccc"
+            android:orientation="vertical">
+            <!--this ia a cut line-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_left_table_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/user"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="试题库名称"
+                    android:layout_gravity="right"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#dddddd"
+            android:orientation="vertical">
+            <!--this ia a cut line-->
+        </LinearLayout>
+
+
+
         <LinearLayout
             android:id="@+id/que_style_linearLayout"
             android:layout_width="match_parent"
@@ -76,6 +157,8 @@
                     android:layout_centerHorizontal="true" />
             </RelativeLayout>
         </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -83,6 +166,8 @@
             android:orientation="vertical">
             <!--this ia a cut line-->
         </LinearLayout>
+
+
         <LinearLayout
             android:id="@+id/que_savedtyle_linearLayout"
             android:layout_width="match_parent"

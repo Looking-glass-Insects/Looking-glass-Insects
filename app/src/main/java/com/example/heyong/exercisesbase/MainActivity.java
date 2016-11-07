@@ -31,7 +31,9 @@ import android.widget.Toast;
 
 import com.example.heyong.exercisesbase.Bean.Note;
 import com.example.heyong.exercisesbase.Bean.QuestionType;
+import com.example.heyong.exercisesbase.Bean.UserAttr;
 import com.example.heyong.exercisesbase.CustomView.MySlidingPaneLayout;
+import com.example.heyong.exercisesbase.Fragment.StudentViewPagerFragment;
 import com.example.heyong.exercisesbase.Interface.Adapter.ViewPagerAdapter;
 import com.example.heyong.exercisesbase.Fragment.ViewPagerFragment;
 import com.example.heyong.exercisesbase.MyThread.QuestionLoaderThread;
@@ -75,6 +77,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     //private int _position;//位置
     private RelativeLayout outputRL;//导出
 
+    private LinearLayout userLL;//登陆用户的属性
+    private UserAttr attr = UserAttr.MANAGER;//默认为管理员
+
+    public String tableName = "试题库1";
+    private LinearLayout tableNameLL;//试题库名称
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +91,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         startFindFileThread();
         setAdapter();
         setListener();
-        QuestionLoaderThread loader = new QuestionLoaderThread(this);
+        QuestionLoaderThread loader = new QuestionLoaderThread(this,this.tableName);
         loader.execute();
         IntentFilter filter = new IntentFilter(ModelActivity.action);
         registerReceiver(receiver, filter);
@@ -108,6 +116,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }
     };
 
+
+    private void loadPreferences(){
+        SharedPreferences sp = getSharedPreferences("table_name", Context.MODE_PRIVATE);
+        this.tableName = sp.getString("table_name", null);
+        if(tableName == null || tableName.equals(""))
+            tableName = "未命名";
+    }
+
+    private void savePreferences(String tableName){
+        SharedPreferences sp = getSharedPreferences("table_name", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("table_name", tableName);
+        editor.commit();
+    }
     /**
      * 导入外部文件
      */
@@ -150,6 +172,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     /**
+     * @param flag 是否重新排版
+     * @param i
+     */
+    private void initUI(int flag, int i) {
+        Message msg = new Message();
+        //设置一个标志
+        msg.what = i;
+        msg.arg1 = flag;//一定为非零,不排版
+        //通过handler向UI线程发送一个消息
+        handler.sendMessage(msg);
+    }
+
+    /**
      * @param i
      * @param dataToShow 要显示
      */
@@ -162,11 +197,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     //Don't use it directly;
-    private void addFragment() {
-        Typer.typeSetting(data);
+    private void addFragment(boolean flag) {
+        if (flag) {
+            Typer.typeSetting(data);
+        }
         for (int i = 0; i < data.size(); i++) {
-            ViewPagerFragment f = ViewPagerFragment.getInstance(data.get(i));
-            content.add(f);
+            if (attr == UserAttr.MANAGER) {
+                ViewPagerFragment f = ViewPagerFragment.getInstance(data.get(i));
+                content.add(f);
+            } else {
+                StudentViewPagerFragment f = StudentViewPagerFragment.getInstance(data.get(i));
+                content.add(f);
+            }
         }
     }
 
@@ -176,10 +218,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 case 0:
                     //设置adapter
                     content.clear();
-                    addFragment();
+                    if (msg.arg1 != 0)
+                        addFragment(false);
+                    else
+                        addFragment(true);
                     viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), content, MainActivity.this));
                     break;
-                case 1:
+                case 1://外部文件
                     ListView l = (ListView) MainActivity.this.findViewById(R.id.founded_files);
                     BaseAdapter adapter = (BaseAdapter) l.getAdapter();
                     adapter.notifyDataSetChanged();
@@ -196,7 +241,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         DemoFileWriter writer = new DemoFileWriter(this);
         writer.write(); //写一个示例文件
         //dbManager = new DatabaseManager(this);
-        ModelFileManager manager = new ModelFileManager(this);
+        ModelFileManager manager = new ModelFileManager(this,this.tableName);
         styleManager = new QuestionStyleManager(this);
         data = manager.getFirstNotes();
         if (data == null) {
@@ -207,13 +252,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         slidingPaneLayout = (SlidingPaneLayout) findViewById(R.id.slidingPanelLayout);
         viewPager = (ViewPager) findViewById(R.id.main_viewPager);
         content = new ArrayList<>();
-        addFragment();
+        addFragment(true);
         relativeLayout = (RelativeLayout) findViewById(R.id.relativelayout_1);
         manage_relativeLayout = (LinearLayout) findViewById(R.id.manage_relativeLayout);
         externalFileRule = (LinearLayout) findViewById(R.id.externalFileRule);
         externalLayout = (LinearLayout) findViewById(R.id.externalFile_LinearLayout);
         modelRelativeLayout = (RelativeLayout) findViewById(R.id.model_relativeLayout);
         outputRL = (RelativeLayout) findViewById(R.id.relativelayout_2);
+        userLL = (LinearLayout) findViewById(R.id.ll_left_user);
+        tableNameLL = (LinearLayout) findViewById(R.id.ll_left_table_name);
     }
 
     private void setAdapter() {
@@ -250,6 +297,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
         });
         outputRL.setOnClickListener(this);
+        userLL.setOnClickListener(this);
+        tableNameLL.setOnClickListener(this);
     }
 
 
@@ -279,6 +328,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 // Toast.makeText(this, "teacher_layout", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, QuestionManage.class);
                 //intent.putExtra("data", (Serializable) data);
+                intent.putExtra("table_name",this.tableName);
                 startActivity(intent);
                 break;
             case R.id.externalFile_LinearLayout:
@@ -294,11 +344,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             case R.id.model_relativeLayout:
                 Intent i = new Intent(MainActivity.this, ModelActivity.class);
                 //i.putExtra();
+                i.putExtra("table_name",this.tableName);
                 startActivity(i);
                 break;
             case R.id.relativelayout_2://导出文件
                 outputDialog();
                 // Toast.makeText(MainActivity.this,"导出完毕",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ll_left_user:
+                alterUserDialog();
+                break;
+            case R.id.ll_left_table_name:
+
                 break;
             default:
                 break;
@@ -324,13 +381,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         setLeftClickable(false);
     }
 
-    private void setLeftClickable(boolean flag){
+    private void setLeftClickable(boolean flag) {
         externalFileRule.setClickable(flag);
         externalLayout.setClickable(flag);
         queStyleLayout.setClickable(flag);
         modelRelativeLayout.setClickable(flag);
         manage_relativeLayout.setClickable(flag);
     }
+
     //导入外部文件
     private boolean alterDialog(final String path) {
         boolean flag = false;
@@ -341,7 +399,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 switch (which) {
                     case Dialog.BUTTON_POSITIVE:
                         Toast.makeText(MainActivity.this, "即将导入" + path, Toast.LENGTH_SHORT).show();
-                        new QuestionLoaderThread(MainActivity.this).execute(path);
+                        new QuestionLoaderThread(MainActivity.this,tableName).execute(path);
                         break;
                 }
             }
@@ -357,7 +415,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return flag;
     }
 
-
+    //导出文件
     private boolean outputDialog() {
         boolean flag = false;
         //先new出一个监听器，设置好监听
@@ -386,6 +444,44 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         builder.setNegativeButton("取消", dialogOnclicListener);
         builder.create().show();
         return flag;
+    }
+
+    //登陆用户属性变更
+    private boolean alterUserDialog() {
+        boolean flag = false;
+        //先new出一个监听器，设置好监听
+        DialogInterface.OnClickListener dialogOnclicListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case Dialog.BUTTON_POSITIVE:
+                        attr = UserAttr.converse(attr);
+                        initUI(1,0);
+                        break;
+                }
+            }
+        };
+        //dialog参数设置
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog_Alert);  //先得到构造器
+        builder.setTitle("提示"); //设置标题
+        builder.setMessage("是否确认将用户变更为： " + UserAttr.getOtherByAttr(this.attr)); //设置内容
+        builder.setIcon(R.drawable.user);//设置图标，图片id即可
+        builder.setPositiveButton("确认", dialogOnclicListener);
+        builder.setNegativeButton("取消", dialogOnclicListener);
+        builder.create().show();
+        return flag;
+    }
+
+
+    private void resultDialog(boolean flag){
+        //dialog参数设置
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog_Alert);  //先得到构造器
+        builder.setTitle("提示"); //设置标题
+        builder.setMessage("是否确认将用户变更为： " + UserAttr.getOtherByAttr(this.attr)); //设置内容
+        builder.setIcon(R.drawable.user);//设置图标，图片id即可
+        builder.setPositiveButton("知道了", null);
+       // builder.setNegativeButton("取消", null);
+        builder.create().show();
     }
 }
 

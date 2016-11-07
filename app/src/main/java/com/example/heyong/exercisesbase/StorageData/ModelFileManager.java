@@ -4,6 +4,7 @@ package com.example.heyong.exercisesbase.StorageData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.example.heyong.exercisesbase.Bean.Bean;
@@ -20,8 +21,8 @@ import java.util.regex.Pattern;
 public class ModelFileManager extends DatabaseManager{
     private Context context;
     private static final String FORMAT = "{<问题>|<答案>}";
-    public ModelFileManager(Context context) {
-        super(context);
+    public ModelFileManager(Context context,String tableName) {
+        super(context,tableName);
         this.context = context;
     }
 
@@ -29,15 +30,17 @@ public class ModelFileManager extends DatabaseManager{
      * 写一条
      * @param notes
      */
-    public void writeModel(@Nullable List<Note> notes,String title) {
+    public void writeModel(@NonNull List<Note> notes,String title) {
         if (notes.size() <= 0) return;
         String content = makeContent(notes);
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE-yyyy-MM-dd-hh:mm:ss");
         String dateTime = dateFormat.format(date);
-        this.writeModel(content,dateTime + "&" + title);
+        this.writeModel(content,dateTime + "&" + title,null);
     }
-    public void readModel(@Nullable List<Bean> list){
+
+    @Deprecated
+    public void readModel(@NonNull List<Bean> list){
         Cursor cursor
                 = this.dbWritable.rawQuery("SELECT * FROM " + MODEL + " ORDER BY id DESC", null);
         try{
@@ -51,6 +54,23 @@ public class ModelFileManager extends DatabaseManager{
 
         }
     }
+
+    public void readModel(@NonNull List<Bean> list,@Nullable String tableName){
+        Cursor cursor
+                = this.dbWritable.rawQuery("SELECT * FROM " + MODEL + " WHERE table_name = \""+this.TABLE_NAME+"\" ORDER BY id DESC", null);
+        try{
+            while(cursor.moveToNext()){
+                Bean bean = new Bean();
+                bean.setContent(cursor.getString(cursor.getColumnIndex("content")));
+                bean.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                list.add(bean);
+            }
+        }catch(Exception e){
+
+        }
+    }
+
+
     public void delModel(String date){
         dbWritable.delete(MODEL, "date = ?", new String[]{date});
     }

@@ -4,7 +4,7 @@ package com.example.heyong.exercisesbase.Bean;
 public class Bean {
     private String date;
     private String content;
-
+    private String TABLE_NAME;//从属题库名
     public Bean(String date, String content) {
         this.date = date;
         this.content = content;

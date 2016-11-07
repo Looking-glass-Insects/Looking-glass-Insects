@@ -18,15 +18,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     }
     private static final String DBname = "question";
     public void test() {
-        getContext().deleteDatabase(DBname);
-        Note n = new Note("test1_que","test1_ans");
-        Note n2 = new Note("test2_que","test2_ans");
-        Note n3 = new Note("test3_que","test3_ans");
-        List<Note> l = new ArrayList<>();
-        l.add(n);
-        l.add(n2);
-        l.add(n3);
-        ModelFileManager manager = new ModelFileManager(getContext());
-        manager.writeModel(l);
+
     }
 }

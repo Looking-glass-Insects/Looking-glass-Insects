@@ -67,7 +67,7 @@ public class ModelActivityDialog extends Dialog implements View.OnClickListener{
      */
     public void dismiss(boolean flag) {
         if(flag){
-            ModelFileManager manager = new ModelFileManager(activity);
+            ModelFileManager manager = new ModelFileManager(activity,activity.tableName);
             List<Note> data = ((DragListViewAdapter)modelActivityDSLV.getInputAdapter()).getData();
             String content = manager.makeContent(data);
             activity.updateModelData(content,currPosition);
