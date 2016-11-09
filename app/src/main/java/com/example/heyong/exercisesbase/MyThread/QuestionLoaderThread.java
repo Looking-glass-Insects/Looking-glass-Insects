@@ -25,6 +25,9 @@ public class QuestionLoaderThread extends AsyncTask<String, Integer, Integer> {
         this.context = context;
         loader = new QuestionLoader(context);
         dbManager = new DatabaseManager(context,tableName);
+//        if(!dbManager.checkIfTableExists(tableName)){
+//            dbManager.writeNewTable(tableName);
+//        }
     }
 
     /**

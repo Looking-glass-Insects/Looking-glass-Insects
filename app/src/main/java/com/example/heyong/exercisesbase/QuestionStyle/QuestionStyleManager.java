@@ -3,6 +3,7 @@ package com.example.heyong.exercisesbase.QuestionStyle;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.AdapterView;
 
 import com.example.heyong.exercisesbase.Bean.Note;
 import com.example.heyong.exercisesbase.CustomView.StyleDialog;
@@ -32,7 +33,7 @@ public class QuestionStyleManager  {
         for(Note n:data){
             Log.i(TAG,n.getQuestion());
         }
-        manager.writeModel(data,title);
+        manager.writeModel(data, title);
     }
 
 

@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.heyong.exercisesbase.Bean.Note;
 import com.example.heyong.exercisesbase.Bean.QuestionType;
+import com.example.heyong.exercisesbase.Bean.TableName;
 import com.example.heyong.exercisesbase.Bean.UserAttr;
 import com.example.heyong.exercisesbase.CustomView.MySlidingPaneLayout;
 import com.example.heyong.exercisesbase.Fragment.StudentViewPagerFragment;
@@ -38,6 +39,7 @@ import com.example.heyong.exercisesbase.Interface.Adapter.ViewPagerAdapter;
 import com.example.heyong.exercisesbase.Fragment.ViewPagerFragment;
 import com.example.heyong.exercisesbase.MyThread.QuestionLoaderThread;
 import com.example.heyong.exercisesbase.QuestionStyle.QuestionStyleManager;
+import com.example.heyong.exercisesbase.QuestionStyle.TableNameManager;
 import com.example.heyong.exercisesbase.StorageData.DatabaseManager;
 import com.example.heyong.exercisesbase.StorageData.FilesWriter;
 import com.example.heyong.exercisesbase.StorageData.ModelFileManager;
@@ -80,8 +82,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout userLL;//登陆用户的属性
     private UserAttr attr = UserAttr.MANAGER;//默认为管理员
 
-    public String tableName = "试题库1";
+    public  String tableName = TableName.TAVLE_1;
     private LinearLayout tableNameLL;//试题库名称
+    private TableNameManager tableNameManager;
+    private TextView userNameTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +95,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         startFindFileThread();
         setAdapter();
         setListener();
-        QuestionLoaderThread loader = new QuestionLoaderThread(this,this.tableName);
-        loader.execute();
+//        QuestionLoaderThread loader = new QuestionLoaderThread(this,this.tableName);
+//        loader.execute();
         IntentFilter filter = new IntentFilter(ModelActivity.action);
         registerReceiver(receiver, filter);
+        setLeftClickable(false);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(receiver);
+        //savePreferences();
     }
 
     //广播,接收更改的数据
@@ -117,17 +123,43 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     };
 
 
-    private void loadPreferences(){
+    public List<String> loadPreferences(){
         SharedPreferences sp = getSharedPreferences("table_name", Context.MODE_PRIVATE);
-        this.tableName = sp.getString("table_name", null);
-        if(tableName == null || tableName.equals(""))
-            tableName = "未命名";
+        String temp = sp.getString("curr", TableName.TAVLE_1);
+        String table1 = sp.getString(TableName.TAVLE_1,TableName.TAVLE_1);
+        String table2 = sp.getString(TableName.TAVLE_2,TableName.TAVLE_2);
+        String table3 = sp.getString(TableName.TAVLE_3,TableName.TAVLE_3);
+        this.tableName = temp;
+        Log.i(TAG,temp);
+        if(temp.equals(TableName.TAVLE_1)){
+            userNameTv.setText(table1);
+        }else if(temp.equals(TableName.TAVLE_2)){
+            userNameTv.setText(table2);
+        }else if(temp.equals(TableName.TAVLE_3)){
+            userNameTv.setText(table3);
+        }else{
+            Log.i(TAG,"error");
+        }
+
+        List<String> l = new ArrayList<>();
+        l.add(table1);
+        l.add(table2);
+        l.add(table3);
+        return l;
     }
 
-    private void savePreferences(String tableName){
+    public void savePreferences(){
         SharedPreferences sp = getSharedPreferences("table_name", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("table_name", tableName);
+        editor.putString("curr", this.tableName);
+        editor.putString(this.tableName, userNameTv.getText().toString());
+        editor.commit();
+    }
+
+    public void saveNew(String tableName){
+        SharedPreferences sp = getSharedPreferences("table_name", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("curr",tableName);
         editor.commit();
     }
     /**
@@ -240,10 +272,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private void init() {
         DemoFileWriter writer = new DemoFileWriter(this);
         writer.write(); //写一个示例文件
-        //dbManager = new DatabaseManager(this);
+        userNameTv = (TextView)findViewById(R.id.tv_user_table_name);
+        List<String> l = loadPreferences();
         ModelFileManager manager = new ModelFileManager(this,this.tableName);
+        tableNameManager = new TableNameManager(this,l);
         styleManager = new QuestionStyleManager(this);
-        data = manager.getFirstNotes();
+        data = manager.getFirstNotes(this.tableName);
         if (data == null) {
             data = new ArrayList<>();
         }
@@ -261,6 +295,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         outputRL = (RelativeLayout) findViewById(R.id.relativelayout_2);
         userLL = (LinearLayout) findViewById(R.id.ll_left_user);
         tableNameLL = (LinearLayout) findViewById(R.id.ll_left_table_name);
+
     }
 
     private void setAdapter() {
@@ -355,11 +390,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 alterUserDialog();
                 break;
             case R.id.ll_left_table_name:
-
+                tableNameManager.show();
                 break;
             default:
                 break;
         }
+    }
+
+    public TextView getUserNameTv() {
+        return userNameTv;
     }
 
     @Override

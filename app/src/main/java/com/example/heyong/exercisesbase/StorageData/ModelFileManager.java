@@ -18,71 +18,75 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ModelFileManager extends DatabaseManager{
+public class ModelFileManager extends DatabaseManager {
     private Context context;
     private static final String FORMAT = "{<问题>|<答案>}";
-    public ModelFileManager(Context context,String tableName) {
-        super(context,tableName);
+
+    public ModelFileManager(Context context, String tableName) {
+        super(context, tableName);
         this.context = context;
     }
 
     /**
      * 写一条
+     *
      * @param notes
      */
-    public void writeModel(@NonNull List<Note> notes,String title) {
+    public void writeModel(@NonNull List<Note> notes, String title) {
         if (notes.size() <= 0) return;
         String content = makeContent(notes);
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE-yyyy-MM-dd-hh:mm:ss");
         String dateTime = dateFormat.format(date);
-        this.writeModel(content,dateTime + "&" + title,null);
+        this.writeModel(content, dateTime + "&" + title, null);
     }
 
     @Deprecated
-    public void readModel(@NonNull List<Bean> list){
+    public void readModel(@NonNull List<Bean> list) {
         Cursor cursor
                 = this.dbWritable.rawQuery("SELECT * FROM " + MODEL + " ORDER BY id DESC", null);
-        try{
-            while(cursor.moveToNext()){
+        try {
+            while (cursor.moveToNext()) {
                 Bean bean = new Bean();
                 bean.setContent(cursor.getString(cursor.getColumnIndex("content")));
                 bean.setDate(cursor.getString(cursor.getColumnIndex("date")));
                 list.add(bean);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    public void readModel(@NonNull List<Bean> list,@Nullable String tableName){
+    public void readModel(@NonNull List<Bean> list, @Nullable String tableName) {
         Cursor cursor
-                = this.dbWritable.rawQuery("SELECT * FROM " + MODEL + " WHERE table_name = \""+this.TABLE_NAME+"\" ORDER BY id DESC", null);
-        try{
-            while(cursor.moveToNext()){
+                = this.dbWritable.rawQuery("SELECT * FROM " + MODEL + " WHERE table_name = \"" + this.TABLE_NAME + "\" ORDER BY id DESC", null);
+        try {
+            while (cursor.moveToNext()) {
                 Bean bean = new Bean();
                 bean.setContent(cursor.getString(cursor.getColumnIndex("content")));
                 bean.setDate(cursor.getString(cursor.getColumnIndex("date")));
                 list.add(bean);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
 
 
-    public void delModel(String date){
+    public void delModel(String date) {
         dbWritable.delete(MODEL, "date = ?", new String[]{date});
     }
-    public void updateModel(Bean bean){
+
+    public void updateModel(Bean bean) {
         ContentValues cv = new ContentValues();
         cv.put("date", bean.getDate());
         cv.put("content", bean.getContent());
         dbWritable.update(MODEL, cv, "date = ?", new String[]{bean.getDate()});
     }
+
     public String makeContent(List<Note> notes) {
-        StringBuilder sb  = new StringBuilder();
-        for(Note n:notes){
+        StringBuilder sb = new StringBuilder();
+        for (Note n : notes) {
             sb.append("{");
             sb.append(n.getQuestion());
             sb.append("|");
@@ -91,7 +95,8 @@ public class ModelFileManager extends DatabaseManager{
         }
         return sb.toString();
     }
-    public List<Note> getNotesList(String content){
+
+    public List<Note> getNotesList(String content) {
         List<Note> notes = new ArrayList<>();
         String re = "\\{([\\s\\S]*?)\\|([\\s\\S]*?)\\}";
         Pattern pattern = Pattern.compile(re);
@@ -100,19 +105,21 @@ public class ModelFileManager extends DatabaseManager{
             // Get the matching string
             String ques = matcher.group(1);
             String ans = matcher.group(2);
-            notes.add(new Note(ques,ans));
+            notes.add(new Note(ques, ans));
         }
         return notes;
     }
-    public List<Note> getFirstNotes(){
+
+    public List<Note> getFirstNotes(String tableName) {
         Cursor cursor
-                = this.dbWritable.rawQuery("SELECT * FROM " + MODEL + " ORDER BY id DESC", null);
+                = null;
         List<Note> notes = null;
-        try{
+        try {
+            cursor = this.dbWritable.rawQuery("SELECT * FROM " + MODEL + " WHERE table_name = \'" + tableName + "\' ORDER BY id DESC", null);
             cursor.moveToFirst();
             String content = cursor.getString(cursor.getColumnIndex("content"));
             notes = getNotesList(content);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         //list.add(bean);
