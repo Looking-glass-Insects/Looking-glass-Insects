@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@drawable/ripple"
+    android:backgroundTint="@color/off_line_bg"
+    android:elevation="5dp">
+    <!--断网时布局-->
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+         />
+
+    <TextView
+        android:id="@+id/text"
+        android:textAlignment="center"
+        android:text="网络不给力，请检查网络设置"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_info_outline_black_24dp"
+        android:layout_toStartOf="@+id/text" />
+</RelativeLayout>
