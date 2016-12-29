@@ -5,6 +5,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -15,6 +18,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -27,24 +31,25 @@ import rx.Subscriber;
  * Created by Heyong
  */
 
-public class CacheManager {
 
-    private  DiskLruCache cache;
+public class CacheManager {
+    static String TAG = "CacheManager";
+    private DiskLruCache cache;
     private String cachePath;
     private Context context;
 
     public CacheManager(Context context) {
         this.context = context;
+        cache = null;
     }
 
     /**
-     *
      * @param uniqueName 文件夹目录
-     * @param URL_OR_STR  最终文件名
+     * @param URL_OR_STR 最终文件名
      * @param content
      * @param subscriber
      */
-    public void startCache(final String uniqueName, final String URL_OR_STR, final Serializable content, @Nullable Subscriber<? super String> subscriber){
+     public void startCache(final String uniqueName, final String URL_OR_STR, final Serializable content, @Nullable Subscriber<? super String> subscriber) {
         Observable<String> myObservable = Observable.create(
                 new Observable.OnSubscribe<String>() {
                     @Override
@@ -63,22 +68,23 @@ public class CacheManager {
                             cache.flush();
                             sub.onNext(cachePath);
                             sub.onCompleted();
+                            close();
                         } catch (IOException e) {
-                            try {
-                                throw new IOException("io exception");
-                            } catch (IOException e1) {
-                            }
+                            return;
                         }
                     }
                 }
         );
-        if (subscriber == null){
+        if (subscriber == null) {
             myObservable.subscribe();
-        }else{
+        } else {
             myObservable.subscribe(subscriber);
         }
+
     }
-    public void startCache(final String uniqueName, final String URL, Subscriber<? super String> subscriber){
+
+
+    public void startCache(final String uniqueName, final String URL, Subscriber<? super String> subscriber) {
         Observable<String> myObservable = Observable.create(
                 new Observable.OnSubscribe<String>() {
                     @Override
@@ -106,15 +112,21 @@ public class CacheManager {
         myObservable.subscribe(subscriber);
     }
 
-
-    public Object getCache(String uniqueName ,String key){
+    /**
+     * 获取缓存
+     *
+     * @param uniqueName
+     * @param key
+     * @return
+     */
+    public Object getCache(String uniqueName, String key) {
         open(uniqueName);
         String _key = hashKeyForDisk(key);
         DiskLruCache.Snapshot snapShot = null;
         ObjectInputStream ois = null;
         try {
             snapShot = cache.get(_key);
-            if(snapShot == null)
+            if (snapShot == null)
                 return null;
             InputStream is = snapShot.getInputStream(0);
             ois = new ObjectInputStream(is);
@@ -129,12 +141,91 @@ public class CacheManager {
         } catch (ClassNotFoundException e) {
             return null;
         }
+        close();
         return obj;
     }
 
-    private void open(String uniqueName){
+
+    /**
+     * 清除缓存
+     *
+     * @param uniqueName
+     * @param key
+     * @return
+     */
+    public boolean clearCache(String uniqueName, String key) {
+        open(uniqueName);
+        String _key = hashKeyForDisk(key);
         try {
-            File cacheDir = getDiskCacheDir(context, uniqueName);
+            cache.remove(_key);
+        } catch (IOException e) {
+            close();
+            return false;
+        }
+        close();
+        return true;
+    }
+
+
+    public void clearAllCache() {
+        openRoot();
+        try {
+            cache.delete();
+        } catch (IOException e) {
+            close();
+        }
+        close();
+    }
+
+    public String getAllSize() {
+        open(HomePagePresenter.CACHE_OBJ);
+        String s = getFormatSize(cache.size());
+        close();
+        return s;
+    }
+
+    public long getAllLongSize() {
+        open(HomePagePresenter.CACHE_OBJ);
+        if (cache == null) {
+            return 0;
+        }
+        long size = cache.size();
+        close();
+        return size;
+    }
+
+    private static String getFormatSize(double size) {
+
+        double kiloByte = size / 1024;
+        if (kiloByte < 1) {
+            return size + "Byte";
+        }
+
+        double megaByte = kiloByte / 1024;
+        if (megaByte < 1) {
+            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+            return result1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "KB";
+        }
+
+        double gigaByte = megaByte / 1024;
+        if (gigaByte < 1) {
+            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "MB";
+        }
+
+        double teraBytes = gigaByte / 1024;
+        if (teraBytes < 1) {
+            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB";
+    }
+
+    private void openRoot() {
+        try {
+            File cacheDir = getDiskCacheDir(context);
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
@@ -144,19 +235,68 @@ public class CacheManager {
         }
     }
 
-    /**
-     * editor.newOutputStream()方法来创建一个输出流
-     */
-    public DiskLruCache.Editor getEditor(String URL_OR_STR){
-        String key = hashKeyForDisk(URL_OR_STR);
-        DiskLruCache.Editor editor = null;
+    private void open(String uniqueName) {
         try {
-            editor = cache.edit(key);
+            File cacheDir = getDiskCacheDir(context, uniqueName);
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+            Log.e(TAG,cacheDir.getAbsolutePath());
+            cache = DiskLruCache.open(cacheDir, getAppVersion(context), 1, 200 * 1024 * 1024);
+            if(cache == null){
+                Log.e(TAG,"cache == null at open()");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void close(){
+        if (cache != null){
+            try {
+                cache.close();
+            } catch (IOException e) {
+
+            }
+            cache = null;
+        }
+    }
+
+    /**
+     * editor.newOutputStream()方法来创建一个输出流
+     */
+    private DiskLruCache.Editor getEditor(String URL_OR_STR) {
+        String key = hashKeyForDisk(URL_OR_STR);
+        DiskLruCache.Editor editor = null;
+        try {
+            if(cache == null)
+            {
+                Log.e(TAG,"cache == null at getEditor()");
+                return null;
+            }
+            editor = cache.edit(key);
+        } catch (IOException e) {
+
+        }
         return editor;
     }
+
+    /**
+     * 根地址
+     *
+     * @param context
+     * @return
+     */
+    private File getDiskCacheDir(Context context) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
+                || !Environment.isExternalStorageRemovable()) {
+            cachePath = context.getExternalCacheDir().getPath();
+        } else {
+            cachePath = context.getCacheDir().getPath();
+        }
+        return new File(cachePath);
+    }
+
     /**
      * 获取缓存地址
      */
@@ -185,6 +325,7 @@ public class CacheManager {
 
     /**
      * MD5算法将url转为唯一字符串
+     *
      * @param key
      * @return
      */

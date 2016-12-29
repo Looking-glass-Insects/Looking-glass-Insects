@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.example.heyong.eeyeswindow.Bean.Bean;
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.Cache.CacheManager;
+
 import com.example.heyong.eeyeswindow.Net.HomePageData;
 
 import java.io.Serializable;
@@ -47,18 +48,20 @@ public class HomePagePresenter {
         return;
     }
 
+    /**
+     * 获取下一条数据
+     * @param onGetDataSuccess
+     */
     public void nextData(final OnGetDataSuccessByNet onGetDataSuccess) {
         HomePageData.dataCallBack(new Callback<Bean>() {
             @Override
             public void onResponse(Call<Bean> call, Response<Bean> response) {
-                List<HomeLectureBean> beanList = new LinkedList<>();
+                final List<HomeLectureBean> beanList = new LinkedList<>();
                 try {
-                    String s = response.body().getTaici();
-                    beanList.add(new HomeLectureBean(s, ""));
+                    String taici = response.body().getTaici();
+                    beanList.add(new HomeLectureBean(taici,""));
                 } catch (Exception e) {
-                    //神奇，勿动
                     onGetDataSuccess.onGetData(false);
-                    return;
                 }
                 listener.onGetData(beanList);
                 onGetDataSuccess.onGetData(true);
@@ -83,10 +86,8 @@ public class HomePagePresenter {
         void onGetData(boolean isSuccessful);
     }
 
-    public boolean isOnLine() {
-        ConnectivityManager con = (ConnectivityManager) context.getSystemService(Activity.CONNECTIVITY_SERVICE);
-        boolean wifi = con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
-        boolean internet = con.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
-        return wifi || internet;
-    }
+
+
+
+
 }

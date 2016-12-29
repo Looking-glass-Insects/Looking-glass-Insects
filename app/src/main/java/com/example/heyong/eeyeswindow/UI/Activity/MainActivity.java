@@ -1,6 +1,8 @@
 package com.example.heyong.eeyeswindow.UI.Activity;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,17 +14,33 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.example.heyong.eeyeswindow.Cache.CacheManager;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.Tools.CacheUtil;
+import com.example.heyong.eeyeswindow.Tools.GlideCacheUtil;
+import com.example.heyong.eeyeswindow.Tools.GlideImageLoader;
+import com.example.heyong.eeyeswindow.Tools.ImgHelper;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.MoreFragment;
-import com.example.heyong.eeyeswindow.UI.Tools.GlideImageLoader;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -66,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setupHeader();
         setupBottom();
+        setupDrawer();
         contents = new Fragment[3];
         contents[0] = new HomeFragment();
         contents[1] = new FindFragment();
@@ -83,6 +102,19 @@ public class MainActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(BANNER_FINISH);
             }
         },5000);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+           if(currFragment == 0){
+               //HomeFragment
+               HomeFragment f = (HomeFragment) contents[currFragment];
+               if(f.onBackKeyDown())
+                   return true;
+           }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
@@ -118,12 +150,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //onBackPressed();
-            }
-        });
         mToolbar.setNavigationIcon(R.drawable.ic_drawer_black_24dp);
         //使用CollapsingToolbarLayout必须把title设置到CollapsingToolbarLayout上，设置到Toolbar上则不会显示
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -165,5 +191,79 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private Drawer drawer;
+    private static String itemCacheTag = "itemCache";
+
+    private void setupDrawer(){
+        Bitmap bmp = ImgHelper.readBitmapById(this,R.drawable.i2);
+        bmp = ImgHelper.crop(bmp,false);
+        ProfileDrawerItem profileDrawerItem = new ProfileDrawerItem().withName("点我登陆").withIcon(bmp);
+        AccountHeader accountHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(new ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
+                .addProfiles(
+                        profileDrawerItem
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        Toast.makeText(MainActivity.this, "onProfileChanged", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                })
+                .build();
+
+
+        PrimaryDrawerItem itemCache = new PrimaryDrawerItem()
+                .withName(getResources()
+                        .getString(R.string.main_cache_clear))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        CacheUtil.clearAllCache(MainActivity.this);
+                        freshCacheString();
+                        Toast.makeText(MainActivity.this, "清理完成", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                })
+                .withTag(itemCacheTag)
+                .withIcon(R.drawable.ic_adb_black_24dp)
+                .withBadgeStyle(new BadgeStyle()
+                        .withTextColorRes(R.color.item_desc)
+                        .withColorRes(R.color.colorAccent))
+                .withBadge(CacheUtil.getCacheSize(this));
+
+
+        drawer = new DrawerBuilder().withActivity(this)
+                .withToolbar((Toolbar) findViewById(R.id.toolbar))
+                .withAccountHeader(accountHeader)
+                .addDrawerItems(
+                        itemCache
+                ).withOnDrawerListener(new Drawer.OnDrawerListener() {
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        freshCacheString();
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+
+                    }
+
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                    }
+                })
+                .build();
+
+    }
+
+
+    private void freshCacheString(){
+        PrimaryDrawerItem itemCache = (PrimaryDrawerItem)drawer.getDrawerItem(itemCacheTag);
+        itemCache.withBadge(CacheUtil.getCacheSize(MainActivity.this));
+        drawer.updateItem(itemCache);
+    }
 
 }

@@ -2,6 +2,8 @@ package com.example.heyong.eeyeswindow.UI.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,8 +21,11 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.heyong.eeyeswindow.BuildConfig;
+import com.example.heyong.eeyeswindow.Net.NetworkInfo;
 import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.Receiver.NetworkReceiver;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureListAdapter;
 
 import butterknife.BindView;
@@ -59,17 +64,17 @@ public class HomeFragment extends Fragment {
      */
     @BindView(R.id.ll_off_line)
     LinearLayout llOffLine;
-    NetWorkManager manager;
 
-    static final int IS_ONLINE = 0;
-    static final int IS_OFFLINE = 1;
+    NetworkReceiver receiver;
+    public static final int IS_ONLINE = 0;
+    public static final int IS_OFFLINE = 1;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == IS_ONLINE){
+            if (msg.what == IS_ONLINE) {
                 llOffLine.setVisibility(View.GONE);
                 footer.setVisibility(View.VISIBLE);
-            }else if(msg.what == IS_OFFLINE){
+            } else if (msg.what == IS_OFFLINE) {
                 footer.setVisibility(View.GONE);
                 llOffLine.setVisibility(View.VISIBLE);
             }
@@ -91,13 +96,13 @@ public class HomeFragment extends Fragment {
         srlHome.setColorSchemeResources(R.color.colorPrimary);
         srlHome.setOnRefreshListener(new MyOnRefreshListener());
         //view[1] init
-
+        registerReceiver();
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
-        manager.stop();
+        this.getActivity().unregisterReceiver(receiver);
         super.onDestroy();
     }
 
@@ -112,11 +117,24 @@ public class HomeFragment extends Fragment {
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
         bindData();
-        manager = new NetWorkManager();
-        new Thread(manager).start();
         return view;
     }
 
+    public boolean onBackKeyDown() {
+        if (lvHomeLecture.getFirstVisiblePosition() != 0) {
+            //返回顶部
+            lvHomeLecture.smoothScrollToPosition(0);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private  void registerReceiver(){
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.receiver = new NetworkReceiver(handler);
+        this.getActivity().registerReceiver(this.receiver, filter);
+    }
     /**
      * 初始化时调用
      * <p>
@@ -126,7 +144,8 @@ public class HomeFragment extends Fragment {
         srlHome.setRefreshing(true);
         HomePageLectureListAdapter adapter = new HomePageLectureListAdapter(getContext());
         presenter = new HomePagePresenter(getContext(), adapter);
-        if (presenter.isOnLine()) {
+        if (NetworkInfo.isOnLine(HomeFragment.this.getContext())) {
+            final boolean[] flag = {true};//解除下面for循环引发的bug
             for (int i = 0; i < 10; i++) {
                 presenter.nextData(new HomePagePresenter.OnGetDataSuccessByNet() {
                     @Override
@@ -135,7 +154,12 @@ public class HomeFragment extends Fragment {
                             srlHome.setRefreshing(false);
                             cache();
                         } else {
-                            srlHome.setRefreshing(false);
+                            if(flag[0]){
+                                handler.sendEmptyMessage(IS_OFFLINE);
+                                presenter.cachedData();
+                                srlHome.setRefreshing(false);
+                                flag[0] = false;
+                            }
                         }
                     }
                 });
@@ -210,6 +234,7 @@ public class HomeFragment extends Fragment {
                 case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                     // 判断滚动到底部
                     if (absListView.getLastVisiblePosition() == (absListView.getCount() - 1)) {
+                        if (presenter == null) return;
                         presenter.nextData(new HomePagePresenter.OnGetDataSuccessByNet() {
                             @Override
                             public void onGetData(boolean isSuccessful) {
@@ -222,52 +247,13 @@ public class HomeFragment extends Fragment {
                     }
                     break;
             }
+
+
         }
 
         @Override
         public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
-        }
-    }
-
-    /**
-     * 监听网络状态
-     */
-    class NetWorkManager implements Runnable {
-        private boolean isRunning;
-
-        public NetWorkManager() {
-            llOffLine.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS);
-                    HomeFragment.this.startActivity(intent);
-                }
-            });
-            start();
-        }
-
-        public void stop() {
-            isRunning = false;
-        }
-
-        public void start() {
-            isRunning = true;
-        }
-
-        @Override
-        public void run() {
-            while (isRunning) {
-                if (presenter.isOnLine()) {
-                    handler.sendEmptyMessage(IS_ONLINE);
-                } else {
-                    handler.sendEmptyMessage(IS_OFFLINE);
-                }
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
         }
     }
 

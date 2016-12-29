@@ -1,14 +1,13 @@
-package com.example.heyong.eeyeswindow.UI.Tools;
+package com.example.heyong.eeyeswindow.Tools;
 
 import android.content.Context;
-import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.youth.banner.loader.ImageLoader;
 
 /**
- * Created by Heyong on 2016/12/18.
+ * Created by Heyong
  */
 
 public class GlideImageLoader extends ImageLoader {

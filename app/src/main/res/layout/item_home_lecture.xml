@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="200dp">
+    android:minHeight="200dp"
+    android:orientation="horizontal">
+
     <android.support.v7.widget.CardView
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:background="@drawable/ripple"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/ripple"
         card_view:cardCornerRadius="20dp"
-        card_view:cardElevation="10dp"
-        >
+        card_view:cardElevation="10dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <ImageView
 
-                android:src="@drawable/ic_insert_photo_black_24dp"
+            <ImageView
                 android:id="@+id/item_home_lecture_photo"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:src="@drawable/ic_insert_photo_black_24dp" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -37,12 +37,17 @@
                 android:orientation="vertical"
                 android:padding="5dp">
 
-                <TextView
+                <com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView
+                    android:textAlignment="center"
                     android:id="@+id/item_home_lecture_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="讲座名"
-                    android:textAlignment="center" />
+                    android:layout_marginBottom="6dip"
+                    android:ellipsize="marquee"
+                    android:focusableInTouchMode="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
