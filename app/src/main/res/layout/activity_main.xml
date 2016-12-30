@@ -27,6 +27,4 @@
         app:itemTextColor="@drawable/bottom_item_color"
         app:menu="@menu/menu_bottom_navigation" />
 
-
-
 </android.support.design.widget.CoordinatorLayout>

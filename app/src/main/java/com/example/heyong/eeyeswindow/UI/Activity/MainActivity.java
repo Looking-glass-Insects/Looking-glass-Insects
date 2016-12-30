@@ -29,6 +29,7 @@ import com.example.heyong.eeyeswindow.Tools.CacheUtil;
 import com.example.heyong.eeyeswindow.Tools.GlideCacheUtil;
 import com.example.heyong.eeyeswindow.Tools.GlideImageLoader;
 import com.example.heyong.eeyeswindow.Tools.ImgHelper;
+import com.example.heyong.eeyeswindow.Tools.SimpleDialogFactory;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.MoreFragment;
@@ -195,9 +196,8 @@ public class MainActivity extends AppCompatActivity {
     private static String itemCacheTag = "itemCache";
 
     private void setupDrawer(){
-        Bitmap bmp = ImgHelper.readBitmapById(this,R.drawable.i2);
-        bmp = ImgHelper.crop(bmp,false);
-        ProfileDrawerItem profileDrawerItem = new ProfileDrawerItem().withName("点我登陆").withIcon(bmp);
+
+        ProfileDrawerItem profileDrawerItem = new ProfileDrawerItem().withName("点我登陆");
         AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(new ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
@@ -208,7 +208,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
                         Toast.makeText(MainActivity.this, "onProfileChanged", Toast.LENGTH_SHORT).show();
-                        return false;
+                        return true;
+                    }
+                }).withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
+                    @Override
+                    public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
+                        Toast.makeText(MainActivity.this, "onProfileImageClick", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onProfileImageLongClick(View view, IProfile profile, boolean current) {
+                        Toast.makeText(MainActivity.this, "onProfileImageLongClick", Toast.LENGTH_SHORT).show();
+                        return true;
                     }
                 })
                 .build();
@@ -220,9 +232,19 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        CacheUtil.clearAllCache(MainActivity.this);
-                        freshCacheString();
-                        Toast.makeText(MainActivity.this, "清理完成", Toast.LENGTH_SHORT).show();
+                        drawer.closeDrawer();
+                        SimpleDialogFactory.alertDialog(MainActivity.this, "提示", "确定清空缓存吗？", R.drawable.ic_adb_black_24dp,
+                                new SimpleDialogFactory.IAlertDialogCallBack() {
+                                    @Override
+                                    public void doSomething(boolean isOK) {
+                                        if(isOK)
+                                        {
+                                            CacheUtil.clearAllCache(MainActivity.this);
+                                            freshCacheString();
+                                            Toast.makeText(MainActivity.this, "清理完成", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                         return true;
                     }
                 })

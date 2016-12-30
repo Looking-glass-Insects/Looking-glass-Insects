@@ -10,7 +10,7 @@
     <android.support.design.widget.CollapsingToolbarLayout
         android:id="@+id/collapsing_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         android:fitsSystemWindows="true"
         app:contentScrim="?attr/colorPrimary"
@@ -29,6 +29,7 @@
             android:layout_height="?attr/actionBarSize"
             app:layout_collapseMode="pin"
             style="@style/AlertDialog.AppCompat.Light"
+            app:layout_scrollFlags="scroll"
             />
 
     </android.support.design.widget.CollapsingToolbarLayout>

@@ -3,16 +3,20 @@ package com.example.heyong.eeyeswindow.UI.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.audiofx.EnvironmentalReverb;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,7 @@ import com.example.heyong.eeyeswindow.Net.NetworkInfo;
 import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Receiver.NetworkReceiver;
+import com.example.heyong.eeyeswindow.UI.Activity.MainActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureListAdapter;
 
 import butterknife.BindView;
@@ -37,7 +42,7 @@ import butterknife.ButterKnife;
  */
 
 public class HomeFragment extends Fragment {
-
+    static String TAG = "HomeFragment";
     @BindView(R.id.tabs)
     TabLayout tabs;
     @BindView(R.id.vp_view)
@@ -111,6 +116,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        llOffLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                startActivity(intent);
+            }
+        });
         tabs.addTab(tabs.newTab().setText(titles[0]));
         tabs.addTab(tabs.newTab().setText(titles[1]));
         MyViewPageAdapter adapter = new MyViewPageAdapter(this.getActivity());
@@ -130,11 +142,12 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private  void registerReceiver(){
+    private void registerReceiver() {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.receiver = new NetworkReceiver(handler);
         this.getActivity().registerReceiver(this.receiver, filter);
     }
+
     /**
      * 初始化时调用
      * <p>
@@ -154,7 +167,7 @@ public class HomeFragment extends Fragment {
                             srlHome.setRefreshing(false);
                             cache();
                         } else {
-                            if(flag[0]){
+                            if (flag[0]) {
                                 handler.sendEmptyMessage(IS_OFFLINE);
                                 presenter.cachedData();
                                 srlHome.setRefreshing(false);
@@ -220,18 +233,16 @@ public class HomeFragment extends Fragment {
     }
 
     class MyOnScrollListener implements AbsListView.OnScrollListener {
-        /**
-         * 监听滑动到底部
-         *
-         * @param absListView
-         * @param scrollState
-         */
+        private boolean scrollFlag = false;// 标记是否滑动
+        private int lastVisibleItemPosition;// 标记上次滑动位置
+
         @Override
         public void onScrollStateChanged(AbsListView absListView, int scrollState) {
 
             switch (scrollState) {
                 // 当不滚动时
                 case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                    scrollFlag = false;
                     // 判断滚动到底部
                     if (absListView.getLastVisiblePosition() == (absListView.getCount() - 1)) {
                         if (presenter == null) return;
@@ -246,14 +257,38 @@ public class HomeFragment extends Fragment {
                         });
                     }
                     break;
+                case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
+                    scrollFlag = true;
+                    break;
+                default:
+                    scrollFlag = false;
             }
 
 
         }
 
         @Override
-        public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+        public void onScroll(AbsListView view, int firstVisibleItem,
+                             int visibleItemCount, int totalItemCount) {
+            if (scrollFlag) {
+                if (firstVisibleItem > lastVisibleItemPosition) {
+                    //Log.e(TAG, "上滑");
+//                    MainActivity activity = (MainActivity)HomeFragment.this.getActivity();
+//                    AppBarLayout bar = (AppBarLayout)activity.findViewById(R.id.appbar);
+//                    bar.setVisibility(View.INVISIBLE);
 
+                }
+                if (firstVisibleItem < lastVisibleItemPosition) {
+                    //Log.e(TAG, "下滑");
+//                    MainActivity activity = (MainActivity)HomeFragment.this.getActivity();
+//                    AppBarLayout bar = (AppBarLayout)activity.findViewById(R.id.appbar);
+//                    bar.setVisibility(View.VISIBLE);
+                }
+                if (firstVisibleItem == lastVisibleItemPosition) {
+                    return;
+                }
+                lastVisibleItemPosition = firstVisibleItem;
+            }
         }
     }
 
