@@ -86,6 +86,21 @@ public class AStar {
                 });
                 return p[0];
             }
+
+            /**
+             * 移除最小的
+             * @return
+             */
+            @Override
+            public ThreeDPoint remove() {
+                final ThreeDPoint[] point = {new ThreeDPoint(Integer.MAX_VALUE, Integer.MAX_VALUE)};
+                this.forEach(e -> {
+                    if (e.compareTo(point[0]) < 0)
+                        point[0] = e;
+                });
+                super.remove(point[0]);
+                return point[0];
+            }
         };
         closedList = new LinkedList<ThreeDPoint>() {
             @Override
@@ -111,7 +126,7 @@ public class AStar {
     /**
      * A星算法
      */
-    public void cal(){
+    public void cal() {
         ThreeDPoint start = new ThreeDPoint(0, 0);//起点入队
         ThreeDPoint end = new ThreeDPoint(maze.getHeight() * maze.getWidth() - 1, -1);
         openedList.add(start);
@@ -129,19 +144,17 @@ public class AStar {
                                 ansP.x = p.x;
                             }
                             return false;
-                        }
-                        else return true;
+                        } else return true;
                     })
                     .map(x -> new ThreeDPoint(x, p.g + 1))
                     .forEach(e -> {
                         openedList.add(e);
                         ansList.add(new Maze.Point(p.x, e.x));
                     });
-            Collections.sort(openedList);
+            //Collections.sort(openedList);
             try {
                 closedList.add((ThreeDPoint) p.clone());
             } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
             }
             ThreeDPoint temp = openedList.remove();
             p.copy(temp);
@@ -149,7 +162,7 @@ public class AStar {
     }
 
 
-    private class ThreeDPoint implements Comparable<ThreeDPoint>,Cloneable {
+    private class ThreeDPoint implements Comparable<ThreeDPoint>, Cloneable {
         int x;//元素本身
         int h;//曼哈顿距离
         int g;//耗散值
@@ -167,7 +180,6 @@ public class AStar {
             ThreeDPoint that = (ThreeDPoint) o;
 
             return x == that.x;
-
         }
 
         public void copy(ThreeDPoint p) {
@@ -195,7 +207,7 @@ public class AStar {
 
         @Override
         protected Object clone() throws CloneNotSupportedException {
-            return  new ThreeDPoint(this.x,this.g);
+            return new ThreeDPoint(this.x, this.g);
         }
     }
 }

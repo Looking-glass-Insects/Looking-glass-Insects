@@ -15,7 +15,11 @@ public class Maze {
      */
     private Set<Point> notWalls;
 
-    UnionFindSet set;
+    private UnionFindSet set;
+    /**
+     * 邻近表
+     */
+    private List<Set<Integer>> adjacencyList = new LinkedList<>();
 
     public Maze(int width, int height) {
         this.width = width;
@@ -35,7 +39,10 @@ public class Maze {
                 return flag[0];
             }
         };
+        initAdjacencyList();
     }
+
+
 
     /**
      * 初始化迷宫
@@ -46,6 +53,8 @@ public class Maze {
             int next = getNearEle(rand);
             notWalls.add(new Point(rand, next));
             set.union(rand, next);
+            adjacencyList.get(rand).add(next);
+            adjacencyList.get(next).add(rand);
         }
     }
 
@@ -54,7 +63,6 @@ public class Maze {
      * 打印数据
      */
     public void print() {
-        //Collections.sort(notWalls);
         for (Point p :
                 notWalls) {
             p.print();
@@ -70,25 +78,16 @@ public class Maze {
     public List<Integer> getNextChoicesByEle(int x) {
         List<Integer> list = new LinkedList<>();
         assert x >= 0 && x < width * height : "参数范围错误";
-        int row = x / width;
-        int column = x % width;
-        int[] dx = {1, 0, -1, 0};
-        int[] dy = {0, 1, 0, -1};
-        for (int i = 0; i < dx.length; i++) {
-            int _row = row + dx[i];
-            int _column = column + dy[i];
-            if (_row >= 0 && _row < height && _column >= 0 && _column < width)
-                list.add(_row * width + _column);
-        }
-        list = list.stream().filter(i -> {
-                            boolean flag = notWalls.contains(new Point(x, i)) || notWalls.contains(new Point(i, x));
-                            //System.out.println(flag);
-                            return flag;
-                        }
-                ).collect(Collectors.toList());
+        Set<Integer> set = adjacencyList.get(x);
+        set.forEach(list::add);
         return list;
     }
 
+    private void initAdjacencyList() {
+        for (int i = 0; i < width * height; i++) {
+            adjacencyList.add(new HashSet<>());
+        }
+    }
 
     /**
      * 随机获取x的旁边元素
@@ -146,10 +145,9 @@ public class Maze {
             if (o == null || getClass() != o.getClass()) return false;
 
             Point point = (Point) o;
-
-            if (x != point.x) return false;
-            return y == point.y;
-
+            boolean flag1 = (x == point.x && y == point.y);
+            boolean flag2 = (y == point.x && x == point.y);
+            return flag1 || flag2;
         }
 
         @Override

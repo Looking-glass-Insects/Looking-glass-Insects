@@ -1,6 +1,4 @@
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -14,7 +12,6 @@ public class Main {
         //m.print();
         long endTime = Calendar.getInstance().getTimeInMillis();
         System.out.println("生成迷宫用时：" + (endTime - startTime));
-
 
         startTime = Calendar.getInstance().getTimeInMillis();
         AStar aStar = new AStar(m);
