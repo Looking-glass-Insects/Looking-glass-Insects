@@ -1,5 +1,6 @@
+package maze;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by Heyong on 2016/12/30.

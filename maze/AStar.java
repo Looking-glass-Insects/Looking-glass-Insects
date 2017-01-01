@@ -1,5 +1,6 @@
+package maze;
+
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Created by Heyong on 2016/12/31.
