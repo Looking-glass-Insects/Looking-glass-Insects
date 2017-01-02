@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * Created by Heyong on 2016/12/30.
- * <p>
+ *
  * 迷宫类
  * 起点为0，终点为 width*height-1
  */
@@ -18,7 +18,7 @@ public class Maze {
 
     private UnionFindSet set;
     /**
-     * 邻近表
+     * 邻接表
      */
     private List<Set<Integer>> adjacencyList = new LinkedList<>();
 

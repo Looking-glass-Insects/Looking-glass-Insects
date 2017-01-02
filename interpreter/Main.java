@@ -14,27 +14,38 @@ public class Main {
 //        i.readLine(" ASSIGN z y * x - 3 * ( x - y ) ");
 //        i.readLine("ASSIGN xx x+x-y*z");
 //        i.printVars();
-        i.readLine("DEFINE f ");
-        i.readLine("ASSIGN x 1+2");
-        i.readLine("ASSIGN x x*x");
+//        i.readLine("DEFINE f ");
+//        i.readLine("ASSIGN x 1+2");
+//        i.readLine("ASSIGN x x*x");
         //i.readLine("CALL g");// generate StackOverFlow Error
-        i.readLine("END");
-
-        i.readLine("DEFINE g ");
-        i.readLine("ASSIGN x 1+2");
-        i.readLine("ASSIGN x x*x*x");
-        i.readLine("CALL f");
-        i.readLine("END");
+//        i.readLine("END");
+//
+//        i.readLine("DEFINE g ");
+//        i.readLine("ASSIGN x 1+2");
+//        i.readLine("ASSIGN x x*x*x");
+//        i.readLine("CALL f");
+//        i.readLine("END");
         //i.printFuncs();
         // i.readLine("CALL g");
 
         //i.readLine(" FOR 1 CALL g");
-        i.readLine("DEFINE h");
-        i.readLine("FOR x ASSIGN x x+1");
-        i.readLine("END");
+//        i.readLine("DEFINE h");
+//        i.readLine("FOR x ASSIGN x x+1");
+//        i.readLine("END");
 
-        i.readLine("ASSIGN x 3");
-        i.readLine("CALL h");
+//        i.readLine("ASSIGN x 3");
+//        i.readLine("CALL h");
+        i.readLine("ASSIGN x 10.1 - 9.2");
+//        i.readLine("DEFINE f ");
+        //i.readLine("DEFINE inner");
+//        i.readLine("ASSIGN x x-1");
+//        i.readLine("END");
+        // i.readLine("END");
 
+        //i.printFuncs();
+        //i.readLine("CALL f");
+        //i.readLine("FOR (x-1)/2 CALL f");
+        i.printVars();
+        i.printFuncs();
     }
 }

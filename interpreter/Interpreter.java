@@ -119,6 +119,8 @@ public class Interpreter {
                 execCall();
                 break;
             case 3:
+                if (!isDefining)
+                    throw new IllegalArgumentException(ERR_GRAMMAR+line);
                 isDefining = false;
                 System.out.println("Defining " + currFuncName + " End");
                 break;
@@ -142,7 +144,7 @@ public class Interpreter {
         String statement = matcher.group(2);
         filter(expression);
         try {
-            int val = (int) jse.eval(expression[0]);
+            int val = execEquation(expression);
             if (val <= 0)
                 throw new IllegalArgumentException(ERR_LOOP_ITERATOR + val);
             System.out.println("FOR Executing: times = " + val);
@@ -175,7 +177,7 @@ public class Interpreter {
     private void execDefineFunc() {
         isDefining = true;
         currFuncName = matcher.group(1);//函数变量名
-        if (!isLeagle(currFuncName))
+        if (!isLegal(currFuncName))
             throw new IllegalArgumentException(ERR_NAME_ILLEAGLE + currFuncName);
         System.out.println("Defining " + currFuncName);
         functions.put(currFuncName, new LinkedList<>());
@@ -186,12 +188,12 @@ public class Interpreter {
      */
     private void execAssign() {
         String var = matcher.group(1);//找到变量名
-        if (!isLeagle(var))
+        if (!isLegal(var))
             throw new IllegalArgumentException(ERR_NAME_ILLEAGLE + var);
         final String[] expression = {matcher.group(2).replaceAll(" ", "")};//表达式去空格
         filter(expression);//替换
         try {
-            int val = (int) jse.eval(expression[0]);
+            int val = execEquation(expression);
             vars.put(var, val);
             System.out.println("Assign " + val + " to " + var);
         } catch (ScriptException e) {
@@ -210,10 +212,11 @@ public class Interpreter {
                     try {
                         if (e.equals(""))
                             return false;
-                        Integer.parseInt(e);
+                        Double.parseDouble(e);
                     } catch (NumberFormatException e1) {
+                        //格式化失败表示其中有字母之类的东西，当作变量名
                         Integer i = vars.get(e);
-                        if (i == null)
+                        if (i == null)//未发现该变量
                             throw new IllegalArgumentException(ERR_NO_SUCH_VAR + e);
                         expression[0] = expression[0].replaceAll(e, i + "");
                         return true;
@@ -226,6 +229,8 @@ public class Interpreter {
      * 打印当前所有变量
      */
     public void printVars() {
+        System.out.println("-------------------------");
+        System.out.println("ALL VARIABLES:");
         vars.keySet().forEach(key -> {
             int val = vars.get(key);
             System.out.println(key + " -> " + val);
@@ -236,6 +241,8 @@ public class Interpreter {
      * 打印所有函数
      */
     public void printFuncs() {
+        System.out.println("-------------------------");
+        System.out.println("ALL FUNCTIONS:");
         functions.keySet().forEach(key -> {
             List<String> l = functions.get(key);
             System.out.println(key);
@@ -248,9 +255,9 @@ public class Interpreter {
     /**
      * 判断该变量名是否合法
      *
-     * @return
+     * @return if is legal
      */
-    private boolean isLeagle(String varName) {
+    private boolean isLegal(String varName) {
         Pattern pattern = Pattern.compile(RE_IS_VAR_NAME);
         Matcher matcher = pattern.matcher(varName);
         if (matcher.matches())
@@ -258,4 +265,8 @@ public class Interpreter {
         else return false;
     }
 
+
+    private int execEquation(final String[] expression) throws ScriptException {
+        return ((Double)(Double.parseDouble(jse.eval(expression[0]).toString()))).intValue();
+    }
 }
