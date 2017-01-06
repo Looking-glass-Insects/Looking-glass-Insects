@@ -3,20 +3,18 @@ package com.example.heyong.eeyeswindow.UI.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.audiofx.EnvironmentalReverb;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,16 +23,15 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.example.heyong.eeyeswindow.BuildConfig;
 import com.example.heyong.eeyeswindow.Net.NetworkInfo;
 import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Receiver.NetworkReceiver;
-import com.example.heyong.eeyeswindow.UI.Activity.MainActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureListAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -47,6 +44,8 @@ public class HomeFragment extends Fragment {
     TabLayout tabs;
     @BindView(R.id.vp_view)
     ViewPager viewPager;
+    @BindView(R.id.btn_top)
+    FloatingActionButton btnTop;
 
     String[] titles = {"讲座", "活动"};
     View[] views = {
@@ -132,7 +131,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    public boolean onBackKeyDown() {
+    public boolean goTop() {
         if (lvHomeLecture.getFirstVisiblePosition() != 0) {
             //返回顶部
             lvHomeLecture.smoothScrollToPosition(0);
@@ -141,7 +140,10 @@ public class HomeFragment extends Fragment {
             return false;
         }
     }
-
+    @OnClick(R.id.btn_top)
+    public void onClick() {
+        goTop();
+    }
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.receiver = new NetworkReceiver(handler);
@@ -191,6 +193,8 @@ public class HomeFragment extends Fragment {
         HomePageLectureListAdapter adapter = (HomePageLectureListAdapter) ((HeaderViewListAdapter) lvHomeLecture.getAdapter()).getWrappedAdapter();
         presenter.startCache(HomePagePresenter.CACHE_OBJ, HomePagePresenter.CACHE_OBJ, adapter.getData(), null);
     }
+
+
 
     class MyViewPageAdapter extends PagerAdapter {
         Context context;

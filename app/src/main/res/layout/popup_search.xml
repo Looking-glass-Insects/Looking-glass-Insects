@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cardview_light_background">
+    <ImageView
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:background="@drawable/ripple"
+        android:layout_centerVertical="true"
+        android:id="@+id/image_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_arrow_back_black_24dp"/>
+    <android.support.v7.widget.SearchView
+        android:id="@+id/sv_search"
+        android:paddingLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/image_back"
+        app:queryHint="@string/search"
+        />
+</RelativeLayout>

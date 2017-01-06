@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 /**
  * Created by Heyong on 2016/12/28.
+ * 滚动式text view
  */
 
 @RemoteViews.RemoteView

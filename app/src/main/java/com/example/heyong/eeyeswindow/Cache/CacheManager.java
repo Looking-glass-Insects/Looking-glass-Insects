@@ -132,6 +132,8 @@ public class CacheManager {
             ois = new ObjectInputStream(is);
         } catch (IOException e) {
             return null;
+        } catch(NullPointerException e){
+            return null;//
         }
         Object obj = null;
         try {

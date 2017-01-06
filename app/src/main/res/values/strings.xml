@@ -4,4 +4,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="main_cache_clear">清理缓存</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_search">搜索</string>
+    <string name="menu_about">关于</string>
+    <string name="search">搜索。。。</string>
 </resources>

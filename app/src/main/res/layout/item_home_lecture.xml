@@ -14,7 +14,7 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        card_view:cardCornerRadius="20dp"
+        card_view:cardCornerRadius="5dp"
         card_view:cardElevation="10dp">
 
         <LinearLayout
