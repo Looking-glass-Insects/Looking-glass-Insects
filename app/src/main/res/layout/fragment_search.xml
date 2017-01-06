@@ -1,18 +1,32 @@
-<android.support.v4.widget.NestedScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <!--将你的内容放在这里-->
-    <com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout
-        android:id="@+id/flowlayout"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:lineSpacing="10dp"
-        >
-
-    </com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout>
-
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/activity_vertical_margin">
+        <!--将你的内容放在这里-->
+        <TextView
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hot_search"/>
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout
+                android:id="@+id/flowlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:lineSpacing="10dp"
+                >
+            </com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout>
+        </android.support.v4.widget.NestedScrollView>
+        <include layout="@layout/cut_line_flow" />
+    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
