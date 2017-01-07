@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -63,6 +64,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     @BindView(R.id.frame_content)
     FrameLayout frameContent;
 
@@ -131,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
     private void bindView(int index) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-
         if (null != contents[currFragment]) {
             transaction.hide(contents[currFragment]);
         }
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!fragment.isAdded()) {
             transaction.add(R.id.frame_content, fragment, fragment.getClass().getName());
+
         } else {
             transaction.show(fragment);
         }

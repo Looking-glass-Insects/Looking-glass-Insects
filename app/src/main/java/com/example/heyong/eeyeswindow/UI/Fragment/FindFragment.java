@@ -4,9 +4,11 @@ package com.example.heyong.eeyeswindow.UI.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,7 +42,7 @@ import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
  */
 public class FindFragment extends Fragment {
     public static final String SEARCH = SearchPopupWindow.SUBMIT_TEXT;
-
+    static String TAG = "FindFragment";
     @BindView(R.id.flowlayout)
     FlowLayout flowlayout;
 
@@ -51,14 +53,17 @@ public class FindFragment extends Fragment {
 
     HotPublisherManager publisherManager;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         flowLayoutManager = new FlowLayoutManager(view);
         publisherManager = new HotPublisherManager();
         init();
+       // Log.i(TAG,"onCreateView");
         return view;
     }
 
