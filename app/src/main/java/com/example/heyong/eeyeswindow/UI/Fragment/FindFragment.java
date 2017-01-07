@@ -63,13 +63,22 @@ public class FindFragment extends Fragment {
         flowLayoutManager = new FlowLayoutManager(view);
         publisherManager = new HotPublisherManager();
         init();
-       // Log.i(TAG,"onCreateView");
         return view;
     }
 
     private void init() {
     }
 
+
+    @Override
+    public void onResume() {
+        /**
+         * 解决焦点产生的bug
+         */
+        flowlayout.setFocusableInTouchMode(true);
+        flowlayout.requestFocus();
+        super.onResume();
+    }
 
     class FlowLayoutManager {
         static final int DEFAULT_SIZE = 9;
@@ -146,7 +155,7 @@ public class FindFragment extends Fragment {
 
         private void yieldText(final String text) {
             int ranHeight = dip2px(FindFragment.this.getContext(), 30);
-            ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(WRAP_CONTENT, ranHeight);
+            ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(WRAP_CONTENT, ranHeight);//
             lp.setMargins(dip2px(FindFragment.this.getContext(), 10), 0, dip2px(FindFragment.this.getContext(), 10), 0);
             TextView tv = new TextView(FindFragment.this.getContext());
             tv.setPadding(dip2px(FindFragment.this.getContext(), 15), 0, dip2px(FindFragment.this.getContext(), 15), 0);
