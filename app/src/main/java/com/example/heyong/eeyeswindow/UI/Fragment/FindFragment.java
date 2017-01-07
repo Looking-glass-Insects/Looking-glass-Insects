@@ -1,22 +1,35 @@
 package com.example.heyong.eeyeswindow.UI.Fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
+import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
 import com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout;
+import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.CropTransformation;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
@@ -26,18 +39,25 @@ import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
  *
  */
 public class FindFragment extends Fragment {
-
+    public static final String SEARCH = SearchPopupWindow.SUBMIT_TEXT;
 
     @BindView(R.id.flowlayout)
     FlowLayout flowlayout;
 
     FlowLayoutManager flowLayoutManager;
+
+    @BindView(R.id.rc_search_container)
+    RecyclerView rcSearchContainer;
+
+    HotPublisherManager publisherManager;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
         flowLayoutManager = new FlowLayoutManager(view);
+        publisherManager = new HotPublisherManager();
         init();
         return view;
     }
@@ -85,7 +105,7 @@ public class FindFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
-                        flowlayout.removeViews(DEFAULT_SIZE,strings.length - DEFAULT_SIZE);
+                        flowlayout.removeViews(DEFAULT_SIZE, strings.length - DEFAULT_SIZE);
                     } catch (Exception e) {
                     }
                     convertVisit();
@@ -95,7 +115,7 @@ public class FindFragment extends Fragment {
         }
 
         private void init() {
-            for(int i = 0;i<DEFAULT_SIZE;i++)
+            for (int i = 0; i < DEFAULT_SIZE; i++)
                 yieldText(strings[i]);
             flowlayout.relayoutToCompress();
         }
@@ -113,7 +133,7 @@ public class FindFragment extends Fragment {
 
         private void addAll() {
             flowlayout.removeAllViews();
-            for(String s : strings){
+            for (String s : strings) {
                 yieldText(s);
             }
             flowlayout.relayoutToCompress();
@@ -133,13 +153,35 @@ public class FindFragment extends Fragment {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(FindFragment.this.getContext(), text, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(FindFragment.this.getContext(), SearchActivity.class);
+                    intent.putExtra(SEARCH, text);
+                    startActivity(intent);
                 }
             });
             tv.setBackgroundResource(R.drawable.flow_bg);
-            flowlayout.addView(tv,lp);
+            flowlayout.addView(tv, lp);
         }
 
     }
 
+    class HotPublisherManager {
+
+        public HotPublisherManager(){
+            List<String> data = new LinkedList<>();
+            data.add("1");
+            data.add("2");
+            data.add("3");
+            data.add("4");
+            data.add("5");
+            data.add("6");
+            SearchFragmentHotAdapter adapter = new SearchFragmentHotAdapter(getContext(),data);
+            rcSearchContainer.setLayoutManager(new LinearLayoutManager(getContext()));
+            rcSearchContainer.setAdapter(adapter);
+            rcSearchContainer.setItemAnimator(new DefaultItemAnimator());
+            rcSearchContainer.setNestedScrollingEnabled(false);
+        }
+
+
+
+    }
 }

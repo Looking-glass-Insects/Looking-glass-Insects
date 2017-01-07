@@ -10,4 +10,6 @@
     <string name="see_more">查看更多</string>
     <string name="see_less">收起</string>
     <string name="hot_search">热门标签</string>
+    <string name="hot_service">热门发布方</string>
+    <string name="hot_name">热门发布方名称</string>
 </resources>

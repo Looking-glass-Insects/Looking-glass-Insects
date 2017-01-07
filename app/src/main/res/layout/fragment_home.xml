@@ -15,7 +15,7 @@
             app:tabSelectedTextColor="@color/colorAccent"
             app:tabTextColor="@color/colorPrimaryDark"/>
         <LinearLayout
-            android:background="@drawable/ripple"
+            android:background="?android:attr/selectableItemBackground"
             android:visibility="gone"
             android:orientation="vertical"
             android:id="@+id/ll_off_line"

@@ -6,7 +6,7 @@
     android:background="@color/cardview_light_background">
     <ImageView
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:background="@drawable/ripple"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_centerVertical="true"
         android:id="@+id/image_back"
         android:layout_width="30dp"

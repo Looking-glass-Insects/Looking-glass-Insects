@@ -25,8 +25,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
+
 import com.example.heyong.eeyeswindow.Cache.CacheManager;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.CacheUtil;

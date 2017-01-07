@@ -61,7 +61,7 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
         }
         ViewHolder viewHolder = new ViewHolder(view);
         viewHolder.itemHomeLectureTitle.setText(data.get(i).getTitle());
-        Glide.with(context).load(data.get(i).getPicURL()).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context).load(data.get(i).getPicURL()).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .error(R.drawable.ic_insert_photo_black_24dp).into(viewHolder.itemHomeLecturePhoto);
         return view;
     }
