@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationIcon(R.drawable.ic_drawer_black_24dp);
-        mToolbar.setTitle("e瞳大屏幕");
+        //mToolbar.setTitle("e瞳大屏幕");
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         //通过CollapsingToolbarLayout修改字体颜色
         mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorPrimary));//设置还没收缩时状态下字体颜色
@@ -313,9 +313,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void freshCacheString() {
-        PrimaryDrawerItem itemCache = (PrimaryDrawerItem) drawer.getDrawerItem(itemCacheTag);
-        itemCache.withBadge(CacheUtil.getCacheSize(MainActivity.this));
-        drawer.updateItem(itemCache);
+        try {
+            PrimaryDrawerItem itemCache = (PrimaryDrawerItem) drawer.getDrawerItem(itemCacheTag);
+            itemCache.withBadge(CacheUtil.getCacheSize(MainActivity.this));
+            drawer.updateItem(itemCache);
+        } catch (NullPointerException e) {
+            //小bug
+        }
     }
 
 }

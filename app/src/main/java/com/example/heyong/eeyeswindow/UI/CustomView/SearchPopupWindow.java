@@ -2,6 +2,7 @@ package com.example.heyong.eeyeswindow.UI.CustomView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.PopupWindow;
 
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.PxToDp;
+import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,15 +24,18 @@ import butterknife.OnClick;
  */
 
 public class SearchPopupWindow extends PopupWindow {
+    static public String SUBMIT_TEXT = "submit";
+
     View menuView;
     @BindView(R.id.image_back)
     ImageView imageBack;
     @BindView(R.id.sv_search)
     SearchView svSearch;
-
+    Context context;
 
     public SearchPopupWindow(final Activity context) {
         super(context);
+        this.context = context;
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         menuView = inflater.inflate(R.layout.popup_search, null);
@@ -60,6 +65,7 @@ public class SearchPopupWindow extends PopupWindow {
             }
         });
         svSearch.onActionViewExpanded();
+        svSearch.setOnQueryTextListener(new MyQueryTextListener());
     }
 
 
@@ -68,5 +74,20 @@ public class SearchPopupWindow extends PopupWindow {
         dismiss();
     }
 
+    class MyQueryTextListener implements SearchView.OnQueryTextListener{
 
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            Intent intent = new Intent(context, SearchActivity.class);
+            intent.putExtra(SUBMIT_TEXT,query);
+            context.startActivity(intent);
+            dismiss();
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            return false;
+        }
+    }
 }
