@@ -7,9 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.aitangba.swipeback.SwipeBackActivity;
+
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
+
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class SearchActivity extends SwipeBackActivity {
     static String TAG = "SearchActivity";

@@ -14,11 +14,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
@@ -30,8 +28,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropTransformation;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
@@ -52,6 +48,9 @@ public class FindFragment extends Fragment {
     RecyclerView rcSearchContainer;
 
     HotPublisherManager publisherManager;
+
+    @BindView(R.id.search_root)
+    NestedScrollView root;
 
 
     @Override
@@ -77,6 +76,7 @@ public class FindFragment extends Fragment {
          */
         flowlayout.setFocusableInTouchMode(true);
         flowlayout.requestFocus();
+        Log.i(TAG,"onResume");
         super.onResume();
     }
 
@@ -180,7 +180,7 @@ public class FindFragment extends Fragment {
 
     class HotPublisherManager {
 
-        public HotPublisherManager(){
+        public HotPublisherManager() {
             List<String> data = new LinkedList<>();
             data.add("1");
             data.add("2");
@@ -188,13 +188,12 @@ public class FindFragment extends Fragment {
             data.add("4");
             data.add("5");
             data.add("6");
-            SearchFragmentHotAdapter adapter = new SearchFragmentHotAdapter(getContext(),data);
+            SearchFragmentHotAdapter adapter = new SearchFragmentHotAdapter(getContext(), data);
             rcSearchContainer.setLayoutManager(new LinearLayoutManager(getContext()));
             rcSearchContainer.setAdapter(adapter);
             rcSearchContainer.setItemAnimator(new DefaultItemAnimator());
             rcSearchContainer.setNestedScrollingEnabled(false);
         }
-
 
 
     }

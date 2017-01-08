@@ -133,11 +133,13 @@ public class MainActivity extends AppCompatActivity {
     private void bindView(int index) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
+
         if (null != contents[currFragment]) {
             transaction.hide(contents[currFragment]);
         }
 
         currFragment = index;
+
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(contents[currFragment].getClass().getName());
         if (null == fragment) {
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             transaction.show(fragment);
         }
-        transaction.commit();
+         transaction.commit();
     }
 
     /**

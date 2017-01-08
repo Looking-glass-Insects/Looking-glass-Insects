@@ -3,7 +3,7 @@ package com.example.heyong.eeyeswindow;
 import android.app.Application;
 import android.content.Context;
 
-import com.aitangba.swipeback.ActivityLifecycleHelper;
+
 
 
 
@@ -21,7 +21,5 @@ public class EeyesWindow extends Application {
     public void onCreate() {
         super.onCreate();
         //refWatcher = LeakCanary.install(this);
-        //右滑关闭支持
-        registerActivityLifecycleCallbacks(ActivityLifecycleHelper.build());
     }
 }
