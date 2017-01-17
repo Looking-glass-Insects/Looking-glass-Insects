@@ -1,12 +1,28 @@
 import numpy as np
 
 class single:
+    '''
+        感知器模型
+    '''
     def __init__(self,dimen):
         self.weight = np.zeros(dimen)
         self.bias = 0
         self.ratio = 0.1
 
+    def sigmoid(self,inputVec):
+        '''
+        阈值函数
+        :param inputVec:
+        :return:
+        '''
+        return 1/(1 + np.exp(- self.out(inputSet)))
+
     def out(self,inputVec):
+        '''
+        输出，并未加阈值函数
+        :param inputVec:
+        :return:
+        '''
         return sum(self.weight * inputVec) + self.bias
 
     def train(self,inputSet,outputSet,times = 100):
@@ -26,3 +42,5 @@ if __name__ == '__main__':
     single.train(inputSet,outputSet)
 
     print(single.out([1,1]))
+
+    print(single.__doc__)
