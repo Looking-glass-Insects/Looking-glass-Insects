@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.PxToDp;
@@ -32,6 +33,8 @@ public class SearchPopupWindow extends PopupWindow {
     @BindView(R.id.sv_search)
     SearchView svSearch;
     Context context;
+    @BindView(R.id.image_scan)
+    ImageView imageScan;
 
     public SearchPopupWindow(final Activity context) {
         super(context);
@@ -42,7 +45,7 @@ public class SearchPopupWindow extends PopupWindow {
         setContentView(menuView);
         ButterKnife.bind(this, menuView);
         final float scale = context.getResources().getDisplayMetrics().density;
-        setHeight(PxToDp.dip2px(context,56));
+        setHeight(PxToDp.dip2px(context, 56));
         int w = context.getWindowManager().getDefaultDisplay().getWidth();
         setWidth(w);
 
@@ -74,12 +77,17 @@ public class SearchPopupWindow extends PopupWindow {
         dismiss();
     }
 
-    class MyQueryTextListener implements SearchView.OnQueryTextListener{
+    @OnClick(R.id.image_scan)
+    public void onClickImageScan() {
+        Toast.makeText(context, "二维码扫描", Toast.LENGTH_SHORT).show();
+    }
+
+    class MyQueryTextListener implements SearchView.OnQueryTextListener {
 
         @Override
         public boolean onQueryTextSubmit(String query) {
             Intent intent = new Intent(context, SearchActivity.class);
-            intent.putExtra(SUBMIT_TEXT,query);
+            intent.putExtra(SUBMIT_TEXT, query);
             context.startActivity(intent);
             dismiss();
             return true;
