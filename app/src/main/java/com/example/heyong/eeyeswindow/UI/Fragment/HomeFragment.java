@@ -44,8 +44,8 @@ public class HomeFragment extends Fragment {
     TabLayout tabs;
     @BindView(R.id.vp_view)
     ViewPager viewPager;
-    @BindView(R.id.btn_top)
-    FloatingActionButton btnTop;
+//    @BindView(R.id.btn_top)
+//    FloatingActionButton btnTop;
 
     String[] titles = {"讲座", "活动"};
     View[] views = {
@@ -99,6 +99,13 @@ public class HomeFragment extends Fragment {
         srlHome = (SwipeRefreshLayout) views[0].findViewById(R.id.srl_home_1);
         srlHome.setColorSchemeResources(R.color.colorPrimary);
         srlHome.setOnRefreshListener(new MyOnRefreshListener());
+        FloatingActionButton btn = (FloatingActionButton)views[0].findViewById(R.id.btn_top);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goTop();
+            }
+        });
         //view[1] init
         registerReceiver();
         super.onCreate(savedInstanceState);
@@ -140,10 +147,13 @@ public class HomeFragment extends Fragment {
             return false;
         }
     }
-    @OnClick(R.id.btn_top)
-    public void onClick() {
-        goTop();
-    }
+
+//    @OnClick(R.id.btn_top)
+//    public void onClick() {
+//        goTop();
+//    }
+
+
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.receiver = new NetworkReceiver(handler);

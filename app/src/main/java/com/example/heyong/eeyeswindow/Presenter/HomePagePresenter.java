@@ -23,7 +23,7 @@ import rx.Subscriber;
 /**
  * 数据提供
  */
-
+@Deprecated
 public class HomePagePresenter {
     static String TAG = "HomePagePresenter";
     private Context context;
@@ -59,7 +59,7 @@ public class HomePagePresenter {
                 final List<HomeLectureBean> beanList = new LinkedList<>();
                 try {
                     String taici = response.body().getTaici();
-                    beanList.add(new HomeLectureBean(taici,""));
+                    beanList.add(new HomeLectureBean());
                 } catch (Exception e) {
                     onGetDataSuccess.onGetData(false);
                 }
@@ -85,6 +85,4 @@ public class HomePagePresenter {
     public interface OnGetDataSuccessByNet {
         void onGetData(boolean isSuccessful);
     }
-
-
 }

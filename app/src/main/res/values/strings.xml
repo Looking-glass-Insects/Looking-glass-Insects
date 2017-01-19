@@ -12,4 +12,7 @@
     <string name="hot_search">热门标签</string>
     <string name="hot_service">热门发布方</string>
     <string name="hot_name">热门发布方名称</string>
+    <string name="time">时间:</string>
+    <string name="location">地点:</string>
+    <string name="publisher">发起方:</string>
 </resources>

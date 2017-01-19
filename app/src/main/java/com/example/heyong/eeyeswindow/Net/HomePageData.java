@@ -23,7 +23,7 @@ import retrofit2.http.Query;
  * Created by Heyong
  *
  */
-
+@Deprecated
 public class HomePageData {
     private static final long DEFAULT_TIMEOUT = 5;
 
@@ -47,6 +47,7 @@ public class HomePageData {
 
 
 }
+@Deprecated
 interface API {
     @Headers({
             "apikey:2bfb5cd064a218db119285f119fe545b"
