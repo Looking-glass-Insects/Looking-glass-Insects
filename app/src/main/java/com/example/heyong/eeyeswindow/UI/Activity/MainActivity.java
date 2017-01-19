@@ -1,6 +1,7 @@
 package com.example.heyong.eeyeswindow.UI.Activity;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.MoreFragment;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -57,6 +60,8 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow.SUBMIT_TEXT;
 
 /**
  * author : heYong
@@ -322,6 +327,27 @@ public class MainActivity extends AppCompatActivity {
             drawer.updateItem(itemCache);
         } catch (NullPointerException e) {
             //小bug
+        }
+    }
+
+    /**
+     * 二维码扫描结果
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if(result != null) {
+            if(result.getContents() != null){
+                //Log.d(TAG, "Scanned: " + result.getContents());
+                String query = result.getContents();
+                Intent i = new Intent(MainActivity.this,SearchActivity.class);
+                i.putExtra(SUBMIT_TEXT, query);
+                startActivity(i);
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 

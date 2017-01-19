@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.PxToDp;
+import com.example.heyong.eeyeswindow.UI.Activity.ScanActivity;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,10 +34,10 @@ public class SearchPopupWindow extends PopupWindow {
     ImageView imageBack;
     @BindView(R.id.sv_search)
     SearchView svSearch;
-    Context context;
+    //Context context;
     @BindView(R.id.image_scan)
     ImageView imageScan;
-
+    Activity context;
     public SearchPopupWindow(final Activity context) {
         super(context);
         this.context = context;
@@ -79,7 +81,9 @@ public class SearchPopupWindow extends PopupWindow {
 
     @OnClick(R.id.image_scan)
     public void onClickImageScan() {
-        Toast.makeText(context, "二维码扫描", Toast.LENGTH_SHORT).show();
+        dismiss();
+        new IntentIntegrator(context).
+                setCaptureActivity(ScanActivity.class).initiateScan();
     }
 
     class MyQueryTextListener implements SearchView.OnQueryTextListener {

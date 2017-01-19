@@ -44,8 +44,7 @@ public class HomeFragment extends Fragment {
     TabLayout tabs;
     @BindView(R.id.vp_view)
     ViewPager viewPager;
-//    @BindView(R.id.btn_top)
-//    FloatingActionButton btnTop;
+
 
     String[] titles = {"讲座", "活动"};
     View[] views = {
@@ -70,18 +69,19 @@ public class HomeFragment extends Fragment {
     LinearLayout llOffLine;
 
     NetworkReceiver receiver;
+
     public static final int IS_ONLINE = 0;
     public static final int IS_OFFLINE = 1;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == IS_ONLINE) {
-                llOffLine.setVisibility(View.GONE);
-                footer.setVisibility(View.VISIBLE);
-            } else if (msg.what == IS_OFFLINE) {
-                footer.setVisibility(View.GONE);
-                llOffLine.setVisibility(View.VISIBLE);
-            }
+//            if (msg.what == IS_ONLINE) {
+//                llOffLine.setVisibility(View.GONE);
+//                footer.setVisibility(View.VISIBLE);
+//            } else if (msg.what == IS_OFFLINE) {
+//                footer.setVisibility(View.GONE);
+//                llOffLine.setVisibility(View.VISIBLE);
+//            }
             super.handleMessage(msg);
         }
     };
@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
         srlHome = (SwipeRefreshLayout) views[0].findViewById(R.id.srl_home_1);
         srlHome.setColorSchemeResources(R.color.colorPrimary);
         srlHome.setOnRefreshListener(new MyOnRefreshListener());
-        FloatingActionButton btn = (FloatingActionButton)views[0].findViewById(R.id.btn_top);
+        FloatingActionButton btn = (FloatingActionButton) views[0].findViewById(R.id.btn_top);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,12 +148,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-//    @OnClick(R.id.btn_top)
-//    public void onClick() {
-//        goTop();
-//    }
-
-
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.receiver = new NetworkReceiver(handler);
@@ -180,7 +174,7 @@ public class HomeFragment extends Fragment {
                             cache();
                         } else {
                             if (flag[0]) {
-                                handler.sendEmptyMessage(IS_OFFLINE);
+                                //handler.sendEmptyMessage(IS_OFFLINE);
                                 presenter.cachedData();
                                 srlHome.setRefreshing(false);
                                 flag[0] = false;
@@ -203,7 +197,6 @@ public class HomeFragment extends Fragment {
         HomePageLectureListAdapter adapter = (HomePageLectureListAdapter) ((HeaderViewListAdapter) lvHomeLecture.getAdapter()).getWrappedAdapter();
         presenter.startCache(HomePagePresenter.CACHE_OBJ, HomePagePresenter.CACHE_OBJ, adapter.getData(), null);
     }
-
 
 
     class MyViewPageAdapter extends PagerAdapter {
