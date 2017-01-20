@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
@@ -51,6 +54,9 @@ public class FindFragment extends Fragment {
 
     @BindView(R.id.search_root)
     NestedScrollView root;
+
+    @BindView(R.id.iv_change_layout)
+    ImageView ivChangeLayout;
 
 
     @Override
@@ -76,8 +82,22 @@ public class FindFragment extends Fragment {
          */
         flowlayout.setFocusableInTouchMode(true);
         flowlayout.requestFocus();
-        Log.i(TAG,"onResume");
+        Log.i(TAG, "onResume");
         super.onResume();
+    }
+
+    private int i = 0;
+    private int[] img_id = {R.drawable.ic_view_list_black_24dp,R.drawable.ic_view_module_black_24dp};
+    private RecyclerView.LayoutManager[] managers = {
+            new LinearLayoutManager(getContext()),
+            new GridLayoutManager(getContext(),2)
+    };
+    @OnClick(R.id.iv_change_layout)
+    public void onClick() {
+        i++;
+        ivChangeLayout.setImageResource(img_id[i%2]);
+        publisherManager.changeLayoutManager(managers[i%2]);
+
     }
 
     class FlowLayoutManager {
@@ -195,6 +215,9 @@ public class FindFragment extends Fragment {
             rcSearchContainer.setNestedScrollingEnabled(false);
         }
 
+        public void changeLayoutManager(RecyclerView.LayoutManager manager){
+            rcSearchContainer.setLayoutManager(manager);
+        }
 
     }
 }
