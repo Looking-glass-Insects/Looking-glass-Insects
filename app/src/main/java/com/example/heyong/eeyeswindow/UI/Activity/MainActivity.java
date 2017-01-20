@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             view.getLocationOnScreen(location);
             searchPopup.showAtLocation(view, Gravity.TOP | Gravity.RIGHT, 10, location[1]);
         } else if (id == R.id.action_about) {
-            Toast.makeText(this, "about", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this,AboutActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
