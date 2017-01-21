@@ -163,31 +163,21 @@ public class HomeFragment extends Fragment {
         srlHome.setRefreshing(true);
         HomePageLectureListAdapter adapter = new HomePageLectureListAdapter(getContext());
         presenter = new HomePagePresenter(getContext(), adapter);
-        if (NetworkInfo.isOnLine(HomeFragment.this.getContext())) {
-            final boolean[] flag = {true};//解除下面for循环引发的bug
-            for (int i = 0; i < 10; i++) {
-                presenter.nextData(new HomePagePresenter.OnGetDataSuccessByNet() {
-                    @Override
-                    public void onGetData(boolean isSuccessful) {
-                        if (isSuccessful) {
-                            srlHome.setRefreshing(false);
-                            cache();
-                        } else {
-                            if (flag[0]) {
-                                //handler.sendEmptyMessage(IS_OFFLINE);
-                                presenter.cachedData();
-                                srlHome.setRefreshing(false);
-                                flag[0] = false;
-                            }
-                        }
-                    }
-                });
-            }
-        } else {
-            presenter.cachedData();
-            srlHome.setRefreshing(false);
-        }
         lvHomeLecture.setAdapter(adapter);
+        for (int i = 0; i < 10; i++) {
+            presenter.nextData(new HomePagePresenter.OnGetDataSuccessByNet() {
+                @Override
+                public void onGetData(boolean isSuccessful) {
+                    if (isSuccessful) {
+                        srlHome.setRefreshing(false);
+                        cache();
+                    }else {
+                        presenter.cachedData();
+                        srlHome.setRefreshing(false);
+                    }
+                }
+            });
+        }
     }
 
     /**

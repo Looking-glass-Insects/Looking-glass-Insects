@@ -110,6 +110,9 @@ public class FindFragment extends Fragment {
         Log.i(TAG, "onResume");
         super.onResume();
     }
+
+
+
     private static final String STATE = "state";
     private static final String I = "i";
     private int i = 0;

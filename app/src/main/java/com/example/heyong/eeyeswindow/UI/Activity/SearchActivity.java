@@ -4,19 +4,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
+import android.widget.LinearLayout;
 
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 public class SearchActivity extends SwipeBackActivity {
     static String TAG = "SearchActivity";
+
+
+    @BindView(R.id.ll_container)
+    LinearLayout llContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
         setupHeader();
     }
 
@@ -34,9 +42,8 @@ public class SearchActivity extends SwipeBackActivity {
                 SearchActivity.this.finish();
             }
         });
-       // Log.i(TAG,query);
+        // Log.i(TAG,query);
     }
-
 
 
 }

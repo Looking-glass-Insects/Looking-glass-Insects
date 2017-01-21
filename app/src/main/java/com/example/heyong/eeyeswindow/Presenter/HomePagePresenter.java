@@ -23,7 +23,7 @@ import rx.Subscriber;
 /**
  * 数据提供
  */
-@Deprecated
+
 public class HomePagePresenter {
     static String TAG = "HomePagePresenter";
     private Context context;
@@ -39,38 +39,40 @@ public class HomePagePresenter {
 
     public void cachedData() {
         Object obj = manager.getCache(CACHE_OBJ, CACHE_OBJ);
-        if (obj == null) {
-
-        } else {
+        if (obj != null) {
             List<HomeLectureBean> beanList = (LinkedList<HomeLectureBean>) obj;
             listener.onGetData(beanList);
         }
-        return;
     }
 
     /**
      * 获取下一条数据
+     *
      * @param onGetDataSuccess
      */
     public void nextData(final OnGetDataSuccessByNet onGetDataSuccess) {
-        HomePageData.dataCallBack(new Callback<Bean>() {
-            @Override
-            public void onResponse(Call<Bean> call, Response<Bean> response) {
-                final List<HomeLectureBean> beanList = new LinkedList<>();
-                try {
-                    beanList.add(new HomeLectureBean());
-                } catch (Exception e) {
-                    onGetDataSuccess.onGetData(false);
-                }
-                listener.onGetData(beanList);
-                onGetDataSuccess.onGetData(true);
-            }
-
-            @Override
-            public void onFailure(Call<Bean> call, Throwable t) {
-                onGetDataSuccess.onGetData(false);
-            }
-        });
+//        HomePageData.dataCallBack(new Callback<Bean>() {
+//            @Override
+//            public void onResponse(Call<Bean> call, Response<Bean> response) {
+//                final List<HomeLectureBean> beanList = new LinkedList<>();
+//                try {
+//                    beanList.add(new HomeLectureBean());
+//                } catch (Exception e) {
+//                    onGetDataSuccess.onGetData(false);
+//                }
+//                listener.onGetData(beanList);
+//                onGetDataSuccess.onGetData(true);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Bean> call, Throwable t) {
+//                onGetDataSuccess.onGetData(false);
+//            }
+//        });
+        final List<HomeLectureBean> beanList = new LinkedList<>();
+        beanList.add(new HomeLectureBean());
+        listener.onGetData(beanList);
+        onGetDataSuccess.onGetData(true);
     }
 
     public void startCache(final String uniqueName, final String URL_OR_STR, final Serializable content, @Nullable Subscriber<? super String> subscriber) {

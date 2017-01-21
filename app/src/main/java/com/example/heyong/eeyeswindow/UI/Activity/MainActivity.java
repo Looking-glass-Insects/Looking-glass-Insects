@@ -18,7 +18,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -28,12 +27,9 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
-import com.example.heyong.eeyeswindow.Cache.CacheManager;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.CacheUtil;
-import com.example.heyong.eeyeswindow.Tools.GlideCacheUtil;
 import com.example.heyong.eeyeswindow.Tools.GlideImageLoader;
-import com.example.heyong.eeyeswindow.Tools.ImgHelper;
 import com.example.heyong.eeyeswindow.Tools.SimpleDialogFactory;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
@@ -96,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setupHeader();
         setupBottom();
-        setupDrawer();
+        //setupDrawer();
         contents = new Fragment[3];
         contents[0] = new HomeFragment();
         contents[1] = new FindFragment();
@@ -267,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
 
         PrimaryDrawerItem itemCache = new PrimaryDrawerItem()
                 .withName(getResources()
-                        .getString(R.string.main_cache_clear))
+                        .getString(R.string.cache_clear))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {

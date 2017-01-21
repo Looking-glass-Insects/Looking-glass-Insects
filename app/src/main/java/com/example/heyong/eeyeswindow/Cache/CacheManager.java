@@ -49,39 +49,42 @@ public class CacheManager {
      * @param content
      * @param subscriber
      */
-     public void startCache(final String uniqueName, final String URL_OR_STR, final Serializable content, @Nullable Subscriber<? super String> subscriber) {
-        Observable<String> myObservable = Observable.create(
-                new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(Subscriber<? super String> sub) {
-                        try {
-                            open(uniqueName);
-                            DiskLruCache.Editor editor = getEditor(URL_OR_STR);
-                            if (editor != null) {
-                                OutputStream outputStream = editor.newOutputStream(0);
-                                ObjectOutputStream oos = new ObjectOutputStream(outputStream);
-                                oos.writeObject(content);
-                                oos.flush();
-                                oos.close();
-                                editor.commit();
-                            }
-                            cache.flush();
-                            sub.onNext(cachePath);
-                            sub.onCompleted();
-                            close();
-                        } catch (IOException e) {
-                            return;
-                        }
-                    }
-                }
-        );
-        if (subscriber == null) {
-            myObservable.subscribe();
-        } else {
-            myObservable.subscribe(subscriber);
-        }
+     public void startCache (final String uniqueName, final String URL_OR_STR, final Serializable content, @Nullable Subscriber<? super String> subscriber) {
+         try {
+             Observable<String> myObservable = Observable.create(
+                     new Observable.OnSubscribe<String>() {
+                         @Override
+                         public void call(Subscriber<? super String> sub) {
+                             try {
+                                 open(uniqueName);
+                                 DiskLruCache.Editor editor = getEditor(URL_OR_STR);
+                                 if (editor != null) {
+                                     OutputStream outputStream = editor.newOutputStream(0);
+                                     ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+                                     oos.writeObject(content);
+                                     oos.flush();
+                                     oos.close();
+                                     editor.commit();
+                                 }
+                                 cache.flush();
+                                 sub.onNext(cachePath);
+                                 sub.onCompleted();
+                                 close();
+                             } catch (IOException e) {
+                                 return;
+                             }
+                         }
+                     }
+             );
+             if (subscriber == null) {
+                 myObservable.subscribe();
+             } else {
+                 myObservable.subscribe(subscriber);
+             }
+         } catch (Exception e) {
 
-    }
+         }
+     }
 
 
     public void startCache(final String uniqueName, final String URL, Subscriber<? super String> subscriber) {
