@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationIcon(R.drawable.ic_drawer_black_24dp);
+        mToolbar.setNavigationIcon(R.drawable.ic_drawer_white_24dp);
         //mToolbar.setTitle("e瞳大屏幕");
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         //通过CollapsingToolbarLayout修改字体颜色
@@ -193,8 +193,8 @@ public class MainActivity extends AppCompatActivity {
             View view = findViewById(R.id.toolbar);
             view.getLocationOnScreen(location);
             searchPopup.showAtLocation(view, Gravity.TOP | Gravity.RIGHT, 10, location[1]);
-        } else if (id == R.id.action_about) {
-            startActivity(new Intent(this,AboutActivity.class));
+        } else if (id == R.id.action_share) {
+            //startActivity(new Intent(this,AboutActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
