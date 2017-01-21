@@ -58,7 +58,6 @@ public class HomePagePresenter {
             public void onResponse(Call<Bean> call, Response<Bean> response) {
                 final List<HomeLectureBean> beanList = new LinkedList<>();
                 try {
-                    String taici = response.body().getTaici();
                     beanList.add(new HomeLectureBean());
                 } catch (Exception e) {
                     onGetDataSuccess.onGetData(false);

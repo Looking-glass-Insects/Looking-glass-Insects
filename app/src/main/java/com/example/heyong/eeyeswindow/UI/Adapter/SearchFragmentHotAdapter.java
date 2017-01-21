@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,11 +31,11 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 public class SearchFragmentHotAdapter extends RecyclerView.Adapter<SearchFragmentHotAdapter.MyViewHolder> {
 
     Context context;
-    List<String> data;
+    List<HotPublisherBean> data;
 
-    public SearchFragmentHotAdapter(Context context, List<String> data) {
+    public SearchFragmentHotAdapter(Context context) {
         this.context = context;
-        this.data = data;
+        this.data = new LinkedList<>();
     }
 
     @Override
@@ -59,6 +61,11 @@ public class SearchFragmentHotAdapter extends RecyclerView.Adapter<SearchFragmen
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public void setData(List<HotPublisherBean> beans) {
+        this.data.addAll(beans);
+        this.notifyDataSetChanged();
     }
 
 

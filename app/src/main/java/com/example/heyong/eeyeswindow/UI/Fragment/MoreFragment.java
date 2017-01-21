@@ -9,15 +9,10 @@ import android.view.ViewGroup;
 
 import com.example.heyong.eeyeswindow.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MoreFragment extends Fragment {
 
 
-    public MoreFragment() {
-        // Required empty public constructor
-    }
+
 
 
     @Override

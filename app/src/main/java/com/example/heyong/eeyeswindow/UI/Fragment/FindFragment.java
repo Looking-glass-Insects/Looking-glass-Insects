@@ -1,8 +1,11 @@
 package com.example.heyong.eeyeswindow.UI.Fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
+import com.example.heyong.eeyeswindow.Presenter.FindPagePresenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
@@ -45,12 +50,14 @@ public class FindFragment extends Fragment {
     @BindView(R.id.flowlayout)
     FlowLayout flowlayout;
 
-    FlowLayoutManager flowLayoutManager;
 
     @BindView(R.id.rc_search_container)
     RecyclerView rcSearchContainer;
 
     HotPublisherManager publisherManager;
+    FlowLayoutManager flowLayoutManager;
+    FindPagePresenter presenter;
+
 
     @BindView(R.id.search_root)
     NestedScrollView root;
@@ -58,6 +65,12 @@ public class FindFragment extends Fragment {
     @BindView(R.id.iv_change_layout)
     ImageView ivChangeLayout;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        SharedPreferences sp=getActivity().getSharedPreferences(STATE, Context.MODE_PRIVATE);
+        this.i = sp.getInt(I,0)%2;
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,13 +80,25 @@ public class FindFragment extends Fragment {
         ButterKnife.bind(this, view);
         flowLayoutManager = new FlowLayoutManager(view);
         publisherManager = new HotPublisherManager();
+        DataHolder dataHolder = new DataHolder();
+        presenter = new FindPagePresenter(this.getContext(),dataHolder);
+        presenter.getData();
         init();
         return view;
     }
 
     private void init() {
+        setStateByI();
     }
 
+    @Override
+    public void onDestroy() {
+        SharedPreferences sp = getActivity().getSharedPreferences(STATE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sp.edit();
+        editor.putInt(I,this.i);
+        editor.apply();
+        super.onDestroy();
+    }
 
     @Override
     public void onResume() {
@@ -85,19 +110,31 @@ public class FindFragment extends Fragment {
         Log.i(TAG, "onResume");
         super.onResume();
     }
-
+    private static final String STATE = "state";
+    private static final String I = "i";
     private int i = 0;
-    private int[] img_id = {R.drawable.ic_view_list_black_24dp,R.drawable.ic_view_module_black_24dp};
+    private int[] img_id = {R.drawable.ic_view_list_black_24dp, R.drawable.ic_view_module_black_24dp};
     private RecyclerView.LayoutManager[] managers = {
             new LinearLayoutManager(getContext()),
-            new GridLayoutManager(getContext(),2)
+            new GridLayoutManager(getContext(), 2)
     };
+
     @OnClick(R.id.iv_change_layout)
     public void onClick() {
         i++;
-        ivChangeLayout.setImageResource(img_id[i%2]);
-        publisherManager.changeLayoutManager(managers[i%2]);
+        setStateByI();
+    }
+    private void setStateByI(){
+        ivChangeLayout.setImageResource(img_id[i % 2]);
+        publisherManager.changeLayoutManager(managers[i % 2]);
+    }
 
+    class DataHolder implements FindPagePresenter.FindPageDataListener{
+        @Override
+        public void onGetData(List<String> flow, List<HotPublisherBean> beans) {
+            flowLayoutManager.setData(flow);
+            publisherManager.setData(beans);
+        }
     }
 
     class FlowLayoutManager {
@@ -107,27 +144,16 @@ public class FindFragment extends Fragment {
         private LinearLayout llSeeMore;
         private LinearLayout llSeeLess;
 
-        final String[] strings = {
-                "The",
-                "life",
-                "is like",
-                "a box of",
-                "chocolates,",
-                "you could not",
-                "know",
-                "what you're going",
-                "to",
-                "get.",
-                "Victory",
-                "won't",
-                "come to me",
-                "unless",
-                "I go to it"
-        };
+        private List<String> flowList;
 
         public FlowLayoutManager(View view) {
             llSeeMore = (LinearLayout) view.findViewById(R.id.ll_see_more);
             llSeeLess = (LinearLayout) view.findViewById(R.id.ll_see_less);
+        }
+
+
+        public void setData( final List<String> flowList){
+            this.flowList = flowList;
             llSeeMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -139,7 +165,7 @@ public class FindFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
-                        flowlayout.removeViews(DEFAULT_SIZE, strings.length - DEFAULT_SIZE);
+                        flowlayout.removeViews(DEFAULT_SIZE, flowList.size() - DEFAULT_SIZE);
                     } catch (Exception e) {
                     }
                     convertVisit();
@@ -150,7 +176,7 @@ public class FindFragment extends Fragment {
 
         private void init() {
             for (int i = 0; i < DEFAULT_SIZE; i++)
-                yieldText(strings[i]);
+                yieldText(flowList.get(i));
             flowlayout.relayoutToCompress();
         }
 
@@ -167,7 +193,7 @@ public class FindFragment extends Fragment {
 
         private void addAll() {
             flowlayout.removeAllViews();
-            for (String s : strings) {
+            for (String s : flowList) {
                 yieldText(s);
             }
             flowlayout.relayoutToCompress();
@@ -199,25 +225,23 @@ public class FindFragment extends Fragment {
     }
 
     class HotPublisherManager {
+        SearchFragmentHotAdapter adapter;
 
         public HotPublisherManager() {
-            List<String> data = new LinkedList<>();
-            data.add("1");
-            data.add("2");
-            data.add("3");
-            data.add("4");
-            data.add("5");
-            data.add("6");
-            SearchFragmentHotAdapter adapter = new SearchFragmentHotAdapter(getContext(), data);
+            adapter = new SearchFragmentHotAdapter(getContext());
             rcSearchContainer.setLayoutManager(new LinearLayoutManager(getContext()));
             rcSearchContainer.setAdapter(adapter);
             rcSearchContainer.setItemAnimator(new DefaultItemAnimator());
             rcSearchContainer.setNestedScrollingEnabled(false);
         }
 
-        public void changeLayoutManager(RecyclerView.LayoutManager manager){
+        public void changeLayoutManager(RecyclerView.LayoutManager manager) {
             rcSearchContainer.setLayoutManager(manager);
         }
 
+
+        public void setData(List<HotPublisherBean> beans){
+            adapter.setData(beans);
+        }
     }
 }
