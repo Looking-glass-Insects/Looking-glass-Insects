@@ -1,24 +1,18 @@
 package com.example.heyong.eeyeswindow.Presenter;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.support.annotation.Nullable;
 
-import com.example.heyong.eeyeswindow.Bean.Bean;
+import android.content.Context;
+
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.Cache.CacheManager;
 
-import com.example.heyong.eeyeswindow.Net.HomePageData;
+
 
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import rx.Subscriber;
+
 
 /**
  * 数据提供
@@ -29,7 +23,8 @@ public class HomePagePresenter {
     private Context context;
     private HomePageDataListener listener;//数据传输终点
     private CacheManager manager;//缓存
-    public static String CACHE_OBJ = "object";
+
+    public static String HOME_PAGE_LIST = "HOME_PAGE_LIST";
 
     public HomePagePresenter(Context context, HomePageDataListener listener) {
         this.context = context;
@@ -38,7 +33,7 @@ public class HomePagePresenter {
     }
 
     public void cachedData() {
-        Object obj = manager.getCache(CACHE_OBJ, CACHE_OBJ);
+        Object obj = manager.getCache(CacheManager.CACHE_OBJ, HOME_PAGE_LIST);
         if (obj != null) {
             List<HomeLectureBean> beanList = (LinkedList<HomeLectureBean>) obj;
             listener.onGetData(beanList);
@@ -75,8 +70,8 @@ public class HomePagePresenter {
         onGetDataSuccess.onGetData(true);
     }
 
-    public void startCache(final String uniqueName, final String URL_OR_STR, final Serializable content, @Nullable Subscriber<? super String> subscriber) {
-        manager.startCache(uniqueName, URL_OR_STR, content, subscriber);
+    public void startCache(final Serializable content) {
+        manager.startCache(CacheManager.CACHE_OBJ, HOME_PAGE_LIST, content);
     }
 
     public interface HomePageDataListener {

@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -24,8 +20,6 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Created by Heyong
@@ -34,6 +28,15 @@ import rx.Subscriber;
 
 public class CacheManager {
     static String TAG = "CacheManager";
+
+    /**
+     *  缓存文件夹
+     */
+    public static String CACHE_OBJ = "object";
+
+
+
+
     private DiskLruCache cache;
     private String cachePath;
     private Context context;
@@ -44,76 +47,31 @@ public class CacheManager {
     }
 
     /**
+     * 坑：我尝试新建线程执行，但奔溃
+     *
      * @param uniqueName 文件夹目录
      * @param URL_OR_STR 最终文件名
      * @param content
-     * @param subscriber
      */
-     public void startCache (final String uniqueName, final String URL_OR_STR, final Serializable content, @Nullable Subscriber<? super String> subscriber) {
-         try {
-             Observable<String> myObservable = Observable.create(
-                     new Observable.OnSubscribe<String>() {
-                         @Override
-                         public void call(Subscriber<? super String> sub) {
-                             try {
-                                 open(uniqueName);
-                                 DiskLruCache.Editor editor = getEditor(URL_OR_STR);
-                                 if (editor != null) {
-                                     OutputStream outputStream = editor.newOutputStream(0);
-                                     ObjectOutputStream oos = new ObjectOutputStream(outputStream);
-                                     oos.writeObject(content);
-                                     oos.flush();
-                                     oos.close();
-                                     editor.commit();
-                                 }
-                                 cache.flush();
-                                 sub.onNext(cachePath);
-                                 sub.onCompleted();
-                                 close();
-                             } catch (IOException e) {
-                                 return;
-                             }
-                         }
-                     }
-             );
-             if (subscriber == null) {
-                 myObservable.subscribe();
-             } else {
-                 myObservable.subscribe(subscriber);
-             }
-         } catch (Exception e) {
+    public void startCache(final String uniqueName, final String URL_OR_STR, final Serializable content) {
+        try {
+            open(uniqueName);
+            DiskLruCache.Editor editor = getEditor(URL_OR_STR);
+            if (editor != null) {
+                OutputStream outputStream = editor.newOutputStream(0);
+                ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+                oos.writeObject(content);
+                oos.flush();
+                oos.close();
+                editor.commit();
+            }
+            cache.flush();
+            close();
+        } catch (IOException e) {
 
-         }
-     }
-
-
-    public void startCache(final String uniqueName, final String URL, Subscriber<? super String> subscriber) {
-        Observable<String> myObservable = Observable.create(
-                new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(Subscriber<? super String> sub) {
-                        try {
-                            open(uniqueName);
-                            DiskLruCache.Editor editor = getEditor(URL);
-                            if (editor != null) {
-                                OutputStream outputStream = editor.newOutputStream(0);
-                                if (downloadUrlToStream(URL, outputStream)) {
-                                    editor.commit();
-                                } else {
-                                    editor.abort();
-                                }
-                            }
-                            cache.flush();
-                            sub.onNext(cachePath);
-                            sub.onCompleted();
-                        } catch (IOException e) {
-                            sub.onError(e);
-                        }
-                    }
-                }
-        );
-        myObservable.subscribe(subscriber);
+        }
     }
+
 
     /**
      * 获取缓存
@@ -135,7 +93,7 @@ public class CacheManager {
             ois = new ObjectInputStream(is);
         } catch (IOException e) {
             return null;
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             return null;//
         }
         Object obj = null;
@@ -183,14 +141,12 @@ public class CacheManager {
     }
 
     public String getAllSize() {
-        open(HomePagePresenter.CACHE_OBJ);
-        String s = getFormatSize(cache.size());
-        close();
-        return s;
+        return getFormatSize(getAllLongSize());
     }
 
     public long getAllLongSize() {
-        open(HomePagePresenter.CACHE_OBJ);
+        //openRoot();
+        open(CACHE_OBJ);
         if (cache == null) {
             return 0;
         }
@@ -200,7 +156,6 @@ public class CacheManager {
     }
 
     private static String getFormatSize(double size) {
-
         double kiloByte = size / 1024;
         if (kiloByte < 1) {
             return size + "Byte";
@@ -234,7 +189,7 @@ public class CacheManager {
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
-            cache = DiskLruCache.open(cacheDir, getAppVersion(context), 1, 10 * 1024 * 1024);
+            cache = DiskLruCache.open(cacheDir, getAppVersion(context), 1, 200 * 1024 * 1024);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -246,18 +201,18 @@ public class CacheManager {
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
-            Log.e(TAG,cacheDir.getAbsolutePath());
+            Log.e(TAG, cacheDir.getAbsolutePath());
             cache = DiskLruCache.open(cacheDir, getAppVersion(context), 1, 200 * 1024 * 1024);
-            if(cache == null){
-                Log.e(TAG,"cache == null at open()");
+            if (cache == null) {
+                Log.e(TAG, "cache == null at open()");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void close(){
-        if (cache != null){
+    private void close() {
+        if (cache != null) {
             try {
                 cache.close();
             } catch (IOException e) {
@@ -274,9 +229,8 @@ public class CacheManager {
         String key = hashKeyForDisk(URL_OR_STR);
         DiskLruCache.Editor editor = null;
         try {
-            if(cache == null)
-            {
-                Log.e(TAG,"cache == null at getEditor()");
+            if (cache == null) {
+                Log.e(TAG, "cache == null at getEditor()");
                 return null;
             }
             editor = cache.edit(key);

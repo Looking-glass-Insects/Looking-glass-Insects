@@ -23,7 +23,7 @@ import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.example.heyong.eeyeswindow.Net.NetworkInfo;
+
 import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Receiver.NetworkReceiver;
@@ -31,7 +31,7 @@ import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureListAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 
 
 /**
@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * 初始化时调用
-     * <p>
+     *
      * presenter 和 listView 的 adapter 将会刷新
      */
     private void bindData() {
@@ -185,7 +185,7 @@ public class HomeFragment extends Fragment {
      */
     private void cache() {
         HomePageLectureListAdapter adapter = (HomePageLectureListAdapter) ((HeaderViewListAdapter) lvHomeLecture.getAdapter()).getWrappedAdapter();
-        presenter.startCache(HomePagePresenter.CACHE_OBJ, HomePagePresenter.CACHE_OBJ, adapter.getData(), null);
+        presenter.startCache(adapter.getData());
     }
 
 

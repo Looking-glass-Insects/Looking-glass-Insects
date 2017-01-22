@@ -72,7 +72,9 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
     }
 
     public LinkedList<HomeLectureBean> getData() {
-        return (LinkedList<HomeLectureBean>) data;
+        LinkedList<HomeLectureBean> list = new LinkedList<>();
+        list.addAll(data);
+        return list;
     }
 
     public void setData(List<HomeLectureBean> data) {
