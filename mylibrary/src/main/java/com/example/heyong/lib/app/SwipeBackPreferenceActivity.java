@@ -1,7 +1,6 @@
 
-package me.imid.swipebacklayout.lib.app;
+package com.example.heyong.lib.app;
 
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.View;

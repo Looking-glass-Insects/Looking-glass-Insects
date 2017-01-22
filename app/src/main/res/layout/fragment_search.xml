@@ -22,14 +22,14 @@
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                <com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout
+                <com.example.heyong.lib.flowLayout.FlowLayout
                     android:id="@+id/flowlayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     app:lineSpacing="10dp"
                     >
-                </com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout>
+                </com.example.heyong.lib.flowLayout.FlowLayout>
             </android.support.v4.widget.NestedScrollView>
             <include layout="@layout/cut_line_flow" />
 

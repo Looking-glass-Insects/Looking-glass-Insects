@@ -4,7 +4,6 @@ package com.example.heyong.eeyeswindow.UI.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -16,7 +15,7 @@ import android.webkit.WebViewClient;
 import com.example.heyong.eeyeswindow.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
+import com.example.heyong.lib.app.SwipeBackActivity;
 
 
 public class AboutActivity extends SwipeBackActivity {

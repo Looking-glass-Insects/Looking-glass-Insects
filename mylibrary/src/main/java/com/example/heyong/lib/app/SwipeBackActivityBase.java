@@ -1,6 +1,5 @@
-package me.imid.swipebacklayout.lib.app;
+package com.example.heyong.lib.app;
 
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
 /**
  * @author Yrom
  */

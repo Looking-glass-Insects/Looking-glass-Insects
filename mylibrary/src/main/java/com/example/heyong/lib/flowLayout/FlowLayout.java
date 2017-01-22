@@ -1,4 +1,4 @@
-package com.example.heyong.eeyeswindow.UI.CustomView;
+package com.example.heyong.lib.flowLayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -6,10 +6,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.heyong.eeyeswindow.R;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.imid.swipebacklayout.library.R;
 
 /**
  * Created by Heyong on 2017/1/6.

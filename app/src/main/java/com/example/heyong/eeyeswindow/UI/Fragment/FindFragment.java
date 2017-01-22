@@ -27,10 +27,9 @@ import com.example.heyong.eeyeswindow.Presenter.FindPagePresenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
-import com.example.heyong.eeyeswindow.UI.CustomView.FlowLayout;
+import com.example.heyong.lib.flowLayout.FlowLayout;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
