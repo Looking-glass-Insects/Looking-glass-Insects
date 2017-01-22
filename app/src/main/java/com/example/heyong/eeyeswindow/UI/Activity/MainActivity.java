@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         images.add(R.drawable.banner1);
         images.add(R.drawable.banner2);
         Banner banner = (Banner) findViewById(R.id.banner);
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR).setIndicatorGravity(BannerConfig.CENTER).setImageLoader(new GlideImageLoader()).setImages(images).start();
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR).setIndicatorGravity(BannerConfig.RIGHT).setImageLoader(new GlideImageLoader()).setImages(images).start();
     }
 
     @Override
