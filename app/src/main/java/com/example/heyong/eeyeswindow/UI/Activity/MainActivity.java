@@ -11,11 +11,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.CollapsingToolbarLayout;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -23,15 +25,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
-
 
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.CacheUtil;
 import com.example.heyong.eeyeswindow.Tools.GlideImageLoader;
 import com.example.heyong.eeyeswindow.Tools.SimpleDialogFactory;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
+import com.example.heyong.eeyeswindow.UI.Fragment.BlankFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.MoreFragment;
@@ -66,13 +67,16 @@ import static com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow.SUB
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    @BindView(R.id.frame_content)
-    FrameLayout frameContent;
 
-    Fragment[] contents;
-    int currFragment = 0;//初始时中央视图index
+
+    @BindView(R.id.view_pager_content)
+    ViewPager mainViewPager;
+
+    List<Fragment> mainViews;
+    int currFragment = 0;//中央视图index
 
     static final int BANNER_FINISH = -1;//轮播图自动弹起
+
 
     private Handler handler = new Handler() {
         @Override
@@ -90,19 +94,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mainViews = new LinkedList<>();
+//        mainViews.add(new HomeFragment());
+//        mainViews.add(new FindFragment());
+//        mainViews.add(new MoreFragment());
+        mainViews.add(new HomeFragment());
+        mainViews.add(new FindFragment());
+        mainViews.add(new MoreFragment());
         setupHeader();
         setupBottom();
         //setupDrawer();
-        contents = new Fragment[3];
-        contents[0] = new HomeFragment();
-        contents[1] = new FindFragment();
-        contents[2] = new MoreFragment();
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.frame_content, contents[0]);
-        ft.commit();
-
-
+        mainViewPager.setAdapter(new MainViewPagerAdapter(getSupportFragmentManager()));
+        mainViewPager.addOnPageChangeListener(new MyOnPageChangeListener());
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -124,35 +129,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * 绑定中央视图fragment
-     *
-     * @param index [012]
-     */
-    private void bindView(int index) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-
-        if (null != contents[currFragment]) {
-            transaction.hide(contents[currFragment]);
-        }
-
-        currFragment = index;
-
-
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(contents[currFragment].getClass().getName());
-        if (null == fragment) {
-            fragment = contents[currFragment];
-        }
-        if (!fragment.isAdded()) {
-            transaction.add(R.id.frame_content, fragment, fragment.getClass().getName());
-
-        } else {
-            transaction.show(fragment);
-        }
-         transaction.commit();
     }
 
     /**
@@ -209,13 +185,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        bindView(0);
+                        mainViewPager.setCurrentItem(0);
+                        currFragment = 0;
                         break;
                     case R.id.menu_search:
-                        bindView(1);
+                        mainViewPager.setCurrentItem(1);
+                        currFragment = 1;
                         break;
                     case R.id.menu_more:
-                        bindView(2);
+                        mainViewPager.setCurrentItem(2);
+                        currFragment = 2;
                         break;
                 }
                 return true;
@@ -328,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 二维码扫描结果
+     *
      * @param requestCode
      * @param resultCode
      * @param intent
@@ -335,11 +315,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if(result != null) {
-            if(result.getContents() != null){
+        if (result != null) {
+            if (result.getContents() != null) {
                 //Log.d(TAG, "Scanned: " + result.getContents());
                 String query = result.getContents();
-                Intent i = new Intent(MainActivity.this,SearchActivity.class);
+                Intent i = new Intent(MainActivity.this, SearchActivity.class);
                 i.putExtra(SUBMIT_TEXT, query);
                 startActivity(i);
                 //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
@@ -347,4 +327,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    class MainViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        public MainViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mainViews.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mainViews.size();
+        }
+    }
+    class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            BottomNavigationView bottom = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+            bottom.getMenu().getItem(currFragment).setChecked(false);
+            bottom.getMenu().getItem(position).setChecked(true);
+            currFragment = position;
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
 }

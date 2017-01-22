@@ -7,11 +7,9 @@ import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.Cache.CacheManager;
 
 
-
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-
 
 
 /**
@@ -45,7 +43,7 @@ public class HomePagePresenter {
      *
      * @param onGetDataSuccess
      */
-    public void nextData(final OnGetDataSuccessByNet onGetDataSuccess) {
+    public void nextData(final OnGetDataSuccessByNet onGetDataSuccess,final int count) {
 //        HomePageData.dataCallBack(new Callback<Bean>() {
 //            @Override
 //            public void onResponse(Call<Bean> call, Response<Bean> response) {
@@ -65,9 +63,11 @@ public class HomePagePresenter {
 //            }
 //        });
         final List<HomeLectureBean> beanList = new LinkedList<>();
-        beanList.add(new HomeLectureBean());
+        for (int i = 0; i < count; i++)
+            beanList.add(new HomeLectureBean());
         listener.onGetData(beanList);
         onGetDataSuccess.onGetData(true);
+
     }
 
     public void startCache(final Serializable content) {

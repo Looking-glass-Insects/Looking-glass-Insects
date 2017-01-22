@@ -99,16 +99,6 @@ public class FindFragment extends Fragment {
         super.onDestroy();
     }
 
-    @Override
-    public void onResume() {
-        /**
-         * 解决焦点产生的bug
-         */
-        flowlayout.setFocusableInTouchMode(true);
-        flowlayout.requestFocus();
-        Log.i(TAG, "onResume");
-        super.onResume();
-    }
 
 
 

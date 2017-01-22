@@ -33,7 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-
 /**
  * Created by HeYong
  */
@@ -108,6 +107,7 @@ public class HomeFragment extends Fragment {
         });
         //view[1] init
         registerReceiver();
+        bindData();
         super.onCreate(savedInstanceState);
     }
 
@@ -134,9 +134,9 @@ public class HomeFragment extends Fragment {
         MyViewPageAdapter adapter = new MyViewPageAdapter(this.getActivity());
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
-        bindData();
         return view;
     }
+
 
     public boolean goTop() {
         if (lvHomeLecture.getFirstVisiblePosition() != 0) {
@@ -156,28 +156,27 @@ public class HomeFragment extends Fragment {
 
     /**
      * 初始化时调用
-     *
      * presenter 和 listView 的 adapter 将会刷新
      */
-    private void bindData() {
+    public void bindData() {
         srlHome.setRefreshing(true);
         HomePageLectureListAdapter adapter = new HomePageLectureListAdapter(getContext());
         presenter = new HomePagePresenter(getContext(), adapter);
         lvHomeLecture.setAdapter(adapter);
-        for (int i = 0; i < 10; i++) {
-            presenter.nextData(new HomePagePresenter.OnGetDataSuccessByNet() {
-                @Override
-                public void onGetData(boolean isSuccessful) {
-                    if (isSuccessful) {
-                        srlHome.setRefreshing(false);
-                        cache();
-                    }else {
-                        presenter.cachedData();
-                        srlHome.setRefreshing(false);
-                    }
+
+        presenter.nextData(new HomePagePresenter.OnGetDataSuccessByNet() {
+            @Override
+            public void onGetData(boolean isSuccessful) {
+                if (isSuccessful) {
+                    srlHome.setRefreshing(false);
+                    cache();
+                } else {
+                    presenter.cachedData();
+                    srlHome.setRefreshing(false);
                 }
-            });
-        }
+            }
+        },10);
+
     }
 
     /**
@@ -251,7 +250,7 @@ public class HomeFragment extends Fragment {
                                 } else {
                                 }
                             }
-                        });
+                        },1);
                     }
                     break;
                 case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
