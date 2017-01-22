@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Receiver.NetworkReceiver;
@@ -105,6 +107,7 @@ public class HomeFragment extends Fragment {
                 goTop();
             }
         });
+        YoYo.with(Techniques.FadeOutRight).duration(500).playOn(btn);
         //view[1] init
         registerReceiver();
         bindData();
@@ -175,7 +178,7 @@ public class HomeFragment extends Fragment {
                     srlHome.setRefreshing(false);
                 }
             }
-        },10);
+        }, 10);
 
     }
 
@@ -231,6 +234,7 @@ public class HomeFragment extends Fragment {
     class MyOnScrollListener implements AbsListView.OnScrollListener {
         private boolean scrollFlag = false;// 标记是否滑动
         private int lastVisibleItemPosition;// 标记上次滑动位置
+        private boolean btnIsVisitable = false;
 
         @Override
         public void onScrollStateChanged(AbsListView absListView, int scrollState) {
@@ -250,7 +254,15 @@ public class HomeFragment extends Fragment {
                                 } else {
                                 }
                             }
-                        },1);
+                        }, 1);
+                    }
+                    FloatingActionButton btn = (FloatingActionButton) views[0].findViewById(R.id.btn_top);
+                    if (lvHomeLecture.getFirstVisiblePosition() != 0 && !btnIsVisitable) {
+                        YoYo.with(Techniques.FadeInRight).duration(500).playOn(btn);
+                        btnIsVisitable = true;
+                    } else if (lvHomeLecture.getFirstVisiblePosition() == 0 && btnIsVisitable) {
+                        YoYo.with(Techniques.FadeOutRight).duration(500).playOn(btn);
+                        btnIsVisitable = false;
                     }
                     break;
                 case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:

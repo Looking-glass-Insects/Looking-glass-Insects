@@ -63,25 +63,26 @@ public class FindFragment extends Fragment {
 
     @BindView(R.id.iv_change_layout)
     ImageView ivChangeLayout;
+    DataHolder dataHolder;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         SharedPreferences sp=getActivity().getSharedPreferences(STATE, Context.MODE_PRIVATE);
         this.i = sp.getInt(I,0)%2;
+        dataHolder = new DataHolder();
+        presenter = new FindPagePresenter(this.getContext(),dataHolder);
+        presenter.getData();
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
-        flowLayoutManager = new FlowLayoutManager(view);
         publisherManager = new HotPublisherManager();
-        DataHolder dataHolder = new DataHolder();
-        presenter = new FindPagePresenter(this.getContext(),dataHolder);
-        presenter.getData();
+        flowLayoutManager = new FlowLayoutManager(view);
+        dataHolder.bindData();
         init();
         return view;
     }
@@ -122,10 +123,18 @@ public class FindFragment extends Fragment {
     }
 
     class DataHolder implements FindPagePresenter.FindPageDataListener{
+        List<String> flowList;
+        List<HotPublisherBean> beans;
+
         @Override
         public void onGetData(List<String> flow, List<HotPublisherBean> beans) {
-            flowLayoutManager.setData(flow);
+            this.flowList = flow;
+            this.beans = beans;
+        }
+
+        public void bindData(){
             publisherManager.setData(beans);
+            flowLayoutManager.setData(flowList);
         }
     }
 
