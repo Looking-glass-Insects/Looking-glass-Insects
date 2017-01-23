@@ -11,7 +11,7 @@ import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.heyong.lib.app.SwipeBackActivity;
+import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 
 public class SearchActivity extends SwipeBackActivity {
     static String TAG = "SearchActivity";

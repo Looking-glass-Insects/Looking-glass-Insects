@@ -1,5 +1,5 @@
 
-package com.example.heyong.lib.app;
+package com.example.heyong.lib.swipeBackActivity;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;

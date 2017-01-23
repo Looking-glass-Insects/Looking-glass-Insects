@@ -96,9 +96,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mainViews = new LinkedList<>();
-//        mainViews.add(new HomeFragment());
-//        mainViews.add(new FindFragment());
-//        mainViews.add(new MoreFragment());
         mainViews.add(new HomeFragment());
         mainViews.add(new FindFragment());
         mainViews.add(new MoreFragment());
@@ -137,9 +134,9 @@ public class MainActivity extends AppCompatActivity {
     private void setupHeader() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setNavigationIcon(R.drawable.ic_drawer_white_24dp);
-        //mToolbar.setTitle("e瞳大屏幕");
+
+
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         //通过CollapsingToolbarLayout修改字体颜色
         mCollapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.colorPrimary));//设置还没收缩时状态下字体颜色
@@ -150,7 +147,10 @@ public class MainActivity extends AppCompatActivity {
         images.add(R.drawable.banner1);
         images.add(R.drawable.banner2);
         Banner banner = (Banner) findViewById(R.id.banner);
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR).setIndicatorGravity(BannerConfig.RIGHT).setImageLoader(new GlideImageLoader()).setImages(images).start();
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR)
+                .setIndicatorGravity(BannerConfig.RIGHT)
+                .setImageLoader(new GlideImageLoader())
+                .setImages(images).start();
     }
 
     @Override
@@ -203,12 +203,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Drawer drawer;
-    private static String itemCacheTag = "itemCache";
-
     /**
      * 侧面抽屉布局
      */
+    private Drawer drawer;
+    private static String itemCacheTag = "itemCache";
+
     private void setupDrawer() {
 
         ProfileDrawerItem profileDrawerItem = new ProfileDrawerItem().withName("点我登陆");
@@ -294,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void freshCacheString() {
         try {
             PrimaryDrawerItem itemCache = (PrimaryDrawerItem) drawer.getDrawerItem(itemCacheTag);
@@ -344,6 +343,7 @@ public class MainActivity extends AppCompatActivity {
             return mainViews.size();
         }
     }
+
     class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
 
         @Override

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.heyong.lib.app;
+package com.example.heyong.lib.swipeBackActivity;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
