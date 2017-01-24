@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class HomeFragment extends Fragment {
     TabLayout tabs;
     @BindView(R.id.vp_view)
     ViewPager viewPager;
-
+    MyViewPageAdapter adapter;
 
     String[] titles = {"讲座", "活动"};
     View[] views = {
@@ -92,8 +93,17 @@ public class HomeFragment extends Fragment {
         views[0] = LayoutInflater.from(this.getActivity()).inflate(R.layout.home_pager_view_1, null);
         views[1] = LayoutInflater.from(this.getActivity()).inflate(R.layout.home_pager_view_2, null);
         //view[0] init
+        initView0();
+        //view[1] init
+        registerReceiver();
+        bindData();//耗时操作
+        adapter = new MyViewPageAdapter(this.getActivity());
+        Log.d(TAG,"onCreate");
+        super.onCreate(savedInstanceState);
+    }
+    private void initView0() {
         lvHomeLecture = (ListView) views[0].findViewById(R.id.lv_home_lecture);
-        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.load_more, null);
+        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer_load_more, null);
         lvHomeLecture.addFooterView(footerParent);
         footer = footerParent.findViewById(R.id.footer);
         lvHomeLecture.setOnScrollListener(new MyOnScrollListener());
@@ -108,12 +118,7 @@ public class HomeFragment extends Fragment {
             }
         });
         YoYo.with(Techniques.FadeOutRight).duration(500).playOn(btn);
-        //view[1] init
-        registerReceiver();
-        bindData();
-        super.onCreate(savedInstanceState);
     }
-
     @Override
     public void onDestroy() {
         this.getActivity().unregisterReceiver(receiver);
@@ -134,9 +139,9 @@ public class HomeFragment extends Fragment {
         });
         tabs.addTab(tabs.newTab().setText(titles[0]));
         tabs.addTab(tabs.newTab().setText(titles[1]));
-        MyViewPageAdapter adapter = new MyViewPageAdapter(this.getActivity());
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
+        Log.d(TAG,"onCreateView");
         return view;
     }
 

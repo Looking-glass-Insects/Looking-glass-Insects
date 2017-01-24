@@ -35,7 +35,7 @@
                     >
                 </com.example.heyong.lib.flowLayout.FlowLayout>
             </android.support.v4.widget.NestedScrollView>
-            <include layout="@layout/cut_line_flow" />
+            <include layout="@layout/fragment_search_cut_line_flow" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

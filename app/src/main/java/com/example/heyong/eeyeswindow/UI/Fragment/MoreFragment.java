@@ -67,8 +67,7 @@ public class MoreFragment extends Fragment {
                     public void doSomething(boolean isOK) {
                         if (isOK) {
                             CacheUtil.clearAllCache(getContext());
-                            String size = CacheUtil.getCacheSize(getContext());
-                            tvCacheSize.setText(size);
+                            tvCacheSize.setText("0kb");
                             Toast.makeText(getContext(), "清理完成", Toast.LENGTH_SHORT).show();
                         }
                     }

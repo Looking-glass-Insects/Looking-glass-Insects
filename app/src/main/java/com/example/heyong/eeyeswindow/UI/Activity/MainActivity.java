@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    class MainViewPagerAdapter extends FragmentStatePagerAdapter {
+    class MainViewPagerAdapter extends FragmentPagerAdapter {
 
         public MainViewPagerAdapter(FragmentManager fm) {
             super(fm);

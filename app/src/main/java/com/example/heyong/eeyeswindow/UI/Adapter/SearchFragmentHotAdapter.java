@@ -30,8 +30,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class SearchFragmentHotAdapter extends RecyclerView.Adapter<SearchFragmentHotAdapter.MyViewHolder> {
 
-    Context context;
-    List<HotPublisherBean> data;
+    private Context context;
+    private List<HotPublisherBean> data;
 
     public SearchFragmentHotAdapter(Context context) {
         this.context = context;
@@ -40,7 +40,7 @@ public class SearchFragmentHotAdapter extends RecyclerView.Adapter<SearchFragmen
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_fragment_search_hot,null,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_fragment_search_hot, null, false);
         return new MyViewHolder(view);
     }
 
@@ -69,19 +69,20 @@ public class SearchFragmentHotAdapter extends RecyclerView.Adapter<SearchFragmen
     }
 
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+     class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_hot)
         ImageView ivHot;
         @BindView(R.id.tv_name)
         AlwaysMarqueeTextView tvName;
         @BindView(R.id.card)
         CardView card;
-        public MyViewHolder(View view){
+
+        public MyViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this,view);
+            ButterKnife.bind(this, view);
         }
 
-        public void setOnClickListener(View.OnClickListener listener){
+        public void setOnClickListener(View.OnClickListener listener) {
             card.setOnClickListener(listener);
         }
     }

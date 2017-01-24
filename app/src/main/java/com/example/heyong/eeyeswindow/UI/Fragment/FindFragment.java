@@ -57,7 +57,9 @@ public class FindFragment extends Fragment {
     FlowLayoutManager flowLayoutManager;
     FindPagePresenter presenter;
 
+    {
 
+    }
     @BindView(R.id.search_root)
     NestedScrollView root;
 
