@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.Presenter.FindPagePresenter;
 import com.example.heyong.eeyeswindow.R;
@@ -29,14 +28,10 @@ import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
 import com.example.heyong.lib.flowLayout.FlowLayout;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
 
 /**
@@ -57,9 +52,7 @@ public class FindFragment extends Fragment {
     FlowLayoutManager flowLayoutManager;
     FindPagePresenter presenter;
 
-    {
 
-    }
     @BindView(R.id.search_root)
     NestedScrollView root;
 
@@ -146,12 +139,13 @@ public class FindFragment extends Fragment {
 
         private LinearLayout llSeeMore;
         private LinearLayout llSeeLess;
-
+        private NestedScrollView flowNestedScrollView;
         private List<String> flowList;
 
         public FlowLayoutManager(View view) {
             llSeeMore = (LinearLayout) view.findViewById(R.id.ll_see_more);
             llSeeLess = (LinearLayout) view.findViewById(R.id.ll_see_less);
+            flowNestedScrollView = (NestedScrollView) view.findViewById(R.id.flow_nested_scroll_view);
         }
 
 
@@ -160,6 +154,8 @@ public class FindFragment extends Fragment {
             llSeeMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dip2px(getContext(),200));
+                    flowNestedScrollView.setLayoutParams(layoutParams);
                     addAll();
                     convertVisit();
                 }
@@ -168,6 +164,8 @@ public class FindFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        flowNestedScrollView.setLayoutParams(layoutParams);
                         flowlayout.removeViews(DEFAULT_SIZE, flowList.size() - DEFAULT_SIZE);
                     } catch (Exception e) {
                     }
@@ -178,9 +176,8 @@ public class FindFragment extends Fragment {
         }
 
         private void init() {
-            for (int i = 0; i < DEFAULT_SIZE; i++)
+            for(int i = 0;i<DEFAULT_SIZE;i++)
                 yieldText(flowList.get(i));
-            flowlayout.relayoutToCompress();
         }
 
         private void convertVisit() {
@@ -196,18 +193,16 @@ public class FindFragment extends Fragment {
 
         private void addAll() {
             flowlayout.removeAllViews();
-            for (String s : flowList) {
+            for(String s:flowList)
                 yieldText(s);
-            }
-            flowlayout.relayoutToCompress();
         }
 
         private void yieldText(final String text) {
-            int ranHeight = dip2px(FindFragment.this.getContext(), 30);
-            ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(WRAP_CONTENT, ranHeight);//
-            lp.setMargins(dip2px(FindFragment.this.getContext(), 10), 0, dip2px(FindFragment.this.getContext(), 10), 0);
-            TextView tv = new TextView(FindFragment.this.getContext());
-            tv.setPadding(dip2px(FindFragment.this.getContext(), 15), 0, dip2px(FindFragment.this.getContext(), 15), 0);
+            int ranHeight = dip2px(getContext(), 30);
+            ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ranHeight);//
+            lp.setMargins(dip2px(getContext(), 10), 0, dip2px(getContext(), 10), 0);
+            TextView tv = new TextView(getContext());
+            tv.setPadding(dip2px(getContext(), 15), 0, dip2px(getContext(), 15), 0);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             //int index = (int)(Math.random() * length);
             tv.setText(text);
@@ -216,7 +211,7 @@ public class FindFragment extends Fragment {
             tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(FindFragment.this.getContext(), SearchActivity.class);
+                    Intent intent = new Intent(getContext(), SearchActivity.class);
                     intent.putExtra(SEARCH, text);
                     startActivity(intent);
                 }

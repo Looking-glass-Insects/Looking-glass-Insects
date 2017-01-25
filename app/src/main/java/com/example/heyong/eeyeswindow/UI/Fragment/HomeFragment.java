@@ -51,11 +51,11 @@ public class HomeFragment extends Fragment {
     String[] titles = {"讲座", "活动"};
     View[] views = {
             null, null
-    };//view pager 视图
+    };//thisView pager 视图
 
 
     /**
-     * view[0]
+     * thisView[0]
      */
     ListView lvHomeLecture;
     SwipeRefreshLayout srlHome;
@@ -92,9 +92,9 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         views[0] = LayoutInflater.from(this.getActivity()).inflate(R.layout.home_pager_view_1, null);
         views[1] = LayoutInflater.from(this.getActivity()).inflate(R.layout.home_pager_view_2, null);
-        //view[0] init
+        //thisView[0] init
         initView0();
-        //view[1] init
+        //thisView[1] init
         registerReceiver();
         bindData();//耗时操作
         adapter = new MyViewPageAdapter(this.getActivity());
@@ -119,17 +119,16 @@ public class HomeFragment extends Fragment {
         });
         YoYo.with(Techniques.FadeOutRight).duration(500).playOn(btn);
     }
-    @Override
-    public void onDestroy() {
-        this.getActivity().unregisterReceiver(receiver);
-        super.onDestroy();
-    }
 
+    private View thisView;//防止viewpager 老调该方法造成一些问题
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ButterKnife.bind(this, view);
+//        Log.d(TAG,"onCreateView");
+        if(thisView != null)
+            return thisView;
+        thisView = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this, thisView);
         llOffLine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,8 +140,13 @@ public class HomeFragment extends Fragment {
         tabs.addTab(tabs.newTab().setText(titles[1]));
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
-        Log.d(TAG,"onCreateView");
-        return view;
+        return thisView;
+    }
+
+    @Override
+    public void onDestroy() {
+        this.getActivity().unregisterReceiver(receiver);
+        super.onDestroy();
     }
 
 
