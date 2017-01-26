@@ -1,11 +1,15 @@
 package com.example.heyong.eeyeswindow.UI.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -13,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.UI.Activity.LectureDetailActivity;
 import com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView;
 
 import java.util.LinkedList;
@@ -29,12 +34,27 @@ import butterknife.ButterKnife;
 
 public class HomePageLectureListAdapter extends BaseAdapter implements HomePagePresenter.HomePageDataListener {
     static String TAG = "HomePage";
+    public static final String BEAN = "bean";
+
     Context context;
     List<HomeLectureBean> data = new LinkedList<>();
-
+    //ListView listView;
     public HomePageLectureListAdapter(Context context) {
         this.context = context;
     }
+
+//    public void bindListView(ListView listView){
+//       // this.listView = listView;
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(context, LectureDetailActivity.class);
+//                intent.putExtra(BEAN,(Parcelable) data.get(position));
+//                context.startActivity(intent);
+//            }
+//        });
+//    }
+
 
     @Override
     public int getCount() {

@@ -175,7 +175,7 @@ public class HomeFragment extends Fragment {
         HomePageLectureListAdapter adapter = new HomePageLectureListAdapter(getContext());
         presenter = new HomePagePresenter(getContext(), adapter);
         lvHomeLecture.setAdapter(adapter);
-
+        //adapter.bindListView(lvHomeLecture);
         presenter.nextData(new HomePagePresenter.OnGetDataSuccessByNet() {
             @Override
             public void onGetData(boolean isSuccessful) {

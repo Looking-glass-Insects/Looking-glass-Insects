@@ -1,12 +1,15 @@
 package com.example.heyong.eeyeswindow.Bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  *
  */
 
-public class HomeLectureBean implements Serializable {
+public class HomeLectureBean implements Serializable,Parcelable {
     String title;
     String picURL;
     String tv1;//音乐
@@ -29,6 +32,29 @@ public class HomeLectureBean implements Serializable {
         this.location = location;
         this.publisher = publisher;
     }
+
+    protected HomeLectureBean(Parcel in) {
+        title = in.readString();
+        picURL = in.readString();
+        tv1 = in.readString();
+        tv2 = in.readString();
+        tv3 = in.readString();
+        time = in.readString();
+        location = in.readString();
+        publisher = in.readString();
+    }
+
+    public static final Creator<HomeLectureBean> CREATOR = new Creator<HomeLectureBean>() {
+        @Override
+        public HomeLectureBean createFromParcel(Parcel in) {
+            return new HomeLectureBean(in);
+        }
+
+        @Override
+        public HomeLectureBean[] newArray(int size) {
+            return new HomeLectureBean[size];
+        }
+    };
 
     public String getPublisher() {
         return publisher;
@@ -92,5 +118,22 @@ public class HomeLectureBean implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(picURL);
+        dest.writeString(tv1);
+        dest.writeString(tv2);
+        dest.writeString(tv3);
+        dest.writeString(time);
+        dest.writeString(location);
+        dest.writeString(publisher);
     }
 }

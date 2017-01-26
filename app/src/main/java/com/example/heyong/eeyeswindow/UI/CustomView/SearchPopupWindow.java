@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Toast;
 
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.PxToDp;
 import com.example.heyong.eeyeswindow.UI.Activity.ScanActivity;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,12 +32,15 @@ public class SearchPopupWindow extends PopupWindow {
     View menuView;
     @BindView(R.id.image_back)
     ImageView imageBack;
-    @BindView(R.id.sv_search)
-    SearchView svSearch;
-    //Context context;
+
     @BindView(R.id.image_scan)
     ImageView imageScan;
+
     Activity context;
+    @BindView(R.id.sv_search)
+    SearchView svSearch;
+
+
     public SearchPopupWindow(final Activity context) {
         super(context);
         this.context = context;
@@ -69,6 +72,7 @@ public class SearchPopupWindow extends PopupWindow {
                 context.getWindow().setAttributes(lp);
             }
         });
+
         svSearch.onActionViewExpanded();
         svSearch.setOnQueryTextListener(new MyQueryTextListener());
     }

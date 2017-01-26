@@ -1,5 +1,5 @@
 package com.example.heyong.eeyeswindow.Bean;
-
+@Deprecated
 public class Bean{
 
     /**

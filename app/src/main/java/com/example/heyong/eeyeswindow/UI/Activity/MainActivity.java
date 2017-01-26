@@ -14,8 +14,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +30,6 @@ import com.example.heyong.eeyeswindow.Tools.CacheUtil;
 import com.example.heyong.eeyeswindow.Tools.GlideImageLoader;
 import com.example.heyong.eeyeswindow.Tools.SimpleDialogFactory;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
-import com.example.heyong.eeyeswindow.UI.Fragment.BlankFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.MoreFragment;
@@ -171,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
             searchPopup.showAtLocation(view, Gravity.TOP | Gravity.RIGHT, 10, location[1]);
         } else if (id == R.id.action_share) {
             //startActivity(new Intent(this,AboutActivity.class));
+            Intent intent = new Intent(this,ProfileActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
