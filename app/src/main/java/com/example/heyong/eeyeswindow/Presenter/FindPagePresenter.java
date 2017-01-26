@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Heyong on 2017/1/21.
  */
 
-public class FindPagePresenter {
+public class FindPagePresenter implements Presenter {
     private FindPageDataListener dataListener;
     private Context context;
 
@@ -55,13 +55,19 @@ public class FindPagePresenter {
         };
     }
 
-    public void getData() {
+    public void nextData(OnGetDataSuccessByNet get) {
         List<String> flowList = new LinkedList<>();
         flowList.addAll(Arrays.asList(strings));
         List<HotPublisherBean> publisherBeanList = new LinkedList<>();
         for (int i = 0; i < 10; i++)
             publisherBeanList.add(new HotPublisherBean());
         dataListener.onGetData(flowList, publisherBeanList);
+        get.onGetData(true);
+    }
+
+    @Override
+    public void nextData(OnGetDataSuccessByNet get, int count) {
+
     }
 
 

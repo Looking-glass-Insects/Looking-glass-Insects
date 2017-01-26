@@ -1,6 +1,7 @@
 package com.example.heyong.eeyeswindow.UI.Activity;
 
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -8,13 +9,9 @@ import android.view.View;
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureLectureListAdapter;
-import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 
-/**
- * 活动详情页面
- */
-public class LectureDetailActivity extends SwipeBackActivity {
-    HomeLectureBean bean;
+public class ActivityDetailActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,10 +19,11 @@ public class LectureDetailActivity extends SwipeBackActivity {
         setupHeader();
     }
 
+
     private void setupHeader() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
-        bean = (HomeLectureBean)intent.getSerializableExtra(HomePageLectureLectureListAdapter.BEAN);
+        HomeLectureBean bean = (HomeLectureBean)intent.getSerializableExtra(HomePageLectureLectureListAdapter.BEAN);
         toolbar.setTitle("讲座详情");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -37,6 +35,4 @@ public class LectureDetailActivity extends SwipeBackActivity {
             }
         });
     }
-
-
 }

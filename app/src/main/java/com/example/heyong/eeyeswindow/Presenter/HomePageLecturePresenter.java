@@ -16,15 +16,15 @@ import java.util.List;
  * 数据提供
  */
 
-public class HomePagePresenter {
+public class HomePageLecturePresenter implements Presenter {
     static String TAG = "HomePagePresenter";
     private Context context;
-    private HomePageDataListener listener;//数据传输终点
+    private HomePageLectureDataListener listener;//数据传输终点
     private CacheManager manager;//缓存
 
     public static String HOME_PAGE_LIST = "HOME_PAGE_LIST";
 
-    public HomePagePresenter(Context context, HomePageDataListener listener) {
+    public HomePageLecturePresenter(Context context, HomePageLectureDataListener listener) {
         this.context = context;
         this.listener = listener;
         manager = new CacheManager(context);
@@ -40,10 +40,9 @@ public class HomePagePresenter {
 
     /**
      * 获取下一条数据
-     *
-     * @param onGetDataSuccess
      */
-    public void nextData(final OnGetDataSuccessByNet onGetDataSuccess,final int count) {
+    @Override
+    public void nextData(OnGetDataSuccessByNet get) {
 //        HomePageData.dataCallBack(new Callback<Bean>() {
 //            @Override
 //            public void onResponse(Call<Bean> call, Response<Bean> response) {
@@ -63,22 +62,28 @@ public class HomePagePresenter {
 //            }
 //        });
         final List<HomeLectureBean> beanList = new LinkedList<>();
+        beanList.add(new HomeLectureBean());
+        listener.onGetData(beanList);
+        get.onGetData(true);
+    }
+
+    @Override
+    public void nextData(OnGetDataSuccessByNet get,int count) {
+        final List<HomeLectureBean> beanList = new LinkedList<>();
         for (int i = 0; i < count; i++)
             beanList.add(new HomeLectureBean());
         listener.onGetData(beanList);
-        onGetDataSuccess.onGetData(true);
-
+        get.onGetData(true);
     }
+
 
     public void startCache(final Serializable content) {
         manager.startCache(CacheManager.CACHE_OBJ, HOME_PAGE_LIST, content);
     }
 
-    public interface HomePageDataListener {
+    public interface HomePageLectureDataListener {
         void onGetData(List<HomeLectureBean> beanList);
     }
 
-    public interface OnGetDataSuccessByNet {
-        void onGetData(boolean isSuccessful);
-    }
+
 }

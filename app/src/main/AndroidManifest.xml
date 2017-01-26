@@ -38,7 +38,8 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".UI.Activity.AboutActivity" />
         <activity android:name=".UI.Activity.HotDetailActivity" />
-        <activity android:name=".UI.Activity.LectureDetailActivity"></activity>
+        <activity android:name=".UI.Activity.LectureDetailActivity" />
+        <activity android:name=".UI.Activity.ActivityDetailActivity"></activity>
     </application>
 
 </manifest>

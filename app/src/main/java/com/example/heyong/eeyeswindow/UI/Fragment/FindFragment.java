@@ -12,7 +12,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.Presenter.FindPagePresenter;
+import com.example.heyong.eeyeswindow.Presenter.OnGetDataSuccessByNet;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
@@ -66,7 +66,12 @@ public class FindFragment extends Fragment {
         this.i = sp.getInt(I,0)%2;
         dataHolder = new DataHolder();
         presenter = new FindPagePresenter(this.getContext(),dataHolder);
-        presenter.getData();
+        presenter.nextData(new OnGetDataSuccessByNet() {
+            @Override
+            public void onGetData(boolean isSuccessful) {
+
+            }
+        });
         super.onCreate(savedInstanceState);
     }
 

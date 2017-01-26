@@ -2,7 +2,6 @@ package com.example.heyong.eeyeswindow.UI.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.heyong.eeyeswindow.Bean.HomeActivityBean;
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
-import com.example.heyong.eeyeswindow.Presenter.HomePagePresenter;
+import com.example.heyong.eeyeswindow.Presenter.HomePageActivityPresenter;
+import com.example.heyong.eeyeswindow.Presenter.HomePageLecturePresenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.LectureDetailActivity;
 import com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView;
@@ -27,35 +28,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Heyong
- * <p>
- * 实现了 HomePagePresenter.HomePageDataListener
+ * Created by Heyong on 2017/1/26.
  */
 
-public class HomePageLectureListAdapter extends BaseAdapter implements HomePagePresenter.HomePageDataListener {
-    static String TAG = "HomePage";
+public class HomePageActivityAdapter  extends BaseAdapter implements HomePageActivityPresenter.HomePageActivityDataListener{
+
     public static final String BEAN = "bean";
 
-    Context context;
-    List<HomeLectureBean> data = new LinkedList<>();
 
-    //ListView listView;
-    public HomePageLectureListAdapter(Context context) {
+    Context context;
+    List<HomeActivityBean> data = new LinkedList<>();
+
+    public HomePageActivityAdapter(Context context) {
         this.context = context;
     }
-
-//    public void bindListView(ListView listView){
-//       // this.listView = listView;
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(context, LectureDetailActivity.class);
-//                intent.putExtra(BEAN,(Parcelable) data.get(position));
-//                context.startActivity(intent);
-//            }
-//        });
-//    }
-
 
     @Override
     public int getCount() {
@@ -80,7 +66,8 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
 
         }
         ViewHolder viewHolder = new ViewHolder(view);
-        viewHolder.setOnClickListener(i);
+        //viewHolder.setOnClickListener(i);
+        viewHolder.itemHomeLectureTitle.setText("活动名");
         //viewHolder.itemHomeLectureTitle.setText(data.get(i).getTitle());
         Glide.with(context).load(data.get(i).getPicURL()).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .error(R.drawable.ic_insert_photo_black_24dp).into(viewHolder.itemHomeLecturePhoto);
@@ -88,24 +75,12 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
     }
 
     @Override
-    public void onGetData(List<HomeLectureBean> beanList) {
-        data.addAll(beanList);
-        this.notifyDataSetChanged();
+    public void onGetData(List<HomeActivityBean> list) {
+        data.addAll(list);
+        notifyDataSetChanged();
     }
 
-    public LinkedList<HomeLectureBean> getData() {
-        LinkedList<HomeLectureBean> list = new LinkedList<>();
-        list.addAll(data);
-        return list;
-    }
-
-    public void setData(List<HomeLectureBean> data) {
-        this.data = data;
-    }
-
-
-
-     class ViewHolder {
+    class ViewHolder {
         @BindView(R.id.item_home_lecture_photo)
         ImageView itemHomeLecturePhoto;
         @BindView(R.id.item_home_lecture_title)
@@ -140,6 +115,5 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
             });
         }
     }
-
 
 }

@@ -2,7 +2,6 @@ package com.example.heyong.eeyeswindow.UI.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
@@ -10,14 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.HotDetailActivity;
 import com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView;
-import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -26,8 +23,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-
-import static com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureListAdapter.BEAN;
 
 
 /**
