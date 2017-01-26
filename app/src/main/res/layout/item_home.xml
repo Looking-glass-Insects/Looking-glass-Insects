@@ -24,7 +24,7 @@
             >
 
             <ImageView
-                android:id="@+id/item_home_lecture_photo"
+                android:id="@+id/item_photo"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -38,7 +38,7 @@
                 android:padding="5dp">
 
                 <com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView
-                    android:id="@+id/item_home_lecture_title"
+                    android:id="@+id/item_title"
                     android:textAlignment="center"
                     android:text="讲座名"
                     android:layout_width="match_parent"

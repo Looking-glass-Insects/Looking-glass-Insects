@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -23,7 +22,6 @@ import android.widget.AbsListView;
 import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -128,7 +126,7 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goTop1();
+                goTop(lvHomeActivity);
             }
         });
         YoYo.with(Techniques.FadeOutRight).duration(500).playOn(btn);
@@ -146,7 +144,7 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goTop0();
+                goTop(lvHomeLecture);
             }
         });
         YoYo.with(Techniques.FadeOutRight).duration(500).playOn(btn);
@@ -182,25 +180,15 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public boolean goTop0() {
-        if (lvHomeLecture.getFirstVisiblePosition() != 0) {
+    public boolean goTop(ListView listView) {
+        if (listView.getFirstVisiblePosition() != 0) {
             //返回顶部
-            lvHomeLecture.smoothScrollToPosition(0);
+            listView.smoothScrollToPosition(0);
             return true;
         } else {
             return false;
         }
     }
-    public boolean goTop1() {
-        if (lvHomeActivity.getFirstVisiblePosition() != 0) {
-            //返回顶部
-            lvHomeActivity.smoothScrollToPosition(0);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
     private void registerReceiver() {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);

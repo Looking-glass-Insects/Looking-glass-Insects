@@ -10,11 +10,11 @@ import java.io.Serializable;
  */
 
 public class HomeLectureBean implements Serializable,Parcelable {
-    String title = "title";
+    String title = "讲座名";
     String picURL = "picURL";
-    String tv1 = "tv1";//音乐
-    String tv2 = "tv2";//彭康书院
-    String tv3 = "tv3";//电影
+    String tv1 = "标签1";//音乐
+    String tv2 = "标签2";//彭康书院
+    String tv3 = "标签3";//电影
     String time = "time";
     String location = "location";
     String publisher = "publisher";

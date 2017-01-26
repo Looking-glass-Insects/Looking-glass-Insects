@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 public class HotPublisherBean implements Parcelable, Serializable {
     String imgURL = "imgURL";
-    String name = "name";
+    String name = "发布方名";
 
     public HotPublisherBean() {
     }

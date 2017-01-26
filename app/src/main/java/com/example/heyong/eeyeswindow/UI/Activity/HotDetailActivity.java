@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.heyong.eeyeswindow.Bean.HomeActivityBean;
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.UI.Adapter.ActivityBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.LectureBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
 import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
@@ -26,7 +28,6 @@ import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -39,6 +40,7 @@ public class HotDetailActivity extends SwipeBackActivity {
             null, null
     };//视图
     private LectureBeanRecyclerViewAdapter adapter;
+    private ActivityBeanRecyclerViewAdapter activityAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +51,26 @@ public class HotDetailActivity extends SwipeBackActivity {
     }
 
     private void setupContent() {
-        views[0] = LayoutInflater.from(this).inflate(R.layout.activity_hot_detail_view_1,null);
+        views[0] = LayoutInflater.from(this).inflate(R.layout.activity_hot_detail_view,null);
         initView0();
-        views[1] = new View(this);
+        views[1] = LayoutInflater.from(this).inflate(R.layout.activity_hot_detail_view,null);
+        initView1();
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new MyPageDapater());
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+    }
+
+    private void initView1() {
+        RecyclerView recyclerView = (RecyclerView) views[1].findViewById(R.id.rc_hot_detail_lecture);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        activityAdapter = new ActivityBeanRecyclerViewAdapter(this);
+        List<HomeActivityBean> l = new LinkedList<>();
+        for(int i = 0;i<10;i++)
+            l.add(new HomeActivityBean());
+        activityAdapter.addData(l);
+        recyclerView.setAdapter(activityAdapter);
     }
 
     private void initView0() {
