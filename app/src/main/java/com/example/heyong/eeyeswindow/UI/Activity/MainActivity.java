@@ -168,8 +168,8 @@ public class MainActivity extends AppCompatActivity {
             searchPopup.showAtLocation(view, Gravity.TOP | Gravity.RIGHT, 10, location[1]);
         } else if (id == R.id.action_share) {
             //startActivity(new Intent(this,AboutActivity.class));
-            Intent intent = new Intent(this,ProfileActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(this,HotDetailActivity.class);
+//            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,6 +1,5 @@
 package com.example.heyong.eeyeswindow.UI.Fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -90,14 +89,14 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        views[0] = LayoutInflater.from(this.getActivity()).inflate(R.layout.home_pager_view_1, null);
-        views[1] = LayoutInflater.from(this.getActivity()).inflate(R.layout.home_pager_view_2, null);
+        views[0] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view_1, null);
+        views[1] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view_2, null);
         //thisView[0] init
         initView0();
         //thisView[1] init
         registerReceiver();
         bindData();//耗时操作
-        adapter = new MyViewPageAdapter(this.getActivity());
+        adapter = new MyViewPageAdapter();
         Log.d(TAG,"onCreate");
         super.onCreate(savedInstanceState);
     }
@@ -201,11 +200,6 @@ public class HomeFragment extends Fragment {
 
 
     class MyViewPageAdapter extends PagerAdapter {
-        Context context;
-
-        public MyViewPageAdapter(Context context) {
-            this.context = context;
-        }
 
         @Override
         public int getCount() {

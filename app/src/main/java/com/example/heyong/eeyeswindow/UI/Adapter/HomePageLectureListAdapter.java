@@ -3,13 +3,12 @@ package com.example.heyong.eeyeswindow.UI.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +19,7 @@ import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.LectureDetailActivity;
 import com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +38,7 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
 
     Context context;
     List<HomeLectureBean> data = new LinkedList<>();
+
     //ListView listView;
     public HomePageLectureListAdapter(Context context) {
         this.context = context;
@@ -79,6 +80,7 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
 
         }
         ViewHolder viewHolder = new ViewHolder(view);
+        viewHolder.setOnClickListener(i);
         //viewHolder.itemHomeLectureTitle.setText(data.get(i).getTitle());
         Glide.with(context).load(data.get(i).getPicURL()).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .error(R.drawable.ic_insert_photo_black_24dp).into(viewHolder.itemHomeLecturePhoto);
@@ -101,7 +103,9 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
         this.data = data;
     }
 
-    static class ViewHolder {
+
+
+     class ViewHolder {
         @BindView(R.id.item_home_lecture_photo)
         ImageView itemHomeLecturePhoto;
         @BindView(R.id.item_home_lecture_title)
@@ -118,9 +122,24 @@ public class HomePageLectureListAdapter extends BaseAdapter implements HomePageP
         TextView tvLocation;
         @BindView(R.id.tv_publisher)
         TextView tvPublisher;
+        @BindView(R.id.card)
+        CardView card;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
+        public void setOnClickListener(final int position) {
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, LectureDetailActivity.class);
+                    intent.putExtra(BEAN,(Serializable) data.get(position));
+                    context.startActivity(intent);
+                }
+            });
+        }
     }
+
+
 }

@@ -1,6 +1,8 @@
 package com.example.heyong.eeyeswindow.UI.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
@@ -13,15 +15,19 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.UI.Activity.HotDetailActivity;
 import com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureListAdapter.BEAN;
 
 
 /**
@@ -32,7 +38,7 @@ public class SearchFragmentHotAdapter extends RecyclerView.Adapter<SearchFragmen
 
     private Context context;
     private List<HotPublisherBean> data;
-
+    public static String HOT_BEAN = "HOT_BEAN";
     public SearchFragmentHotAdapter(Context context) {
         this.context = context;
         this.data = new LinkedList<>();
@@ -53,7 +59,9 @@ public class SearchFragmentHotAdapter extends RecyclerView.Adapter<SearchFragmen
         holder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "-->" + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context,HotDetailActivity.class);
+                intent.putExtra(HOT_BEAN, (Serializable) data.get(position));
+                context.startActivity(intent);
             }
         });
     }

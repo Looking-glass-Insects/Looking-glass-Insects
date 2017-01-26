@@ -11,8 +11,8 @@ import java.io.Serializable;
  */
 
 public class HotPublisherBean implements Parcelable, Serializable {
-    String imgURL;
-    String name;
+    String imgURL = "imgURL";
+    String name = "name";
 
     public HotPublisherBean() {
     }

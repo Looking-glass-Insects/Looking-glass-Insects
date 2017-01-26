@@ -37,7 +37,7 @@
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".UI.Activity.AboutActivity" />
-        <activity android:name=".UI.Activity.ProfileActivity" />
+        <activity android:name=".UI.Activity.HotDetailActivity" />
         <activity android:name=".UI.Activity.LectureDetailActivity"></activity>
     </application>
 
