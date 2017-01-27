@@ -25,8 +25,134 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_detail"
+                android:background="@color/accent"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_gravity="center_horizontal"
+                android:textSize="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标题"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                />
+            <LinearLayout
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@color/accent"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"/>
 
+            <RelativeLayout
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time"/>
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="时间"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location"/>
+                <TextView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="=地点"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/speech_maker"/>
+                <TextView
+                    android:id="@+id/tv_speech_maker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="演讲人"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/publisher"/>
+                <TextView
+                    android:id="@+id/tv_publisher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="发起方"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:padding="@dimen/activity_vertical_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label"/>
+                <RelativeLayout
+                    android:layout_centerInParent="true"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content">
+                    <com.example.heyong.lib.flowLayout.FlowLayout
+                        android:layout_centerInParent="true"
+                        android:id="@+id/flow_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:lineSpacing="@dimen/activity_horizontal_margin"
+                        />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@color/accent"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin">
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_margin="@dimen/activity_horizontal_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="正文内容"/>
+            </LinearLayout>
+
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
-
 </android.support.design.widget.CoordinatorLayout>

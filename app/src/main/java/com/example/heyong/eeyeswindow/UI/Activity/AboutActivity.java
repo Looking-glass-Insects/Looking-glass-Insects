@@ -12,10 +12,12 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 
 
 public class AboutActivity extends SwipeBackActivity {

@@ -33,11 +33,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/cache_clear"/>
                 <TextView
+                    android:id="@+id/tv_cache_size"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:text="0kb"
-                    android:id="@+id/tv_cache_size"
+                    android:background="@drawable/corner_text_view_background"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
