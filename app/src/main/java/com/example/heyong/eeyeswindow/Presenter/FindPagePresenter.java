@@ -5,7 +5,6 @@ import android.content.Context;
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,6 +54,7 @@ public class FindPagePresenter implements Presenter {
         };
     }
 
+    @Override
     public void nextData(OnGetDataSuccessByNet get) {
         List<String> flowList = new LinkedList<>();
         flowList.addAll(Arrays.asList(strings));

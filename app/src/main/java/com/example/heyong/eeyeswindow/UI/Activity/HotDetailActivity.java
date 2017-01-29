@@ -35,7 +35,7 @@ public class HotDetailActivity extends SwipeBackActivity {
 
     private static final String TAG = "HotDetailActivity";
 
-    String[] titles = {"讲座", "活动"};
+    String[] titles = {"全部讲座", "全部活动"};
     View[] views = {
             null, null
     };//视图

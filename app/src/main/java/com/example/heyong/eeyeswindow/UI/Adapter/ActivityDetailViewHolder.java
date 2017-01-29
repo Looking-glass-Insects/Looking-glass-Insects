@@ -56,8 +56,7 @@ public class ActivityDetailViewHolder {
     }
 
     private void yeildText(String text){
-        int ranHeight = dip2px(context, 30);
-        ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ranHeight);//
+        ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);//
         lp.setMargins(dip2px(context, 10), 0, dip2px(context, 10), 0);
         TextView tv = new TextView(context);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);

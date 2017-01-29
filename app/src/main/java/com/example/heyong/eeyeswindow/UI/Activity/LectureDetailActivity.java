@@ -9,7 +9,7 @@ import android.view.View;
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Adapter.ActivityDetailViewHolder;
-import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureLectureListAdapter;
+import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureAdapter;
 import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class LectureDetailActivity extends SwipeBackActivity {
     private void setupHeader() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
-        bean = (HomeLectureBean)intent.getSerializableExtra(HomePageLectureLectureListAdapter.BEAN);
+        bean = (HomeLectureBean)intent.getSerializableExtra(HomePageLectureAdapter.BEAN);
         toolbar.setTitle("讲座详情");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

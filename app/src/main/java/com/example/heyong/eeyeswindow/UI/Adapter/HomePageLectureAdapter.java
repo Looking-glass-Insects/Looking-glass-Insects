@@ -24,7 +24,7 @@ import java.util.List;
  * 实现了 HomePagePresenter.HomePageDataListener
  */
 
-public class HomePageLectureLectureListAdapter extends BaseAdapter implements HomePageLecturePresenter.HomePageLectureDataListener {
+public class HomePageLectureAdapter extends BaseAdapter implements HomePageLecturePresenter.HomePageLectureDataListener {
     static String TAG = "HomePage";
     public static final String BEAN = "bean";
 
@@ -32,7 +32,7 @@ public class HomePageLectureLectureListAdapter extends BaseAdapter implements Ho
     List<HomeLectureBean> data = new LinkedList<>();
 
     //ListView listView;
-    public HomePageLectureLectureListAdapter(Context context) {
+    public HomePageLectureAdapter(Context context) {
         this.context = context;
     }
 
@@ -91,48 +91,5 @@ public class HomePageLectureLectureListAdapter extends BaseAdapter implements Ho
         list.addAll(data);
         return list;
     }
-
-//    public void setData(List<HomeLectureBean> data) {
-//        this.data = data;
-//    }
-
-
-
-//     class ViewHolder {
-//        @BindView(R.id.item_home_lecture_photo)
-//        ImageView itemPhoto;
-//        @BindView(R.id.item_home_lecture_title)
-//        AlwaysMarqueeTextView itemTitle;
-//        @BindView(R.id.tv_1)
-//        TextView tv1;
-//        @BindView(R.id.tv_2)
-//        TextView tv2;
-//        @BindView(R.id.tv_3)
-//        TextView tv3;
-//        @BindView(R.id.tv_time)
-//        TextView tvTime;
-//        @BindView(R.id.tv_location)
-//        TextView tvLocation;
-//        @BindView(R.id.tv_publisher)
-//        TextView tvPublisher;
-//        @BindView(R.id.card)
-//        CardView card;
-//
-//        ViewHolder(View view) {
-//            ButterKnife.bind(this, view);
-//        }
-//
-//        public void setOnClickListener(final int position) {
-//            card.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(context, LectureDetailActivity.class);
-//                    intent.putExtra(BEAN,(Serializable) data.get(position));
-//                    context.startActivity(intent);
-//                }
-//            });
-//        }
-//    }
-
 
 }

@@ -32,7 +32,7 @@ import com.example.heyong.eeyeswindow.Presenter.Presenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Receiver.NetworkReceiver;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageActivityAdapter;
-import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureLectureListAdapter;
+import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -203,7 +203,7 @@ public class HomeFragment extends Fragment {
     public void bindData(int index) {
         if (index == 0) {
             srlHomeLecture.setRefreshing(true);
-            HomePageLectureLectureListAdapter adapter = new HomePageLectureLectureListAdapter(getContext());
+            HomePageLectureAdapter adapter = new HomePageLectureAdapter(getContext());
             presenterLecture = new HomePageLecturePresenter(getContext(), adapter);
             lvHomeLecture.setAdapter(adapter);
             lvHomeLecture.setOnScrollListener(new MyOnScrollListener(lvHomeLecture,presenterLecture ,0));
@@ -235,7 +235,7 @@ public class HomeFragment extends Fragment {
      * 缓存
      */
     private void cache() {
-        HomePageLectureLectureListAdapter adapter = (HomePageLectureLectureListAdapter) ((HeaderViewListAdapter) lvHomeLecture.getAdapter()).getWrappedAdapter();
+        HomePageLectureAdapter adapter = (HomePageLectureAdapter) ((HeaderViewListAdapter) lvHomeLecture.getAdapter()).getWrappedAdapter();
         presenterLecture.startCache(adapter.getData());
     }
 

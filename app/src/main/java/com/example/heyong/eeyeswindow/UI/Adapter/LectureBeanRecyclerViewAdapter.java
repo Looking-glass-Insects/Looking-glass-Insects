@@ -62,51 +62,10 @@ public class LectureBeanRecyclerViewAdapter extends RecyclerView.Adapter<ItemVie
         holder.tvPublisher.setText(bean.getPublisher());
         Glide.with(context).load(bean.getPicURL()).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .error(R.drawable.ic_insert_photo_black_24dp).into(holder.itemPhoto);
-
-
-
-
     }
-
     @Override
     public int getItemCount() {
         return data.size();
     }
 
-//    class ViewHolder extends RecyclerView.ViewHolder{
-//        @BindView(R.id.item_home_lecture_photo)
-//        ImageView itemPhoto;
-//        @BindView(R.id.item_home_lecture_title)
-//        AlwaysMarqueeTextView itemTitle;
-//        @BindView(R.id.tv_1)
-//        TextView tv1;
-//        @BindView(R.id.tv_2)
-//        TextView tv2;
-//        @BindView(R.id.tv_3)
-//        TextView tv3;
-//        @BindView(R.id.tv_time)
-//        TextView tvTime;
-//        @BindView(R.id.tv_location)
-//        TextView tvLocation;
-//        @BindView(R.id.tv_publisher)
-//        TextView tvPublisher;
-//        @BindView(R.id.card)
-//        CardView card;
-//
-//        ViewHolder(View view) {
-//            super(view);
-//            ButterKnife.bind(this, view);
-//        }
-//
-//        public void setOnClickListener(final int position) {
-//            card.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(context, LectureDetailActivity.class);
-//                    intent.putExtra(BEAN,(Serializable) data.get(position));
-//                    context.startActivity(intent);
-//                }
-//            });
-//        }
-//    }
 }
