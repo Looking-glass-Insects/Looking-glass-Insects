@@ -22,6 +22,7 @@ public class SimpleDialogFactory {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if(callBack == null) return;
                 switch (which) {
                     case Dialog.BUTTON_POSITIVE:
                         callBack.doSomething(true);

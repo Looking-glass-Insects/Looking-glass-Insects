@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     int[][] dataMetrix;
 
 
-
     static class Point {
         public int i;
         public int j;
@@ -110,13 +109,9 @@ public class MainActivity extends AppCompatActivity {
                 if (dataMetrix[i][j] == 0)
                     l.add(new Point(i, j));
         if (l.size() == 0) {
-            SimpleDialogFactory.alertDialog(this, "提示", "Game Over:你本次移动没有造成空位", R.mipmap.ic_launcher, new SimpleDialogFactory.IAlertDialogCallBack() {
-                @Override
-                public void doSomething(boolean isOK) {
-                    initItem();
-                    drawItem();
-                }
-            });
+            SimpleDialogFactory.alertDialog(this, "提示", "Game Over:你本次移动没有造成空位", R.mipmap.ic_launcher, null);
+            initItem();
+            drawItem();
         } else {
             Point p = l.get(new Random().nextInt(l.size()));
             dataMetrix[p.i][p.j] = new Random().nextInt() > 0.5 ? 4 : 2;
@@ -125,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             v.setBgColor(intToColor.get(dataMetrix[p.i][p.j]));
             v.invalidate();
             ScaleAnimation sa = new ScaleAnimation(0,1,0,1, Animation.RELATIVE_TO_SELF,0.5F,Animation.RELATIVE_TO_SELF,0.5F);
-            sa.setDuration(100);
+            sa.setDuration(300);
             v.startAnimation(sa);
         }
     }
@@ -292,13 +287,11 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_header_menu,menu);
         return true;
     }
-    private static String MyURL = "";
+    private static String MyURL = "https://github.com/Looking-glass-Insects/Looking-glass-Insects/tree/Game2048";
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.item_share){
-
-        }else if(id == R.id.item_about){
+        if(id == R.id.item_about){
             Intent intent = new Intent();
             intent.setAction("android.intent.action.VIEW");
             Uri content_url = Uri.parse(MyURL);

@@ -2,12 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <item
-        android:id="@+id/item_share"
-        android:icon="@drawable/ic_share_black_24dp"
-        android:showAsAction="ifRoom"
-        android:title="分享"
-        tools:ignore="AppCompatResource" />
+
     <item
         android:id="@+id/item_about"
         android:icon="@drawable/ic_more_vert_black_24dp"
