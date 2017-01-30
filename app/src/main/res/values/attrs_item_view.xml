@@ -1,0 +1,8 @@
+<resources>
+    <declare-styleable name="ItemView">
+        <attr name="text" format="string" />
+        <attr name="text_size" format="dimension"/>
+        <attr name="bg_color" format="color" />
+        <attr name="text_color" format="color" />
+    </declare-styleable>
+</resources>
