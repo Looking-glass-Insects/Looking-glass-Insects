@@ -43,24 +43,6 @@ public class HomePageLecturePresenter implements Presenter {
      */
     @Override
     public void nextData(OnGetDataSuccessByNet get) {
-//        HomePageData.dataCallBack(new Callback<Bean>() {
-//            @Override
-//            public void onResponse(Call<Bean> call, Response<Bean> response) {
-//                final List<HomeLectureBean> beanList = new LinkedList<>();
-//                try {
-//                    beanList.add(new HomeLectureBean());
-//                } catch (Exception e) {
-//                    onGetDataSuccess.onGetData(false);
-//                }
-//                listener.onGetData(beanList);
-//                onGetDataSuccess.onGetData(true);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Bean> call, Throwable t) {
-//                onGetDataSuccess.onGetData(false);
-//            }
-//        });
         final List<HomeLectureBean> beanList = new LinkedList<>();
         beanList.add(new HomeLectureBean());
         listener.onGetData(beanList);
@@ -81,9 +63,8 @@ public class HomePageLecturePresenter implements Presenter {
         manager.startCache(CacheManager.CACHE_OBJ, HOME_PAGE_LIST, content);
     }
 
+
     public interface HomePageLectureDataListener {
         void onGetData(List<HomeLectureBean> beanList);
     }
-
-
 }

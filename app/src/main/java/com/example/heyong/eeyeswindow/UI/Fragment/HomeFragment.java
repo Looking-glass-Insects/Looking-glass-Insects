@@ -1,12 +1,6 @@
 package com.example.heyong.eeyeswindow.UI.Fragment;
 
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -14,13 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.HeaderViewListAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -30,7 +22,6 @@ import com.example.heyong.eeyeswindow.Presenter.HomePageLecturePresenter;
 import com.example.heyong.eeyeswindow.Presenter.OnGetDataSuccessByNet;
 import com.example.heyong.eeyeswindow.Presenter.Presenter;
 import com.example.heyong.eeyeswindow.R;
-import com.example.heyong.eeyeswindow.Receiver.NetworkReceiver;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageActivityAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageLectureAdapter;
 
@@ -72,29 +63,29 @@ public class HomeFragment extends Fragment {
     HomePageActivityPresenter presenterActivity;
 
 
-    /**
-     * 网络状态
-     */
-    @BindView(R.id.ll_off_line)
-    LinearLayout llOffLine;
-
-    NetworkReceiver receiver;
-
-    public static final int IS_ONLINE = 0;
-    public static final int IS_OFFLINE = 1;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-//            if (msg.what == IS_ONLINE) {
-//                llOffLine.setVisibility(View.GONE);
-//                footerLecture.setVisibility(View.VISIBLE);
-//            } else if (msg.what == IS_OFFLINE) {
-//                footerLecture.setVisibility(View.GONE);
-//                llOffLine.setVisibility(View.VISIBLE);
-//            }
-            super.handleMessage(msg);
-        }
-    };
+//    /**
+//     * 网络状态
+//     */
+//    @BindView(R.id.ll_off_line)
+//    LinearLayout llOffLine;
+//
+//    NetworkReceiver receiver;
+//
+//    public static final int IS_ONLINE = 0;
+//    public static final int IS_OFFLINE = 1;
+//    private Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+////            if (msg.what == IS_ONLINE) {
+////                llOffLine.setVisibility(View.GONE);
+////                footerLecture.setVisibility(View.VISIBLE);
+////            } else if (msg.what == IS_OFFLINE) {
+////                footerLecture.setVisibility(View.GONE);
+////                llOffLine.setVisibility(View.VISIBLE);
+////            }
+//            super.handleMessage(msg);
+//        }
+//    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,11 +97,11 @@ public class HomeFragment extends Fragment {
         initView1();
 
 
-        registerReceiver();
+        //registerReceiver();
         bindData(0);//耗时操作
         bindData(1);
         adapter = new MyViewPageAdapter();
-        Log.d(TAG, "onCreate");
+        //Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
     }
 
@@ -159,13 +150,13 @@ public class HomeFragment extends Fragment {
             return thisView;
         thisView = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, thisView);
-        llOffLine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                startActivity(intent);
-            }
-        });
+//        llOffLine.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(Settings.ACTION_SETTINGS);
+//                startActivity(intent);
+//            }
+//        });
         tabs.addTab(tabs.newTab().setText(titles[0]));
         tabs.addTab(tabs.newTab().setText(titles[1]));
         viewPager.setAdapter(adapter);
@@ -173,11 +164,11 @@ public class HomeFragment extends Fragment {
         return thisView;
     }
 
-    @Override
-    public void onDestroy() {
-        this.getActivity().unregisterReceiver(receiver);
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        this.getActivity().unregisterReceiver(receiver);
+//        super.onDestroy();
+//    }
 
 
     public boolean goTop(ListView listView) {
@@ -190,11 +181,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void registerReceiver() {
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        this.receiver = new NetworkReceiver(handler);
-        this.getActivity().registerReceiver(this.receiver, filter);
-    }
+//    private void registerReceiver() {
+//        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+//        this.receiver = new NetworkReceiver(handler);
+//        this.getActivity().registerReceiver(this.receiver, filter);
+//    }
 
     /**
      * 初始化时调用

@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
-import android.widget.Toast;
-
-import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 
 /**
  * 监听网络状态
@@ -16,6 +13,9 @@ import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 public class NetworkReceiver extends BroadcastReceiver {
 
     Handler handler;
+    public static final int IS_OFFLINE = 0;
+    public static final int IS_ONLINE = 1;
+
     public NetworkReceiver(Handler handler) {
         this.handler = handler;
     }
@@ -25,11 +25,10 @@ public class NetworkReceiver extends BroadcastReceiver {
         ConnectivityManager connectivityManager=(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo  mobNetInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         NetworkInfo  wifiNetInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
         if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
-            handler.sendEmptyMessage(HomeFragment.IS_OFFLINE);
+            handler.sendEmptyMessage(IS_OFFLINE);
         }else {
-            handler.sendEmptyMessage(HomeFragment.IS_ONLINE);
+            handler.sendEmptyMessage(IS_ONLINE);
         }
     }
 }

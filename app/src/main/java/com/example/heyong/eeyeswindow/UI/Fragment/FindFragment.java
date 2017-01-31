@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.Presenter.FindPagePresenter;
 import com.example.heyong.eeyeswindow.Presenter.OnGetDataSuccessByNet;
@@ -28,10 +29,13 @@ import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
 import com.example.heyong.lib.flowLayout.FlowLayout;
 import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
 
 /**
@@ -62,10 +66,10 @@ public class FindFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        SharedPreferences sp=getActivity().getSharedPreferences(STATE, Context.MODE_PRIVATE);
-        this.i = sp.getInt(I,0)%2;
+        SharedPreferences sp = getActivity().getSharedPreferences(STATE, Context.MODE_PRIVATE);
+        this.i = sp.getInt(I, 0) % 2;
         dataHolder = new DataHolder();
-        presenter = new FindPagePresenter(this.getContext(),dataHolder);
+        presenter = new FindPagePresenter(this.getContext(), dataHolder);
         presenter.nextData(new OnGetDataSuccessByNet() {
             @Override
             public void onGetData(boolean isSuccessful) {
@@ -94,13 +98,11 @@ public class FindFragment extends Fragment {
     @Override
     public void onDestroy() {
         SharedPreferences sp = getActivity().getSharedPreferences(STATE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sp.edit();
-        editor.putInt(I,this.i);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(I, this.i);
         editor.apply();
         super.onDestroy();
     }
-
-
 
 
     private static final String STATE = "state";
@@ -117,22 +119,27 @@ public class FindFragment extends Fragment {
         i++;
         setStateByI();
     }
-    private void setStateByI(){
+
+    private void setStateByI() {
         ivChangeLayout.setImageResource(img_id[i % 2]);
         publisherManager.changeLayoutManager(managers[i % 2]);
     }
 
-    class DataHolder implements FindPagePresenter.FindPageDataListener{
+    class DataHolder implements FindPagePresenter.FindPageDataListener {
         List<String> flowList;
         List<HotPublisherBean> beans;
-
+        /**
+         * 回调
+         * @param flow
+         * @param beans
+         */
         @Override
         public void onGetData(List<String> flow, List<HotPublisherBean> beans) {
             this.flowList = flow;
             this.beans = beans;
         }
 
-        public void bindData(){
+        public void bindData() {
             publisherManager.setData(beans);
             flowLayoutManager.setData(flowList);
         }
@@ -154,12 +161,12 @@ public class FindFragment extends Fragment {
         }
 
 
-        public void setData( final List<String> flowList){
+        public void setData(final List<String> flowList) {
             this.flowList = flowList;
             llSeeMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dip2px(getContext(),200));
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(getContext(), 200));
                     flowNestedScrollView.setLayoutParams(layoutParams);
                     addAll();
                     convertVisit();
@@ -169,7 +176,7 @@ public class FindFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     try {
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         flowNestedScrollView.setLayoutParams(layoutParams);
                         flowlayout.removeViews(DEFAULT_SIZE, flowList.size() - DEFAULT_SIZE);
                     } catch (Exception e) {
@@ -181,7 +188,7 @@ public class FindFragment extends Fragment {
         }
 
         private void init() {
-            for(int i = 0;i<DEFAULT_SIZE;i++)
+            for (int i = 0; i < DEFAULT_SIZE; i++)
                 yieldText(flowList.get(i));
         }
 
@@ -198,7 +205,7 @@ public class FindFragment extends Fragment {
 
         private void addAll() {
             flowlayout.removeAllViews();
-            for(String s:flowList)
+            for (String s : flowList)
                 yieldText(s);
         }
 
@@ -243,7 +250,7 @@ public class FindFragment extends Fragment {
         }
 
 
-        public void setData(List<HotPublisherBean> beans){
+        public void setData(List<HotPublisherBean> beans) {
             adapter.setData(beans);
         }
     }

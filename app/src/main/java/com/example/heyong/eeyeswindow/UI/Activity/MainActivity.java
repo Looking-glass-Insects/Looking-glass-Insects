@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private long exitTime = 0;
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -160,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            //Toast.makeText(this, "search", Toast.LENGTH_SHORT).show();
             SearchPopupWindow searchPopup = new SearchPopupWindow(MainActivity.this);
             int[] location = new int[2];
             View view = findViewById(R.id.toolbar);
@@ -343,24 +341,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
+    class MyOnPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
 
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
+        BottomNavigationView bottom = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         @Override
         public void onPageSelected(int position) {
-            BottomNavigationView bottom = (BottomNavigationView) findViewById(R.id.bottom_navigation);
             bottom.getMenu().getItem(currFragment).setChecked(false);
             bottom.getMenu().getItem(position).setChecked(true);
             currFragment = position;
         }
 
-        @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
     }
 }
