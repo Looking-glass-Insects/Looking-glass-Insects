@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-import com.example.heyong.eeyeswindow.R;
-
 /**
  * Created by Heyong
  * <p>
@@ -24,6 +22,7 @@ public class SimpleDialogFactory {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if(callBack == null) return;
                 switch (which) {
                     case Dialog.BUTTON_POSITIVE:
                         callBack.doSomething(true);

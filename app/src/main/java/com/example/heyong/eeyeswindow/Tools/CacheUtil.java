@@ -8,7 +8,7 @@ import android.content.Context;
 
 public class CacheUtil {
 
-    public static String getCacheSize(Context context){
+    public static String getCacheSize(Context context) throws Exception {
         return GlideCacheUtil.getInstance().getCacheSize(context);
     }
 

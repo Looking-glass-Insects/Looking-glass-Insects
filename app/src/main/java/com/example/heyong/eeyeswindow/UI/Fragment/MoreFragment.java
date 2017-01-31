@@ -3,7 +3,9 @@ package com.example.heyong.eeyeswindow.UI.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +24,7 @@ import butterknife.OnClick;
 
 public class MoreFragment extends Fragment {
 
-
+    static String TAG = "MoreFragment";
     @BindView(R.id.tv_cache_size)
     TextView tvCacheSize;
     @BindView(R.id.rl_clear_cache)
@@ -42,22 +44,31 @@ public class MoreFragment extends Fragment {
 //    };
 
 
+    String cacheSize = "";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        try {
+            cacheSize = CacheUtil.getCacheSize(getContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG,"onCreate-->"+cacheSize);
+        super.onCreate(savedInstanceState);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_more, container, false);
         ButterKnife.bind(this, view);
-        String size = CacheUtil.getCacheSize(getContext());
-        tvCacheSize.setText(size);
+        tvCacheSize.setText(cacheSize);
+        Log.d(TAG,"onCreateView");
         return view;
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        if (hidden)
-            tvCacheSize.setText(CacheUtil.getCacheSize(getContext()));
-        super.onHiddenChanged(hidden);
-    }
+
 
     @OnClick(R.id.rl_clear_cache)
     public void onClickCleanCache() {
@@ -68,6 +79,7 @@ public class MoreFragment extends Fragment {
                         if (isOK) {
                             CacheUtil.clearAllCache(getContext());
                             tvCacheSize.setText("0.0Byte");
+                            cacheSize = "0.0Byte";
                             Toast.makeText(getContext(), "清理完成", Toast.LENGTH_SHORT).show();
                         }
                     }

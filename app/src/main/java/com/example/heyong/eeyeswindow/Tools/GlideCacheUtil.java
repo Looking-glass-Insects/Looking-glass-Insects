@@ -66,7 +66,7 @@ public class GlideCacheUtil {
     public void clearImageAllCache(Context context) {
         clearImageDiskCache(context);
         clearImageMemoryCache(context);
-        String ImageExternalCatchDir=context.getExternalCacheDir()+ ExternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR;
+        String ImageExternalCatchDir = context.getExternalCacheDir() + ExternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR;
         deleteFolderFile(ImageExternalCatchDir, true);
     }
 
@@ -75,22 +75,24 @@ public class GlideCacheUtil {
      *
      * @return CacheSize
      */
-    public String getCacheSize(Context context) {
-        try {
-            return getFormatSize(getFolderSize(new File(context.getCacheDir() + "/"+ InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
+    public String getCacheSize(Context context) throws Exception {
+        // try {
+        return getFormatSize(getFolderSize(new File(context.getCacheDir() + "/" + InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR)));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "";
     }
-    public long getCacheLongSize(Context context){
+
+    public long getCacheLongSize(Context context) {
         try {
-            return getFolderSize(new File(context.getCacheDir() + "/"+ InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR));
+            return getFolderSize(new File(context.getCacheDir() + "/" + InternalCacheDiskCacheFactory.DEFAULT_DISK_CACHE_DIR));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
     }
+
     /**
      * 获取指定文件夹内所有文件大小的和
      *
