@@ -1,6 +1,8 @@
 package com.example.heyong.eeyeswindow.UI.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v7.graphics.Palette;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.RotateTransformation;
 import com.example.heyong.lib.flowLayout.FlowLayout;
@@ -98,15 +102,51 @@ public class ActivityDetailViewHolder {
     }
 
     public void setBannerImage(String url){
-        Glide.with(context).load(url).centerCrop().into(ivDetailBanner);
+        Glide.with(context).load(url).asBitmap().listener(new RequestListener<String, Bitmap>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                Palette.Builder builder = Palette.from(resource);
+                builder.generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        Palette.Swatch swatch = palette.getLightVibrantSwatch();
+                        container.setBackgroundColor(swatch.getRgb());
+                    }
+                });
+                return false;
+            }
+        }).centerCrop().into(ivDetailBanner);
     }
 
     public void setBannerImage(int res){
-        Glide.with(context).load(res).centerCrop().into(ivDetailBanner);
+        Glide.with(context).load(res).asBitmap().listener(listener).centerCrop().into(ivDetailBanner);
     }
 
 
+    private final  RequestListener<Integer, Bitmap> listener = new RequestListener<Integer, Bitmap>() {
+        @Override
+        public boolean onException(Exception e, Integer model, Target<Bitmap> target, boolean isFirstResource) {
+            return false;
+        }
 
+        @Override
+        public boolean onResourceReady(Bitmap resource, Integer model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            Palette.Builder builder = Palette.from(resource);
+            builder.generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    Palette.Swatch swatch = palette.getLightVibrantSwatch();
+                    container.setBackgroundColor(swatch.getRgb());
+                }
+            });
+            return false;
+        }
+    };
 
 
 

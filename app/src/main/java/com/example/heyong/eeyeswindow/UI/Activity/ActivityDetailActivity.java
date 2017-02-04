@@ -30,7 +30,7 @@ public class ActivityDetailActivity extends SwipeBackActivity {
     private void setupContent() {
         viewHolder.yeildText(Arrays.asList(new String[]{"标签1", "标签2", "标签3"}));
         viewHolder.setContentTitle("活动详情:");
-        viewHolder.setBannerImage(R.drawable.banner1);
+        viewHolder.setBannerImage(R.drawable.banner2);
         viewHolder.setContent("什么也没有,喵喵喵");
     }
 

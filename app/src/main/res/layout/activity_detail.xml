@@ -25,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:background="@color/colorAccent"
             android:id="@+id/container"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -39,7 +38,7 @@
                 app:cardCornerRadius="5dp"
                 app:cardElevation="10dp"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:background="?android:attr/selectableItemBackground"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
