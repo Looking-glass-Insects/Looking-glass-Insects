@@ -73,7 +73,7 @@ public class SearchActivity extends SwipeBackActivity {
         lvActivity.setItemAnimator(new DefaultItemAnimator());
 
         List<HomeLectureBean> l = new LinkedList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             l.add(new HomeLectureBean());
         }
         lectureAdapter.addData(l);

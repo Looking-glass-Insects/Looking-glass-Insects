@@ -32,7 +32,9 @@ public class LectureDetailActivity extends SwipeBackActivity {
 
     private void setupContent() {
         viewHolder.yeildText(Arrays.asList(new String[]{"标签1","标签2","标签3"}));
-
+        viewHolder.setContentTitle("讲座详情:");
+        viewHolder.setBannerImage(R.drawable.banner1);
+        viewHolder.setContent("什么也没有,喵喵喵");
     }
 
     private void setupHeader() {
