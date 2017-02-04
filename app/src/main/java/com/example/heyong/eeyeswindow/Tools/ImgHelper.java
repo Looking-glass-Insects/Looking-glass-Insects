@@ -52,7 +52,7 @@ public class ImgHelper {
      * @param pixels
      * @return
      */
-    public static Bitmap removeYuanjiao(Bitmap bitmap, int pixels) {
+    public static Bitmap makeCorner(Bitmap bitmap, int pixels) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 

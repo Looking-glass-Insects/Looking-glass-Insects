@@ -31,7 +31,7 @@ public class LectureBeanRecyclerViewAdapter extends RecyclerView.Adapter<ItemVie
     public LectureBeanRecyclerViewAdapter(Context context) {
         this.context = context;
     }
-    public void setDate(List<HomeLectureBean> list){
+    public void addData(List<HomeLectureBean> list){
         data.addAll(list);
         notifyDataSetChanged();
     }

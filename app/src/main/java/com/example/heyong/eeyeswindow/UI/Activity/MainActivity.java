@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupHeader() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.ic_drawer_white_24dp);
+        //mToolbar.setNavigationIcon(R.drawable.ic_drawer_white_24dp);
 
 
         CollapsingToolbarLayout mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);

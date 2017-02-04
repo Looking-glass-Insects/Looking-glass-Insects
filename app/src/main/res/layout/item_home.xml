@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:minHeight="150dp"
     android:orientation="horizontal">
-
     <android.support.v7.widget.CardView
         android:id="@+id/card"
         android:clickable="true"
@@ -18,6 +17,7 @@
         card_view:cardCornerRadius="5dp"
         card_view:cardElevation="10dp">
         <LinearLayout
+            android:elevation="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -111,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/activity_min_vertical_margin"
-                   >
+                    >
                     <TextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -148,7 +148,14 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+        <ImageView
+            android:layout_gravity="bottom|right"
+            android:id="@+id/iv_can_print"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            />
     </android.support.v7.widget.CardView>
+
 </RelativeLayout>
 
 

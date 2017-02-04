@@ -1,6 +1,7 @@
 package com.example.heyong.eeyeswindow.UI.Activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -20,6 +21,8 @@ import com.example.heyong.eeyeswindow.Bean.HomeActivityBean;
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.Tools.CircleRadiusTransformation;
+import com.example.heyong.eeyeswindow.Tools.PxToDp;
 import com.example.heyong.eeyeswindow.UI.Adapter.ActivityBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.LectureBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
@@ -29,7 +32,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class HotDetailActivity extends SwipeBackActivity {
 
@@ -67,7 +69,7 @@ public class HotDetailActivity extends SwipeBackActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         activityAdapter = new ActivityBeanRecyclerViewAdapter(this);
         List<HomeActivityBean> l = new LinkedList<>();
-        for(int i = 0;i<10;i++)
+        for(int i = 0;i<5;i++)
             l.add(new HomeActivityBean());
         activityAdapter.addData(l);
         recyclerView.setAdapter(activityAdapter);
@@ -81,7 +83,7 @@ public class HotDetailActivity extends SwipeBackActivity {
         List<HomeLectureBean> l = new LinkedList<>();
         for(int i = 0;i<10;i++)
             l.add(new HomeLectureBean());
-        adapter.setDate(l);
+        adapter.addData(l);
         recyclerView.setAdapter(adapter);
     }
 
@@ -99,13 +101,15 @@ public class HotDetailActivity extends SwipeBackActivity {
         });
         Glide.with(this).load(R.drawable.i2)
                 .centerCrop()
-                .bitmapTransform(new CropCircleTransformation(this))
+                .bitmapTransform(new CircleRadiusTransformation(this, PxToDp.dip2px(this,10),getResources().getColor(R.color.cardview_light_background)))
                 .into((ImageView) findViewById(R.id.iv_header_profile));
         Glide.with(this).load(R.drawable.banner1)
                 .centerCrop()
                 .into((ImageView) findViewById(R.id.iv_header_bg));
         CollapsingToolbarLayout layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         layout.setTitle(bean.getName());
+        layout.setExpandedTitleColor(getResources().getColor(R.color.colorPrimary));
+        layout.setCollapsedTitleTextColor(Color.WHITE);
     }
 
 

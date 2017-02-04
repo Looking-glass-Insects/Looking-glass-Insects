@@ -20,5 +20,6 @@
     <string name="night_model">夜间模式</string>
     <string name="menu_share">分享</string>
     <string name="label">标签:</string>
+    <string name="empty">空空如也~</string>
 
 </resources>

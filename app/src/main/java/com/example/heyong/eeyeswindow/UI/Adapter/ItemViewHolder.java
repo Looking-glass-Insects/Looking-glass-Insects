@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.Tools.RotateTransformation;
 import com.example.heyong.eeyeswindow.UI.CustomView.AlwaysMarqueeTextView;
 
 import butterknife.BindView;
@@ -37,11 +39,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     TextView tv2;
     @BindView(R.id.tv_3)
     TextView tv3;
-
+    @BindView(R.id.iv_can_print)
+    ImageView canPrint;//if 可盖章
 
     public ItemViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        Glide.with(itemView.getContext()).load(R.mipmap.can_print).transform(new RotateTransformation(itemView.getContext(),30f)).into(canPrint);
     }
 
 

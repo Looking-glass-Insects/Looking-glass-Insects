@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="56dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/cardview_light_background">
+    android:background="@color/colorPrimary">
     <ImageView
         android:background="?android:attr/selectableItemBackground"
         android:id="@+id/image_back"
@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_arrow_back_black_24dp"/>
+        android:src="@drawable/ic_arrow_back_white_24dp"/>
 
 
     <android.support.v7.widget.SearchView
@@ -26,12 +26,12 @@
 
     <ImageView
         android:background="?android:attr/selectableItemBackground"
-        android:padding="10dp"
+        android:padding="15dp"
         android:id="@+id/image_scan"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_center_focus_weak_black_24dp"
+        android:src="@mipmap/scan"
         />
 
 </LinearLayout>
