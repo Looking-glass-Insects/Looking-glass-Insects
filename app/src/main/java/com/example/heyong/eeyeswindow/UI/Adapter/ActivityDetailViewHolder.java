@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.v7.graphics.Palette;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,7 +16,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.Tools.PxToDp;
 import com.example.heyong.eeyeswindow.Tools.RotateTransformation;
+import com.example.heyong.eeyeswindow.UI.CustomView.pulltozoomview.PullToZoomScrollView;
 import com.example.heyong.lib.flowLayout.FlowLayout;
 
 import java.util.List;
@@ -34,8 +37,8 @@ import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
 public class ActivityDetailViewHolder {
 
     Context context;
-    @BindView(R.id.iv_detail_banner)
-    ImageView ivDetailBanner;
+//    @BindView(R.id.iv_detail_banner)
+//    ImageView ivDetailBanner;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_time)
@@ -54,14 +57,33 @@ public class ActivityDetailViewHolder {
     TextView tvContent;
     @BindView(R.id.iv_can_print)
     ImageView ivCanPrint;
-    @BindView(R.id.container)
+
     LinearLayout container;
+
+
+    //private ImageView ivDetailBanner;
+
+    private PullToZoomScrollView scrollView;
+
     public ActivityDetailViewHolder(View view, Context context) {
         this.context = context;
-        ButterKnife.bind(this, view);
+        scrollView = (PullToZoomScrollView) view.findViewById(R.id.zoom_scroll_view);
+        View contentView = LayoutInflater.from(context).inflate(R.layout.activity_detail_content,null,false);
+        container = (LinearLayout) view.findViewById(R.id.container);
+
+        ButterKnife.bind(this, contentView);
         Glide.with(context).load(R.mipmap.can_print).bitmapTransform(new RotateTransformation(context,30))
                 .into(ivCanPrint);
+
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PxToDp.dip2px(context,200) );
+        scrollView.setHeaderLayoutParams(layoutParams);
+        scrollView.setScrollContentView(contentView);
     }
+
+
+
+
 
     //是否显示可盖章的图片
     public void canPrint(boolean canPrint) {
@@ -102,6 +124,8 @@ public class ActivityDetailViewHolder {
     }
 
     public void setBannerImage(String url){
+        final ImageView imageView = new ImageView(context);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Glide.with(context).load(url).asBitmap().listener(new RequestListener<String, Bitmap>() {
             @Override
             public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
@@ -120,11 +144,15 @@ public class ActivityDetailViewHolder {
                 });
                 return false;
             }
-        }).centerCrop().into(ivDetailBanner);
+        }).into(imageView);
+        scrollView.setZoomView(imageView);
     }
 
     public void setBannerImage(int res){
-        Glide.with(context).load(res).asBitmap().listener(listener).centerCrop().into(ivDetailBanner);
+        final ImageView imageView = new ImageView(context);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Glide.with(context).load(res).asBitmap().listener(listener).into(imageView);
+        scrollView.setZoomView(imageView);
     }
 
 

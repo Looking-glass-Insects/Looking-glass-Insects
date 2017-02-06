@@ -13,4 +13,5 @@
 
 
     <color name="item_desc">#49494957</color>
+    <color name="transparent">#00000000</color>
 </resources>
