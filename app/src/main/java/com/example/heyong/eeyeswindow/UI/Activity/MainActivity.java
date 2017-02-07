@@ -46,7 +46,8 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow.SUBMIT_TEXT;
+import static com.example.heyong.eeyeswindow.UI.CustomView.SearchDialog.SUBMIT_TEXT;
+
 
 /**
  * author : heYong

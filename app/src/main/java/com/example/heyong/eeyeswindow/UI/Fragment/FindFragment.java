@@ -28,7 +28,7 @@ import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
 import com.example.heyong.lib.flowLayout.FlowLayout;
-import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
+
 
 import java.util.List;
 
@@ -37,13 +37,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.example.heyong.eeyeswindow.Tools.PxToDp.dip2px;
+import static com.example.heyong.eeyeswindow.UI.CustomView.SearchDialog.SUBMIT_TEXT;
 
 /**
  *
  *
  */
 public class FindFragment extends Fragment {
-    public static final String SEARCH = SearchPopupWindow.SUBMIT_TEXT;
+    public static final String SEARCH = SUBMIT_TEXT;
     static String TAG = "FindFragment";
     @BindView(R.id.flowlayout)
     FlowLayout flowlayout;

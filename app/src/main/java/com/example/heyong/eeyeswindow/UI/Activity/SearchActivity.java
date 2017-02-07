@@ -9,14 +9,17 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 import com.example.heyong.eeyeswindow.R;
+import com.example.heyong.eeyeswindow.Tools.PxToDp;
 import com.example.heyong.eeyeswindow.UI.Adapter.ActivityBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.LectureBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.CustomView.EmptyRecyclerView;
-import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
+import com.example.heyong.eeyeswindow.UI.CustomView.SearchDialog;
 import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 
 import java.util.LinkedList;
@@ -24,6 +27,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.heyong.eeyeswindow.UI.CustomView.SearchDialog.SUBMIT_TEXT;
 
 public class SearchActivity extends SwipeBackActivity {
     static String TAG = "SearchActivity";
@@ -81,7 +86,7 @@ public class SearchActivity extends SwipeBackActivity {
 
     private void setupHeader() {
         Intent i = getIntent();
-        queryString = i.getStringExtra(SearchPopupWindow.SUBMIT_TEXT);
+        queryString = i.getStringExtra(SUBMIT_TEXT);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("搜索");
         setSupportActionBar(mToolbar);
@@ -106,11 +111,20 @@ public class SearchActivity extends SwipeBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            SearchPopupWindow searchPopup = new SearchPopupWindow(SearchActivity.this);
             int[] location = new int[2];
             View view = findViewById(R.id.toolbar);
             view.getLocationOnScreen(location);
-            searchPopup.showAtLocation(view, Gravity.TOP | Gravity.RIGHT, 10, location[1]);
+            SearchDialog dialog = SearchDialog.buildInstance(this);
+            Window window = dialog.getWindow();
+            WindowManager.LayoutParams params = window.getAttributes();
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setGravity(Gravity.LEFT | Gravity.TOP);
+            params.x = location[0];
+            params.y = location[1];
+            params.height = PxToDp.dip2px(this,56);
+            params.width = getWindowManager().getDefaultDisplay().getWidth();
+            window.setAttributes(params);
+            dialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
