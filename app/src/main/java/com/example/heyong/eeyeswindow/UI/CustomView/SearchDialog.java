@@ -1,18 +1,15 @@
 package com.example.heyong.eeyeswindow.UI.CustomView;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import com.example.heyong.eeyeswindow.R;
-import com.example.heyong.eeyeswindow.Tools.PxToDp;
 import com.example.heyong.eeyeswindow.UI.Activity.ScanActivity;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -21,60 +18,41 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by Heyong
- * replaced by {@link SearchDialog}
- */
-@Deprecated
-public class SearchPopupWindow extends PopupWindow {
+
+
+public class SearchDialog extends Dialog{
     static public String SUBMIT_TEXT = "submit";
 
-    View menuView;
     @BindView(R.id.image_back)
     ImageView imageBack;
 
     @BindView(R.id.image_scan)
     ImageView imageScan;
 
-    Activity context;
+    static Activity context;
+
     @BindView(R.id.sv_search)
     SearchView svSearch;
 
 
-    public SearchPopupWindow(final Activity context) {
-        super(context);
-        this.context = context;
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        menuView = inflater.inflate(R.layout.popup_search, null);
-        setContentView(menuView);
-        ButterKnife.bind(this, menuView);
-        final float scale = context.getResources().getDisplayMetrics().density;
-        setHeight(PxToDp.dip2px(context, 56));
-        int w = context.getWindowManager().getDefaultDisplay().getWidth();
-        setWidth(w);
-
-        //setFocusable(true);
-        //设置SelectPicPopupWindow弹出窗体动画效果
-        setAnimationStyle(R.style.MyPopupWindow);
-        setBackgroundDrawable(new BitmapDrawable());
-        //setTouchable(true);
-        setOutsideTouchable(true);
-
-        WindowManager.LayoutParams lp = context.getWindow().getAttributes();
-        lp.alpha = 0.5f;
-        context.getWindow().setAttributes(lp);
-        setOnDismissListener(new OnDismissListener() {
-
-            @Override
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = context.getWindow().getAttributes();
-                lp.alpha = 1f;
-                context.getWindow().setAttributes(lp);
-            }
-        });
+    private void init() {
+        View layout = LayoutInflater.from(context).inflate(R.layout.popup_search,null,false);
+        this.setContentView(layout);
+        ButterKnife.bind(this, layout);
         svSearch.onActionViewExpanded();
         svSearch.setOnQueryTextListener(new MyQueryTextListener());
+    }
+
+    private SearchDialog(Context context, int themeResId) {
+        super(context, themeResId);
+        init();
+    }
+
+
+    public static SearchDialog buildInstance(Activity context){
+        SearchDialog.context = context;
+        SearchDialog dialog = new SearchDialog(context, R.style.CustomDialog);
+        return dialog;
     }
 
     @OnClick(R.id.image_back)
@@ -84,11 +62,13 @@ public class SearchPopupWindow extends PopupWindow {
 
     @OnClick(R.id.image_scan)
     public void onClickImageScan() {
-
+        if(context == null)
+            throw new IllegalStateException("context is null");
         new IntentIntegrator(context).
                 setCaptureActivity(ScanActivity.class).initiateScan();
         dismiss();
     }
+
 
     class MyQueryTextListener implements SearchView.OnQueryTextListener {
 
@@ -106,4 +86,5 @@ public class SearchPopupWindow extends PopupWindow {
             return false;
         }
     }
+
 }

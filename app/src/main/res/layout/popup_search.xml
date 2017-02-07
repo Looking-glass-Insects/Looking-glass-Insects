@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary">
     <ImageView
+        android:layout_alignParentLeft="true"
         android:background="?android:attr/selectableItemBackground"
         android:id="@+id/image_back"
         android:padding="10dp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="56dp"
         android:layout_height="match_parent"
         android:src="@drawable/ic_arrow_back_white_24dp"/>
 
-
-    <android.support.v7.widget.SearchView
-        android:id="@+id/sv_search"
-        android:paddingLeft="10dp"
-        android:layout_width="0dp"
-        android:layout_weight="3"
-        android:layout_height="match_parent"
-        app:queryHint="@string/search"
-        />
-
     <ImageView
+        android:layout_alignParentRight="true"
         android:background="?android:attr/selectableItemBackground"
         android:padding="15dp"
         android:id="@+id/image_scan"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_width="56dp"
         android:layout_height="match_parent"
         android:src="@mipmap/scan"
         />
-
-</LinearLayout>
+    <android.support.v7.widget.SearchView
+        android:layout_toRightOf="@id/image_back"
+        android:layout_toLeftOf="@id/image_scan"
+        android:layout_centerInParent="true"
+        android:id="@+id/sv_search"
+        android:paddingLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:queryHint="@string/search"
+        />
+</RelativeLayout>

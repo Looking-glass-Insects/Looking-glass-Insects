@@ -21,11 +21,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.GlideImageLoader;
-import com.example.heyong.eeyeswindow.UI.CustomView.SearchPopupWindow;
+import com.example.heyong.eeyeswindow.Tools.PxToDp;
+import com.example.heyong.eeyeswindow.UI.CustomView.SearchDialog;
 import com.example.heyong.eeyeswindow.UI.Fragment.FindFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.HomeFragment;
 import com.example.heyong.eeyeswindow.UI.Fragment.MoreFragment;
@@ -147,11 +150,26 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            SearchPopupWindow searchPopup = new SearchPopupWindow(MainActivity.this);
+            //SearchPopupWindow searchPopup = new SearchPopupWindow(MainActivity.this);
             int[] location = new int[2];
             View view = findViewById(R.id.toolbar);
             view.getLocationOnScreen(location);
-            searchPopup.showAtLocation(view, Gravity.TOP | Gravity.RIGHT, 10, location[1]);
+
+            SearchDialog dialog = SearchDialog.buildInstance(this);
+            Window window = dialog.getWindow();
+            WindowManager.LayoutParams params = window.getAttributes();
+            //window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setGravity(Gravity.LEFT | Gravity.TOP);
+
+            params.x = location[0];
+            params.y = location[1];
+            params.height = PxToDp.dip2px(this,56);
+            params.width = getWindowManager().getDefaultDisplay().getWidth();
+            window.setAttributes(params);
+
+            dialog.show();
+
+            //searchPopup.showAtLocation(view, Gravity.TOP | Gravity.RIGHT, 10, location[1]);
         } else if (id == R.id.action_share) {
             //startActivity(new Intent(this,AboutActivity.class));
 //            Intent intent = new Intent(this,HotDetailActivity.class);
