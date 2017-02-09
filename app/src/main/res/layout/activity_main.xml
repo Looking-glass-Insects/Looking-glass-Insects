@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.heyong.library.MainActivity">
-    <com.example.heyong.library.customView.flowLayout.FlowLayout
-        android:id="@+id/flow"
+    <com.example.heyong.library.customView.EmptyRecyclerView
+        android:id="@+id/rc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.example.heyong.library.customView.flowLayout.FlowLayout>
+        android:layout_height="match_parent"></com.example.heyong.library.customView.EmptyRecyclerView>
 </RelativeLayout>

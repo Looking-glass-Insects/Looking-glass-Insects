@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
- * Created by Heyong on 2017/2/4.
+ *
+ *
  */
 
 public class EmptyRecyclerView extends RecyclerView {
@@ -21,7 +23,6 @@ public class EmptyRecyclerView extends RecyclerView {
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
-           // Log.i(TAG, "onItemRangeInserted" + itemCount);
             checkIfEmpty();
         }
 
@@ -63,12 +64,31 @@ public class EmptyRecyclerView extends RecyclerView {
         if (adapter != null) {
             adapter.registerAdapterDataObserver(observer);
         }
-
         checkIfEmpty();
     }
 
+
     public void setEmptyView(View emptyView) {
+        if(emptyView == null)
+            return;
+        this.emptyView = emptyView;
+        ViewGroup parent = (ViewGroup) this.getParent();
+        parent.addView(emptyView,0,emptyView.getLayoutParams());
+        checkIfEmpty();
+    }
+
+    /** usage:
+     *  .xml:
+     *      ...
+     *      <EmptyRecyclerView/>
+     *      ...
+     *      <EmptyView/>
+     *  在xml中添加emptyView，位置随意
+     * @param emptyView
+     */
+    public void setEmptyViewByXML(View emptyView){
         this.emptyView = emptyView;
         checkIfEmpty();
     }
+
 }
