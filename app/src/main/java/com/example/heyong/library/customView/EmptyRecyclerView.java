@@ -73,7 +73,7 @@ public class EmptyRecyclerView extends RecyclerView {
             return;
         this.emptyView = emptyView;
         ViewGroup parent = (ViewGroup) this.getParent();
-        parent.addView(emptyView,0,emptyView.getLayoutParams());
+        parent.addView(emptyView,0);
         checkIfEmpty();
     }
 
