@@ -118,6 +118,7 @@ public class SearchActivity extends SwipeBackActivity {
             Window window = dialog.getWindow();
             WindowManager.LayoutParams params = window.getAttributes();
             //window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setWindowAnimations(R.style.dialogWindowAnim);
             window.setGravity(Gravity.LEFT | Gravity.TOP);
             params.x = location[0];
             params.y = location[1];

@@ -1,5 +1,7 @@
 package com.example.heyong.eeyeswindow.UI.CustomView.pulltozoomview;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;
@@ -7,7 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -21,12 +23,12 @@ public class PullToZoomListView extends PullToZoomBase<ListView> implements AbsL
     private int mHeaderHeight;
     private ScalingRunnable mScalingRunnable;
 
-    private static final Interpolator sInterpolator = new Interpolator() {
-        public float getInterpolation(float paramAnonymousFloat) {
-            float f = paramAnonymousFloat - 1.0F;
-            return 1.0F + f * (f * (f * (f * f)));
-        }
-    };
+//    private static final Interpolator sInterpolator = new Interpolator() {
+//        public float getInterpolation(float paramAnonymousFloat) {
+//            float f = paramAnonymousFloat - 1.0F;
+//            return 1.0F + f * (f * (f * (f * f)));
+//        }
+//    };
 
     public PullToZoomListView(Context context) {
         this(context, null);
@@ -233,10 +235,58 @@ public class PullToZoomListView extends PullToZoomBase<ListView> implements AbsL
     }
 
 
+//    class ScalingRunnable implements Runnable {
+//        protected long mDuration;
+//        protected boolean mIsFinished = true;
+//        protected float mScale;
+//        protected long mStartTime;
+//
+//        ScalingRunnable() {
+//        }
+//
+//        public void abortAnimation() {
+//            mIsFinished = true;
+//        }
+//
+//        public boolean isFinished() {
+//            return mIsFinished;
+//        }
+//
+//        public void run() {
+//            if (mZoomView != null) {
+//                float f2;
+//                ViewGroup.LayoutParams localLayoutParams;
+//                if ((!mIsFinished) && (mScale > 1.0D)) {
+//                    float f1 = ((float) SystemClock.currentThreadTimeMillis() - (float) mStartTime) / (float) mDuration;
+//                    f2 = mScale - (mScale - 1.0F) * PullToZoomListView.sInterpolator.getInterpolation(f1);
+//                    localLayoutParams = mHeaderContainer.getLayoutParams();
+//                    Log.d(TAG, "ScalingRunnable --> f2 = " + f2);
+//                    if (f2 > 1.0F) {
+//                        localLayoutParams.height = ((int) (f2 * mHeaderHeight));
+//                        mHeaderContainer.setLayoutParams(localLayoutParams);
+//                        post(this);
+//                        return;
+//                    }
+//                    mIsFinished = true;
+//                }
+//            }
+//        }
+//
+//        public void startAnimation(long paramLong) {
+//            if (mZoomView != null) {
+//                mStartTime = SystemClock.currentThreadTimeMillis();
+//                mDuration = paramLong;
+//                mScale = ((float) (mHeaderContainer.getBottom()) / mHeaderHeight);
+//                mIsFinished = false;
+//                post(this);
+//            }
+//        }
+//    }
+
+
     class ScalingRunnable implements Runnable {
         protected long mDuration;
         protected boolean mIsFinished = true;
-        protected float mScale;
         protected long mStartTime;
 
         ScalingRunnable() {
@@ -252,20 +302,48 @@ public class PullToZoomListView extends PullToZoomBase<ListView> implements AbsL
 
         public void run() {
             if (mZoomView != null) {
-                float f2;
-                ViewGroup.LayoutParams localLayoutParams;
-                if ((!mIsFinished) && (mScale > 1.0D)) {
-                    float f1 = ((float) SystemClock.currentThreadTimeMillis() - (float) mStartTime) / (float) mDuration;
-                    f2 = mScale - (mScale - 1.0F) * PullToZoomListView.sInterpolator.getInterpolation(f1);
-                    localLayoutParams = mHeaderContainer.getLayoutParams();
-                    Log.d(TAG, "ScalingRunnable --> f2 = " + f2);
-                    if (f2 > 1.0F) {
-                        localLayoutParams.height = ((int) (f2 * mHeaderHeight));
-                        mHeaderContainer.setLayoutParams(localLayoutParams);
-                        post(this);
-                        return;
-                    }
-                    mIsFinished = true;
+                if (!mIsFinished) {
+                    ViewGroup.LayoutParams localLayoutParams = mHeaderContainer.getLayoutParams();
+                    ValueAnimator animator = ValueAnimator.ofFloat(localLayoutParams.height,mHeaderHeight);
+                    animator.setDuration(mDuration);
+                    animator.setInterpolator(new DecelerateInterpolator());
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            Float value = (Float) animation.getAnimatedValue();
+                            ViewGroup.LayoutParams headerParams = mHeaderContainer.getLayoutParams();
+                            headerParams.height = value.intValue();
+                            mHeaderContainer.setLayoutParams(headerParams);
+//                            if (isCustomHeaderHeight) {
+//                                ViewGroup.LayoutParams zoomLayoutParams;
+//                                zoomLayoutParams = mZoomView.getLayoutParams();
+//                                zoomLayoutParams.height = value.intValue();
+//                                mZoomView.setLayoutParams(zoomLayoutParams);
+//                            }
+                        }
+                    });
+                    animator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mIsFinished = true;
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            mIsFinished = true;
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+                    animator.start();
                 }
             }
         }
@@ -274,10 +352,16 @@ public class PullToZoomListView extends PullToZoomBase<ListView> implements AbsL
             if (mZoomView != null) {
                 mStartTime = SystemClock.currentThreadTimeMillis();
                 mDuration = paramLong;
-                mScale = ((float) (mHeaderContainer.getBottom()) / mHeaderHeight);
+                //mScale = ((float) (mHeaderContainer.getBottom()) / mHeaderHeight);
                 mIsFinished = false;
                 post(this);
             }
         }
     }
+
+
+
+
+
+
 }

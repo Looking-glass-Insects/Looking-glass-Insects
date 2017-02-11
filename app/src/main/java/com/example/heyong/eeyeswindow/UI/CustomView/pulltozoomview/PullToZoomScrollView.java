@@ -1,5 +1,7 @@
 package com.example.heyong.eeyeswindow.UI.CustomView.pulltozoomview;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.SystemClock;
@@ -8,7 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Interpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -25,12 +27,12 @@ public class PullToZoomScrollView extends PullToZoomBase<ScrollView> {
     private int mHeaderHeight;
     private ScalingRunnable mScalingRunnable;
 
-    private static final Interpolator sInterpolator = new Interpolator() {
-        public float getInterpolation(float paramAnonymousFloat) {
-            float f = paramAnonymousFloat - 1.0F;
-            return 1.0F + f * (f * (f * (f * f)));
-        }
-    };
+//    private static final Interpolator sInterpolator = new Interpolator() {
+//        public float getInterpolation(float paramAnonymousFloat) {
+//            float f = paramAnonymousFloat - 1.0F;
+//            return 1.0F + f * (f * (f * (f * f)));
+//        }
+//    };
 
     public PullToZoomScrollView(Context context) {
         this(context, null);
@@ -225,7 +227,6 @@ public class PullToZoomScrollView extends PullToZoomBase<ScrollView> {
     class ScalingRunnable implements Runnable {
         protected long mDuration;
         protected boolean mIsFinished = true;
-        protected float mScale;
         protected long mStartTime;
 
         ScalingRunnable() {
@@ -241,26 +242,48 @@ public class PullToZoomScrollView extends PullToZoomBase<ScrollView> {
 
         public void run() {
             if (mZoomView != null) {
-                float f2;
-                ViewGroup.LayoutParams localLayoutParams;
-                if ((!mIsFinished) && (mScale > 1.0D)) {
-                    float f1 = ((float) SystemClock.currentThreadTimeMillis() - (float) mStartTime) / (float) mDuration;
-                    f2 = mScale - (mScale - 1.0F) * PullToZoomScrollView.sInterpolator.getInterpolation(f1);
-                    localLayoutParams = mHeaderContainer.getLayoutParams();
-                    Log.d(TAG, "ScalingRunnable --> f2 = " + f2);
-                    if (f2 > 1.0F) {
-                        localLayoutParams.height = ((int) (f2 * mHeaderHeight));
-                        mHeaderContainer.setLayoutParams(localLayoutParams);
-                        if (isCustomHeaderHeight) {
-                            ViewGroup.LayoutParams zoomLayoutParams;
-                            zoomLayoutParams = mZoomView.getLayoutParams();
-                            zoomLayoutParams.height = ((int) (f2 * mHeaderHeight));
-                            mZoomView.setLayoutParams(zoomLayoutParams);
+                if (!mIsFinished) {
+                    ViewGroup.LayoutParams localLayoutParams = mHeaderContainer.getLayoutParams();
+                    ValueAnimator animator = ValueAnimator.ofFloat(localLayoutParams.height,mHeaderHeight);
+                    animator.setDuration(mDuration);
+                    animator.setInterpolator(new DecelerateInterpolator());
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            Float value = (Float) animation.getAnimatedValue();
+                            ViewGroup.LayoutParams headerParams = mHeaderContainer.getLayoutParams();
+                            headerParams.height = value.intValue();
+                            mHeaderContainer.setLayoutParams(headerParams);
+                            if (isCustomHeaderHeight) {
+                                ViewGroup.LayoutParams zoomLayoutParams;
+                                zoomLayoutParams = mZoomView.getLayoutParams();
+                                zoomLayoutParams.height = value.intValue();
+                                mZoomView.setLayoutParams(zoomLayoutParams);
+                            }
                         }
-                        post(this);
-                        return;
-                    }
-                    mIsFinished = true;
+                    });
+                    animator.addListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mIsFinished = true;
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            mIsFinished = true;
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    });
+                    animator.start();
                 }
             }
         }
@@ -269,7 +292,7 @@ public class PullToZoomScrollView extends PullToZoomBase<ScrollView> {
             if (mZoomView != null) {
                 mStartTime = SystemClock.currentThreadTimeMillis();
                 mDuration = paramLong;
-                mScale = ((float) (mHeaderContainer.getBottom()) / mHeaderHeight);
+                //mScale = ((float) (mHeaderContainer.getBottom()) / mHeaderHeight);
                 mIsFinished = false;
                 post(this);
             }

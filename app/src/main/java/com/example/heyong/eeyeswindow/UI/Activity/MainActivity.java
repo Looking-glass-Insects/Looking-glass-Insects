@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             WindowManager.LayoutParams params = window.getAttributes();
             //window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             window.setGravity(Gravity.LEFT | Gravity.TOP);
-
+            window.setWindowAnimations(R.style.dialogWindowAnim);
             params.x = location[0];
             params.y = location[1];
             params.height = PxToDp.dip2px(this,56);
