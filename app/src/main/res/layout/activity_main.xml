@@ -14,13 +14,11 @@
     <com.example.heyong.library.customView.EmptyRecyclerView
         android:id="@+id/rc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.example.heyong.library.customView.EmptyRecyclerView>
+        android:layout_height="wrap_content"></com.example.heyong.library.customView.EmptyRecyclerView>
 
     <Button
         android:id="@+id/btn"
-        android:text="NOTIFICATION"
+        android:text="BUTTON"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-
 </LinearLayout>
