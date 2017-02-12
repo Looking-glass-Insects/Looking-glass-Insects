@@ -55,18 +55,18 @@ public class FindPagePresenter implements Presenter {
     }
 
     @Override
-    public void nextData(OnGetDataSuccessByNet get) {
+    public void nextData(INetworkCallBack get) {
         List<String> flowList = new LinkedList<>();
         flowList.addAll(Arrays.asList(strings));
         List<HotPublisherBean> publisherBeanList = new LinkedList<>();
         for (int i = 0; i < 10; i++)
             publisherBeanList.add(new HotPublisherBean());
         dataListener.onGetData(flowList, publisherBeanList);
-        get.onGetData(true);
+        get.onGetData(INetworkCallBack.SUCCESS);
     }
 
     @Override
-    public void nextData(OnGetDataSuccessByNet get, int count) {
+    public void nextData(INetworkCallBack get, int count) {
 
     }
 

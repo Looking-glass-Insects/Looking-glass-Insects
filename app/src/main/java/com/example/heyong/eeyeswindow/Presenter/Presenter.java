@@ -5,6 +5,6 @@ package com.example.heyong.eeyeswindow.Presenter;
  */
 
 public interface Presenter {
-    void nextData(OnGetDataSuccessByNet get);
-    void nextData(OnGetDataSuccessByNet get,int count);
+    void nextData(INetworkCallBack get);
+    void nextData(INetworkCallBack get, int count);
 }

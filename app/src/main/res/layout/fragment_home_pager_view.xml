@@ -6,6 +6,10 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <include
+            android:id="@+id/empty"
+            layout="@layout/empty_view"
+            android:visibility="gone"/>
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/srl_home_1"
             android:layout_width="match_parent"
@@ -19,10 +23,6 @@
 
             </ListView>
         </android.support.v4.widget.SwipeRefreshLayout>
-        <include
-            android:id="@+id/empty"
-            layout="@layout/empty_view"
-            android:visibility="gone"/>
     </FrameLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_top"

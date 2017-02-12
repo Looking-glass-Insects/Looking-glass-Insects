@@ -3,7 +3,6 @@ package com.example.heyong.eeyeswindow.Presenter;
 import android.content.Context;
 
 import com.example.heyong.eeyeswindow.Bean.HomeActivityBean;
-import com.example.heyong.eeyeswindow.Bean.HomeLectureBean;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,20 +20,20 @@ public class HomePageActivityPresenter implements Presenter{
     }
 
     @Override
-    public void nextData(OnGetDataSuccessByNet get) {
+    public void nextData(INetworkCallBack get) {
         final List<HomeActivityBean> beanList = new LinkedList<>();
         beanList.add(new HomeActivityBean());
         listener.onGetData(beanList);
-        get.onGetData(true);
+        get.onGetData(INetworkCallBack.SUCCESS);
     }
 
     @Override
-    public void nextData(OnGetDataSuccessByNet get, int count) {
+    public void nextData(INetworkCallBack get, int count) {
         final List<HomeActivityBean> beanList = new LinkedList<>();
         for (int i = 0; i < count; i++)
             beanList.add(new HomeActivityBean());
         listener.onGetData(beanList);
-        get.onGetData(true);
+        get.onGetData(INetworkCallBack.SUCCESS);
     }
 
 

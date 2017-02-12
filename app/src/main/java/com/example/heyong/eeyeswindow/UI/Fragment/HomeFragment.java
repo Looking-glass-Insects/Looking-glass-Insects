@@ -19,7 +19,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.example.heyong.eeyeswindow.Presenter.HomePageActivityPresenter;
 import com.example.heyong.eeyeswindow.Presenter.HomePageLecturePresenter;
-import com.example.heyong.eeyeswindow.Presenter.OnGetDataSuccessByNet;
+import com.example.heyong.eeyeswindow.Presenter.INetworkCallBack;
 import com.example.heyong.eeyeswindow.Presenter.Presenter;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Adapter.HomePageActivityAdapter;
@@ -159,10 +159,10 @@ public class HomeFragment extends Fragment {
             presenterLecture = new HomePageLecturePresenter(getContext(), adapter);
             lvHomeLecture.setAdapter(adapter);
             lvHomeLecture.setOnScrollListener(new MyOnScrollListener(lvHomeLecture,presenterLecture ,0));
-            presenterLecture.nextData(new OnGetDataSuccessByNet() {
+            presenterLecture.nextData(new INetworkCallBack() {
                 @Override
-                public void onGetData(boolean isSuccessful) {
-                    if (isSuccessful) {
+                public void onGetData(int code) {
+                    if(code == INetworkCallBack.SUCCESS){
                         srlHomeLecture.setRefreshing(false);
                     }
                 }
@@ -173,11 +173,12 @@ public class HomeFragment extends Fragment {
             presenterActivity = new HomePageActivityPresenter(getContext(),activityAdapter);
             lvHomeActivity.setAdapter(activityAdapter);
             lvHomeActivity.setOnScrollListener(new MyOnScrollListener(lvHomeActivity,presenterActivity,1));
-            presenterActivity.nextData(new OnGetDataSuccessByNet() {
+            presenterActivity.nextData(new INetworkCallBack() {
                 @Override
-                public void onGetData(boolean isSuccessful) {
-                    if(isSuccessful)
-                        srlHomeActivity.setRefreshing(false);
+                public void onGetData(int code) {
+                    if(code == INetworkCallBack.SUCCESS){
+                        srlHomeLecture.setRefreshing(false);
+                    }
                 }
             },0);
         }
@@ -261,9 +262,9 @@ public class HomeFragment extends Fragment {
                     if (absListView.getLastVisiblePosition() == (absListView.getCount() - 1)) {
                         if (presenter == null)
                             throw new IllegalStateException("presenter is null");
-                        presenter.nextData(new OnGetDataSuccessByNet() {
+                        presenter.nextData(new INetworkCallBack() {
                             @Override
-                            public void onGetData(boolean isSuccessful) {
+                            public void onGetData(int code) {
 
                             }
                         });

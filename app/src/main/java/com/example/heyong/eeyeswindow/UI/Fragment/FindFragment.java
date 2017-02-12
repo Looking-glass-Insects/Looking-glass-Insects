@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
 import com.example.heyong.eeyeswindow.Presenter.FindPagePresenter;
-import com.example.heyong.eeyeswindow.Presenter.OnGetDataSuccessByNet;
+import com.example.heyong.eeyeswindow.Presenter.INetworkCallBack;
 import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.UI.Activity.SearchActivity;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
@@ -71,9 +71,9 @@ public class FindFragment extends Fragment {
         this.i = sp.getInt(I, 0) % 2;
         dataHolder = new DataHolder();
         presenter = new FindPagePresenter(this.getContext(), dataHolder);
-        presenter.nextData(new OnGetDataSuccessByNet() {
+        presenter.nextData(new INetworkCallBack() {
             @Override
-            public void onGetData(boolean isSuccessful) {
+            public void onGetData(int code) {
 
             }
         });

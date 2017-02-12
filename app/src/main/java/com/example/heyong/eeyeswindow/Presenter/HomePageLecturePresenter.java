@@ -42,20 +42,20 @@ public class HomePageLecturePresenter implements Presenter {
      * 获取下一条数据
      */
     @Override
-    public void nextData(OnGetDataSuccessByNet get) {
+    public void nextData(INetworkCallBack get) {
         final List<HomeLectureBean> beanList = new LinkedList<>();
         beanList.add(new HomeLectureBean());
         listener.onGetData(beanList);
-        get.onGetData(true);
+        get.onGetData(INetworkCallBack.SUCCESS);
     }
 
     @Override
-    public void nextData(OnGetDataSuccessByNet get,int count) {
+    public void nextData(INetworkCallBack get, int count) {
         final List<HomeLectureBean> beanList = new LinkedList<>();
         for (int i = 0; i < count; i++)
             beanList.add(new HomeLectureBean());
         listener.onGetData(beanList);
-        get.onGetData(true);
+        get.onGetData(INetworkCallBack.SUCCESS);
     }
 
 
