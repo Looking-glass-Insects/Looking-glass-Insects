@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by Heyong on 2017/2/4.
@@ -67,8 +68,17 @@ public class EmptyRecyclerView extends RecyclerView {
         checkIfEmpty();
     }
 
-    public void setEmptyView(View emptyView) {
+    public void setEmptyViewByXml(View emptyView) {
         this.emptyView = emptyView;
+        checkIfEmpty();
+    }
+
+    public void setEmptyView(View emptyView) {
+        if(emptyView == null)
+            return;
+        this.emptyView = emptyView;
+        ViewGroup parent = (ViewGroup) this.getParent();
+        parent.addView(emptyView,0);
         checkIfEmpty();
     }
 }

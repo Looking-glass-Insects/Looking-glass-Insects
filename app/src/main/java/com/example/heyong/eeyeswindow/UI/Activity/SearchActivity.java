@@ -68,12 +68,12 @@ public class SearchActivity extends SwipeBackActivity {
         tvActivity.setText("与\"" + queryString + "\"有关的活动");
 
         lvLecture.setLayoutManager(new LinearLayoutManager(this));
-        lvLecture.setEmptyView(findViewById(R.id.empty1));
+        lvLecture.setEmptyViewByXml(findViewById(R.id.empty1));
         lvLecture.setAdapter(lectureAdapter);
         lvLecture.setItemAnimator(new DefaultItemAnimator());
 
         lvActivity.setLayoutManager(new LinearLayoutManager(this));
-        lvActivity.setEmptyView(findViewById(R.id.empty2));
+        lvActivity.setEmptyViewByXml(findViewById(R.id.empty2));
         lvActivity.setAdapter(activityAdapter);
         lvActivity.setItemAnimator(new DefaultItemAnimator());
 

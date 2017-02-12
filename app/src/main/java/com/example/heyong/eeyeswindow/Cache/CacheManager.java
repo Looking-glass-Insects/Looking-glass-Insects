@@ -23,9 +23,11 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by Heyong
+ *
+ * replaced by {@link DiskLruCacheHelper}
  */
 
-
+@Deprecated
 public class CacheManager {
     static String TAG = "CacheManager";
 

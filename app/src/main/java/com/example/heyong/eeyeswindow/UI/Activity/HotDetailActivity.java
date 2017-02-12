@@ -9,7 +9,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +25,7 @@ import com.example.heyong.eeyeswindow.Tools.PxToDp;
 import com.example.heyong.eeyeswindow.UI.Adapter.ActivityBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.LectureBeanRecyclerViewAdapter;
 import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
+import com.example.heyong.eeyeswindow.UI.CustomView.EmptyRecyclerView;
 import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 
 import java.util.LinkedList;
@@ -64,21 +64,23 @@ public class HotDetailActivity extends SwipeBackActivity {
     }
 
     private void initView1() {
-        RecyclerView recyclerView = (RecyclerView) views[1].findViewById(R.id.rc_hot_detail_lecture);
+        EmptyRecyclerView recyclerView = (EmptyRecyclerView) views[1].findViewById(R.id.rc_hot_detail_lecture);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view,null,false));
         activityAdapter = new ActivityBeanRecyclerViewAdapter(this);
         List<HomeActivityBean> l = new LinkedList<>();
         for(int i = 0;i<5;i++)
             l.add(new HomeActivityBean());
-        activityAdapter.addData(l);
+        //activityAdapter.addData(l);
         recyclerView.setAdapter(activityAdapter);
     }
 
     private void initView0() {
-        RecyclerView recyclerView = (RecyclerView) views[0].findViewById(R.id.rc_hot_detail_lecture);
+        EmptyRecyclerView recyclerView = (EmptyRecyclerView) views[0].findViewById(R.id.rc_hot_detail_lecture);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view,null,false));
         adapter = new LectureBeanRecyclerViewAdapter(this);
         List<HomeLectureBean> l = new LinkedList<>();
         for(int i = 0;i<10;i++)

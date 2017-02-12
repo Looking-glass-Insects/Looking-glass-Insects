@@ -63,39 +63,14 @@ public class HomeFragment extends Fragment {
     HomePageActivityPresenter presenterActivity;
 
 
-//    /**
-//     * 网络状态
-//     */
-//    @BindView(R.id.ll_off_line)
-//    LinearLayout llOffLine;
-//
-//    NetworkReceiver receiver;
-//
-//    public static final int IS_ONLINE = 0;
-//    public static final int IS_OFFLINE = 1;
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-////            if (msg.what == IS_ONLINE) {
-////                llOffLine.setVisibility(View.GONE);
-////                footerLecture.setVisibility(View.VISIBLE);
-////            } else if (msg.what == IS_OFFLINE) {
-////                footerLecture.setVisibility(View.GONE);
-////                llOffLine.setVisibility(View.VISIBLE);
-////            }
-//            super.handleMessage(msg);
-//        }
-//    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        views[0] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view_1, null);
-        views[1] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view_1, null);
+        views[0] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view, null);
+        views[1] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view, null);
         //thisView[0] init
         initView0();
         //thisView[1] init
         initView1();
-
 
         //registerReceiver();
         bindData(0);//耗时操作
@@ -107,8 +82,11 @@ public class HomeFragment extends Fragment {
 
     private void initView1() {
         lvHomeActivity = (ListView) views[1].findViewById(R.id.lv_home_lecture);
-        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer_load_more, null);
+        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer, null);
         lvHomeActivity.addFooterView(footerParent);
+        View emptyView = views[1].findViewById(R.id.empty);
+        lvHomeActivity.setEmptyView(emptyView);
+//        ((ViewGroup)lvHomeActivity.getParent()).addView(emptyView,1);
         footerActivity = footerParent.findViewById(R.id.footer);
         srlHomeActivity = (SwipeRefreshLayout) views[1].findViewById(R.id.srl_home_1);
         srlHomeActivity.setColorSchemeResources(R.color.colorPrimary);
@@ -125,8 +103,10 @@ public class HomeFragment extends Fragment {
 
     private void initView0() {
         lvHomeLecture = (ListView) views[0].findViewById(R.id.lv_home_lecture);
-        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer_load_more, null);
+        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer, null,false);
         lvHomeLecture.addFooterView(footerParent);
+        View emptyView = views[0].findViewById(R.id.empty);
+        lvHomeLecture.setEmptyView(emptyView);
         footerLecture = footerParent.findViewById(R.id.footer);
         srlHomeLecture = (SwipeRefreshLayout) views[0].findViewById(R.id.srl_home_1);
         srlHomeLecture.setColorSchemeResources(R.color.colorPrimary);
@@ -150,26 +130,12 @@ public class HomeFragment extends Fragment {
             return thisView;
         thisView = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, thisView);
-//        llOffLine.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(Settings.ACTION_SETTINGS);
-//                startActivity(intent);
-//            }
-//        });
         tabs.addTab(tabs.newTab().setText(titles[0]));
         tabs.addTab(tabs.newTab().setText(titles[1]));
         viewPager.setAdapter(adapter);
         tabs.setupWithViewPager(viewPager);
         return thisView;
     }
-
-//    @Override
-//    public void onDestroy() {
-//        this.getActivity().unregisterReceiver(receiver);
-//        super.onDestroy();
-//    }
-
 
     public boolean goTop(ListView listView) {
         if (listView.getFirstVisiblePosition() != 0) {
@@ -181,15 +147,10 @@ public class HomeFragment extends Fragment {
         }
     }
 
-//    private void registerReceiver() {
-//        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-//        this.receiver = new NetworkReceiver(handler);
-//        this.getActivity().registerReceiver(this.receiver, filter);
-//    }
 
     /**
      * 初始化时调用
-     * presenterLecture 和 listView 的 adapter 将会刷新
+     * presenter 和 listView 的 adapter 将会刷新
      */
     public void bindData(int index) {
         if (index == 0) {
@@ -218,7 +179,7 @@ public class HomeFragment extends Fragment {
                     if(isSuccessful)
                         srlHomeActivity.setRefreshing(false);
                 }
-            },10);
+            },0);
         }
     }
 
@@ -254,7 +215,6 @@ public class HomeFragment extends Fragment {
             return titles[position];//页卡标题
         }
     }
-
 
     class MyOnRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         private int index;

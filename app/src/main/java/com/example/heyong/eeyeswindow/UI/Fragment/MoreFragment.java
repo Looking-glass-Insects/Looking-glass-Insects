@@ -32,29 +32,9 @@ public class MoreFragment extends Fragment {
     @BindView(R.id.rl_about)
     RelativeLayout rlAbout;
 
-//    static final int CACHE_CLEAN_FINISHED = 2;
-//    private Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            if (msg.what == CACHE_CLEAN_FINISHED) {
-//
-//            }
-//            super.handleMessage(msg);
-//        }
-//    };
-
-
-    String cacheSize = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
-        try {
-            cacheSize = CacheUtil.getCacheSize(getContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d(TAG,"onCreate-->"+cacheSize);
         super.onCreate(savedInstanceState);
     }
 
@@ -63,7 +43,11 @@ public class MoreFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_more, container, false);
         ButterKnife.bind(this, view);
-        tvCacheSize.setText(cacheSize);
+        try {
+            tvCacheSize.setText(CacheUtil.getCacheSize(getContext()));
+        } catch (Exception e) {
+            Log.d(TAG,"error at onCreateView");
+        }
         Log.d(TAG,"onCreateView");
         return view;
     }
@@ -79,7 +63,6 @@ public class MoreFragment extends Fragment {
                         if (isOK) {
                             CacheUtil.clearAllCache(getContext());
                             tvCacheSize.setText("0.0Byte");
-                            cacheSize = "0.0Byte";
                             Toast.makeText(getContext(), "清理完成", Toast.LENGTH_SHORT).show();
                         }
                     }

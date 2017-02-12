@@ -67,4 +67,5 @@ public class HomePageLecturePresenter implements Presenter {
     public interface HomePageLectureDataListener {
         void onGetData(List<HomeLectureBean> beanList);
     }
+
 }
