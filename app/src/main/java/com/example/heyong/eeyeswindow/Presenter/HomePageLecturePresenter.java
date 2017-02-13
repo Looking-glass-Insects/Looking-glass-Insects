@@ -24,6 +24,8 @@ public class HomePageLecturePresenter implements Presenter {
 
     public static String HOME_PAGE_LIST = "HOME_PAGE_LIST";
 
+    int count = 0;
+
     public HomePageLecturePresenter(Context context, HomePageLectureDataListener listener) {
         this.context = context;
         this.listener = listener;
@@ -43,9 +45,16 @@ public class HomePageLecturePresenter implements Presenter {
      */
     @Override
     public void nextData(INetworkCallBack get) {
+
+        if(count == 15){
+            get.onGetData(INetworkCallBack.DATA_FINISH);
+            return;
+        }
+
         final List<HomeLectureBean> beanList = new LinkedList<>();
         beanList.add(new HomeLectureBean());
         listener.onGetData(beanList);
+        count++;
         get.onGetData(INetworkCallBack.SUCCESS);
     }
 

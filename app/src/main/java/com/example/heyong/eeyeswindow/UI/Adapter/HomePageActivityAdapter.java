@@ -78,6 +78,11 @@ public class HomePageActivityAdapter  extends BaseAdapter implements HomePageAct
         return view;
     }
 
+    public void clearAll(){
+        data.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onGetData(List<HomeActivityBean> list) {
         data.addAll(list);

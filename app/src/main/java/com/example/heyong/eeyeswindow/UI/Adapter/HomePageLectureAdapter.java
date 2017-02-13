@@ -92,4 +92,9 @@ public class HomePageLectureAdapter extends BaseAdapter implements HomePageLectu
         return list;
     }
 
+    public void clearAll(){
+        data.clear();
+        notifyDataSetChanged();
+    }
+
 }

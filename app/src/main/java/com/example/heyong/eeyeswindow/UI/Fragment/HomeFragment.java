@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -46,31 +47,33 @@ public class HomeFragment extends Fragment {
             null, null
     };//View pager 视图
 
-
+    static final String FOOTER_FINISH = "已经倒底了_ (:з」∠)_";
+    static final String FOOTER_LOADING = "正在加载中(๑•̀ㅂ•́)و✧";
     /**
-     * view[0]
+     * view[0] 讲座对应的页面
      */
     ListView lvHomeLecture;
     SwipeRefreshLayout srlHomeLecture;
-    View footerLecture;
+    TextView footerLecture;
     HomePageLecturePresenter presenterLecture;//数据提供
+    HomePageLectureAdapter lectureAdapter;
     /**
-     * view[1]
+     * view[1] 活动对应的页面
      */
     ListView lvHomeActivity;
     SwipeRefreshLayout srlHomeActivity;
-    View footerActivity;
+    TextView footerActivity;
     HomePageActivityPresenter presenterActivity;
-
+    HomePageActivityAdapter activityAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         views[0] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view, null);
         views[1] = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_pager_view, null);
         //thisView[0] init
-        initView0();
+        initViewLecture();
         //thisView[1] init
-        initView1();
+        initViewActivity();
 
         //registerReceiver();
         bindData(0);//耗时操作
@@ -80,14 +83,15 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private void initView1() {
+    private void initViewActivity() {
+        activityAdapter = new HomePageActivityAdapter(this.getContext());
         lvHomeActivity = (ListView) views[1].findViewById(R.id.lv_home_lecture);
         View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer, null);
         lvHomeActivity.addFooterView(footerParent);
         View emptyView = views[1].findViewById(R.id.empty);
         lvHomeActivity.setEmptyView(emptyView);
-//        ((ViewGroup)lvHomeActivity.getParent()).addView(emptyView,1);
-        footerActivity = footerParent.findViewById(R.id.footer);
+        lvHomeActivity.setAdapter(activityAdapter);
+        footerActivity = (TextView) footerParent.findViewById(R.id.footer);
         srlHomeActivity = (SwipeRefreshLayout) views[1].findViewById(R.id.srl_home_1);
         srlHomeActivity.setColorSchemeResources(R.color.colorPrimary);
         srlHomeActivity.setOnRefreshListener(new MyOnRefreshListener(1));
@@ -101,13 +105,15 @@ public class HomeFragment extends Fragment {
         YoYo.with(Techniques.FadeOutRight).duration(500).playOn(btn);
     }
 
-    private void initView0() {
+    private void initViewLecture() {
+        lectureAdapter =  new HomePageLectureAdapter(this.getContext());
         lvHomeLecture = (ListView) views[0].findViewById(R.id.lv_home_lecture);
-        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer, null,false);
+        View footerParent = LayoutInflater.from(this.getActivity()).inflate(R.layout.fragment_home_footer, null, false);
         lvHomeLecture.addFooterView(footerParent);
         View emptyView = views[0].findViewById(R.id.empty);
         lvHomeLecture.setEmptyView(emptyView);
-        footerLecture = footerParent.findViewById(R.id.footer);
+        lvHomeLecture.setAdapter(lectureAdapter);
+        footerLecture = (TextView) footerParent.findViewById(R.id.footer);
         srlHomeLecture = (SwipeRefreshLayout) views[0].findViewById(R.id.srl_home_1);
         srlHomeLecture.setColorSchemeResources(R.color.colorPrimary);
         srlHomeLecture.setOnRefreshListener(new MyOnRefreshListener(0));
@@ -122,7 +128,6 @@ public class HomeFragment extends Fragment {
     }
 
     private View thisView;//防止viewpager 老调该方法造成一些问题
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -150,43 +155,57 @@ public class HomeFragment extends Fragment {
 
     /**
      * 初始化时调用
-     * presenter 和 listView 的 adapter 将会刷新
+     * presenter将会刷新
      */
     public void bindData(int index) {
         if (index == 0) {
             srlHomeLecture.setRefreshing(true);
-            HomePageLectureAdapter adapter = new HomePageLectureAdapter(getContext());
-            presenterLecture = new HomePageLecturePresenter(getContext(), adapter);
-            lvHomeLecture.setAdapter(adapter);
-            lvHomeLecture.setOnScrollListener(new MyOnScrollListener(lvHomeLecture,presenterLecture ,0));
-            presenterLecture.nextData(new INetworkCallBack() {
-                @Override
-                public void onGetData(int code) {
-                    if(code == INetworkCallBack.SUCCESS){
-                        srlHomeLecture.setRefreshing(false);
-                    }
-                }
-            }, 10);
+            footerLecture.setText(FOOTER_LOADING);
+            bindLectureData();
         } else {
             srlHomeActivity.setRefreshing(true);
-            HomePageActivityAdapter activityAdapter = new HomePageActivityAdapter(getContext());
-            presenterActivity = new HomePageActivityPresenter(getContext(),activityAdapter);
-            lvHomeActivity.setAdapter(activityAdapter);
-            lvHomeActivity.setOnScrollListener(new MyOnScrollListener(lvHomeActivity,presenterActivity,1));
-            presenterActivity.nextData(new INetworkCallBack() {
-                @Override
-                public void onGetData(int code) {
-                    if(code == INetworkCallBack.SUCCESS){
-                        srlHomeActivity.setRefreshing(false);
-                    }
-                }
-            },0);
+            footerActivity.setText(FOOTER_LOADING);
+            bindActivityData();
         }
+    }
+
+    private void bindLectureData(){
+        lectureAdapter.clearAll();
+        presenterLecture = new HomePageLecturePresenter(getContext(), lectureAdapter);
+        lvHomeLecture.setOnScrollListener(new MyOnScrollListener(lvHomeLecture, presenterLecture,footerLecture ,0));
+        presenterLecture.nextData(new INetworkCallBack() {
+            @Override
+            public void onGetData(int code) {
+                if (code == INetworkCallBack.SUCCESS) {
+                    srlHomeLecture.setRefreshing(false);
+                }else if(code == INetworkCallBack.DATA_FINISH){
+                    srlHomeLecture.setRefreshing(false);
+                    footerLecture.setText(FOOTER_FINISH);
+                }
+            }
+        }, 10);
+    }
+    private void bindActivityData(){
+        activityAdapter.clearAll();
+        presenterActivity = new HomePageActivityPresenter(getContext(), activityAdapter);
+        lvHomeActivity.setOnScrollListener(new MyOnScrollListener(lvHomeActivity, presenterActivity, footerActivity ,1));
+        presenterActivity.nextData(new INetworkCallBack() {
+            @Override
+            public void onGetData(int code) {
+                if (code == INetworkCallBack.SUCCESS) {
+                    srlHomeActivity.setRefreshing(false);
+                }else if(code == INetworkCallBack.DATA_FINISH){
+                    srlHomeActivity.setRefreshing(false);
+                    footerActivity.setText(FOOTER_FINISH);
+                }
+            }
+        }, 0);
     }
 
     /**
      * 缓存
      */
+
     private void cache() {
         HomePageLectureAdapter adapter = (HomePageLectureAdapter) ((HeaderViewListAdapter) lvHomeLecture.getAdapter()).getWrappedAdapter();
         presenterLecture.startCache(adapter.getData());
@@ -240,20 +259,23 @@ public class HomeFragment extends Fragment {
         private ListView listView;
         private Presenter presenter;
         private int index;
+        private TextView footer;
 
-        public MyOnScrollListener(ListView listView,Presenter presenter ,int index) {
+        public MyOnScrollListener(ListView listView, Presenter presenter,TextView footer ,int index) {
             this.listView = listView;
             this.index = index;
+            this.footer = footer;
             bindPresneter(presenter);
         }
 
-        public void bindPresneter(Presenter presenter){
+
+
+        public void bindPresneter(Presenter presenter) {
             this.presenter = presenter;
         }
 
         @Override
         public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-
             switch (scrollState) {
                 // 当不滚动时
                 case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
@@ -265,7 +287,9 @@ public class HomeFragment extends Fragment {
                         presenter.nextData(new INetworkCallBack() {
                             @Override
                             public void onGetData(int code) {
-
+                                if (code == INetworkCallBack.DATA_FINISH) {
+                                    footer.setText(FOOTER_FINISH);
+                                }
                             }
                         });
                     }
@@ -284,8 +308,6 @@ public class HomeFragment extends Fragment {
                 default:
                     scrollFlag = false;
             }
-
-
         }
 
         @Override

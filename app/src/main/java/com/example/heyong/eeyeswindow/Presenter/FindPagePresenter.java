@@ -8,9 +8,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Heyong on 2017/1/21.
- */
+
 
 public class FindPagePresenter implements Presenter {
     private FindPageDataListener dataListener;
