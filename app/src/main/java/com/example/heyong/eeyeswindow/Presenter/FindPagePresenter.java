@@ -3,16 +3,23 @@ package com.example.heyong.eeyeswindow.Presenter;
 import android.content.Context;
 
 import com.example.heyong.eeyeswindow.Bean.HotPublisherBean;
+import com.example.heyong.eeyeswindow.Cache.DiskLruCacheHelper;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 
-
 public class FindPagePresenter implements Presenter {
     private FindPageDataListener dataListener;
     private Context context;
+
+    static final String DIR = "object";
+    static final String KEY_FLOW = "List<String>";
+    static final String KEY_HOT = "List<HotPublisherBean>";
 
     public FindPagePresenter(Context context, FindPageDataListener dataListener) {
         this.dataListener = dataListener;
@@ -68,6 +75,66 @@ public class FindPagePresenter implements Presenter {
 
     }
 
+    public void startCache(final LinkedList<String> flow, final LinkedList<HotPublisherBean> hotList) {
+        DiskLruCacheHelper.writeCache(new DiskLruCacheHelper.WriteCallBack() {
+            @Override
+            public String dir() {
+                return DIR;
+            }
+
+            @Override
+            public String key() {
+                return KEY_FLOW;
+            }
+
+            @Override
+            public long maxSize() {
+                return 0;
+            }
+
+            @Override
+            public boolean onGetStream(OutputStream os) {
+                try {
+                    ObjectOutputStream oos = new ObjectOutputStream(os);
+                    oos.writeObject(flow);
+                    oos.flush();
+                    oos.close();
+                } catch (IOException e) {
+                   return false;
+                }
+                return true;
+            }
+        });
+        DiskLruCacheHelper.writeCache(new DiskLruCacheHelper.WriteCallBack() {
+            @Override
+            public String dir() {
+                return DIR;
+            }
+
+            @Override
+            public String key() {
+                return KEY_HOT;
+            }
+
+            @Override
+            public long maxSize() {
+                return 0;
+            }
+
+            @Override
+            public boolean onGetStream(OutputStream os) {
+                try {
+                    ObjectOutputStream oos = new ObjectOutputStream(os);
+                    oos.writeObject(hotList);
+                    oos.flush();
+                    oos.close();
+                } catch (IOException e) {
+                    return false;
+                }
+                return true;
+            }
+        });
+    }
 
     public interface FindPageDataListener {
         void onGetData(List<String> flow, List<HotPublisherBean> beans);

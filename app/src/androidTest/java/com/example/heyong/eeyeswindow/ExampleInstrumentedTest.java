@@ -3,6 +3,9 @@ package com.example.heyong.eeyeswindow;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
+
+import com.example.heyong.eeyeswindow.Cache.DiskLruCacheHelper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,11 +22,27 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-//        CacheManager manager = new CacheManager(appContext);
-//        String s = manager.getAllSize();
-//        String s1 = GlideCacheUtil.getInstance().getCacheSize(appContext);
-//        Log.e(TAG,"-->"+s+"<>"+s1);
 
+//        DiskLruCacheHelper.init(appContext);
+
+        DiskLruCacheHelper.getSize(new DiskLruCacheHelper.SizeCallBack() {
+            @Override
+            public void onGetSize(long size) {
+                Log.d(TAG,"long-->"+size);
+            }
+
+            @Override
+            public void onGetSize(String size) {
+                Log.d(TAG,"String-->"+size);
+            }
+        });
+
+        DiskLruCacheHelper.removeAllCache(new DiskLruCacheHelper.IRemoveListener() {
+            @Override
+            public void onRemoveFin() {
+                Log.d(TAG,"onRemoveFin");
+            }
+        });
 
     }
 }

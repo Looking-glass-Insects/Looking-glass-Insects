@@ -31,9 +31,13 @@ public class LectureDetailActivity extends SwipeBackActivity {
     }
 
     private void setupContent() {
-        viewHolder.yeildText(Arrays.asList(new String[]{"标签1","标签2","标签3"}));
+        viewHolder.setTitle(bean.getTitle());
+        viewHolder.setTime(bean.getTime());
+        viewHolder.setTvLocation(bean.getLocation());
+//        viewHolder.setSpeechMaker();
+        viewHolder.setPublisher(bean.getPublisher());
+        viewHolder.yeildText(Arrays.asList(new String[]{bean.getTv1(),bean.getTv2(),bean.getTv3()}));
         viewHolder.setContentTitle("讲座详情:");
-       // String url = "https://avatars0.githubusercontent.com/u/20254017?v=3&u=7b5ad47effe9cdc64e4fc954fb45ff0c7e7f08b0&s=400";
         viewHolder.setBannerImage(R.drawable.banner1);
         viewHolder.setContent("什么也没有,喵喵喵");
     }

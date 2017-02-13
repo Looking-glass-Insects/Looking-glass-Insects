@@ -15,90 +15,194 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * {@link #init(Context)}
  * <p>
  * start a new thread to cache
- * {@link #enqueue(WriteCallBack)}
+ * {@link #writeCache(WriteCallBack)}
  * <p>
  * get the cached data
  * {@link #getCache(ReadCallBack)}
  * <p>
  * get total size of cache
  * {@link #getSize()}
- * {@link #getFormatSize()}
+ * {@link #getFormatSize(double)}
  * <p>
  * clear all size
- * {@link #removeAll(IRemoveListener)}
+ * {@link #removeAllCache(IRemoveListener)}
  */
 
 public class DiskLruCacheHelper {
 
+    private static final String TAG = "DiskLruCacheHelper";
+
     private static final long DEFAULT_SIZE = 10 * 1024 * 1024;//10M
     private static Context context;
+    private static Queue<CallBack> workQueue = new ConcurrentLinkedQueue<>();
+    private static boolean isRunning;
+
 
     private DiskLruCacheHelper() {
     }
 
     public static void init(Context context) {
+        if (isRunning)
+            throw new IllegalStateException("init() has been called");
         DiskLruCacheHelper.context = context;
+        isRunning = true;
+        new Thread(new WorkThread()).start();
     }
+
+    public static void destroy() {
+        isRunning = false;
+    }
+
 
     public static void assertContext() {
         if (context == null)
             throw new IllegalStateException("The context is null,call init() firstly");
     }
 
-    /**
-     * to start a new thread to write file
-     *
-     * @param callBack
-     */
-    public static void enqueue(@NonNull final WriteCallBack callBack) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                workAtThread(callBack);
-            }
-        }).start();
-    }
 
-    public static void getCache(@NonNull ReadCallBack callBack) {
-        assertContext();
-        DiskLruCache mDiskLruCache = null;
-        try {
-            File cacheDir = getDiskCacheDir(callBack.dir());
+    static class WorkThread implements Runnable {
+
+        @Override
+        public void run() {
+            while (isRunning) {
+                if (!workQueue.isEmpty()) {
+                    CallBack callBack = workQueue.remove();
+                    if (callBack instanceof WriteCallBack) {
+                        workAtThread((WriteCallBack) callBack);
+                    } else if (callBack instanceof ReadCallBack) {
+                        workAtThread((ReadCallBack) callBack);
+                    } else if (callBack instanceof RemoveCallBack) {
+                        workAtThread((RemoveCallBack) callBack);
+                    } else if (callBack instanceof IRemoveListener) {
+                        workAtThread((IRemoveListener) callBack);
+                    }else if(callBack instanceof SizeCallBack){
+                        workAtThread((SizeCallBack) callBack);
+                    }
+                }
+            }
+        }
+
+        private static void workAtThread(@NonNull WriteCallBack callBack) {
+            DiskLruCache mDiskLruCache = null;
+            try {
+                File cacheDir = getDiskCacheDir(callBack.dir());
+                if (!cacheDir.exists()) {
+                    cacheDir.mkdirs();
+                }
+                mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 1, callBack.maxSize() > 0 ? callBack.maxSize() : DEFAULT_SIZE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String key = hashKeyForDisk(callBack.key());
+            try {
+                DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+                if (editor != null) {
+                    OutputStream outputStream = editor.newOutputStream(0);
+                    if (callBack.onGetStream(outputStream)) {
+                        editor.commit();
+                    } else {
+                        editor.abort();
+                    }
+                }
+                mDiskLruCache.flush();
+                mDiskLruCache.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private static void workAtThread(@NonNull ReadCallBack callBack) {
+            DiskLruCache mDiskLruCache = null;
+            try {
+                File cacheDir = getDiskCacheDir(callBack.dir());
+                if (!cacheDir.exists()) {
+                    cacheDir.mkdirs();
+                }
+                mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 1, DEFAULT_SIZE);
+                String key = hashKeyForDisk(callBack.key());
+                DiskLruCache.Snapshot snapShot = mDiskLruCache.get(key);
+                if (snapShot != null) {
+                    InputStream is = snapShot.getInputStream(0);
+                    callBack.onGetInputStream(is);
+                }
+                mDiskLruCache.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private static void workAtThread(@NonNull RemoveCallBack callBack) {
+            DiskLruCache mDiskLruCache = null;
+            try {
+                File cacheDir = getDiskCacheDir(callBack.dir());
+                if (!cacheDir.exists()) {
+                    cacheDir.mkdirs();
+                }
+                mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 1, DEFAULT_SIZE);
+                String key = hashKeyForDisk(callBack.key());
+                mDiskLruCache.remove(key);
+                mDiskLruCache.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private static void workAtThread(@Nullable IRemoveListener listener) {
+            final File cacheDir = getDiskCacheDir(null);// root
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
-            mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 1, DEFAULT_SIZE);
-            String key = hashKeyForDisk(callBack.key());
-            DiskLruCache.Snapshot snapShot = mDiskLruCache.get(key);
-            if (snapShot != null) {
-                InputStream is = snapShot.getInputStream(0);
-                callBack.onGetInputStream(is);
-            }
-            mDiskLruCache.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            removeByFile(cacheDir);
+            if (listener != null)
+                listener.onRemoveFin();
+        }
+
+        private static void workAtThread(@NonNull SizeCallBack callBack){
+            long size = getSize();
+            String formatSize = getFormatSize(size);
+            callBack.onGetSize(size);
+            callBack.onGetSize(formatSize);
         }
     }
 
+
+    /**
+     * write file
+     *
+     * @param callBack
+     */
+    public static void writeCache(@NonNull final WriteCallBack callBack) {
+        synchronized (workQueue) {
+            workQueue.add(callBack);
+        }
+    }
+
+    /**
+     * get the cached data
+     *
+     * @param callBack
+     */
+    public static void getCache(@NonNull ReadCallBack callBack) {
+        synchronized (workQueue) {
+            workQueue.add(callBack);
+        }
+    }
+
+    /**
+     * remove the specific file
+     *
+     * @param callBack
+     */
     public static void removeCache(@NonNull RemoveCallBack callBack) {
-        assertContext();
-        DiskLruCache mDiskLruCache = null;
-        try {
-            File cacheDir = getDiskCacheDir(callBack.dir());
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs();
-            }
-            mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 1, DEFAULT_SIZE);
-            String key = hashKeyForDisk(callBack.key());
-            mDiskLruCache.remove(key);
-            mDiskLruCache.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (workQueue) {
+            workQueue.add(callBack);
         }
     }
 
@@ -107,48 +211,40 @@ public class DiskLruCacheHelper {
      *
      * @param listener
      */
-    public static void removeAll(@Nullable final IRemoveListener listener) {
+    public static void removeAllCache(@Nullable final IRemoveListener listener) {
+        synchronized (workQueue) {
+            workQueue.add(listener);
+        }
+    }
+
+
+    public static void getSize(SizeCallBack callBack){
+        synchronized (workQueue){
+            workQueue.add(callBack);
+        }
+    }
+
+    private static long getSize() {
         assertContext();
-        final File cacheDir = getDiskCacheDir(null);// root
+        File cacheDir = getDiskCacheDir(null);// root
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                removeByFile(cacheDir);
-                if (listener != null)
-                    listener.onRemoveFin();
-            }
-        }).start();
-    }
-
-    public interface IRemoveListener {
-        void onRemoveFin();//will call at a new thread
+        try {
+            return getSizeByFile(cacheDir);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
 
-    public static void removeByFile(File file) {
+    private static void removeByFile(File file) {
         if (file.isDirectory()) {
             for (File subFile : file.listFiles())
                 removeByFile(subFile);
         } else {
             file.delete();
         }
-    }
-
-
-    public static long getSize() {
-        assertContext();
-        File cacheDir = getDiskCacheDir(null);// root
-        if (!cacheDir.exists()) {
-            cacheDir.mkdirs();
-        }
-        return getSizeByFile(cacheDir);
-    }
-
-    public static String getFormatSize() {
-        return getFormatSize(getSize());
     }
 
 
@@ -179,38 +275,10 @@ public class DiskLruCacheHelper {
     }
 
 
-    private static void workAtThread(@NonNull WriteCallBack callBack) {
-        assertContext();
-        DiskLruCache mDiskLruCache = null;
-        try {
-            File cacheDir = getDiskCacheDir(callBack.dir());
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs();
-            }
-            mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 1, callBack.maxSize() > 0 ? callBack.maxSize() : DEFAULT_SIZE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String key = hashKeyForDisk(callBack.key());
-        try {
-            DiskLruCache.Editor editor = mDiskLruCache.edit(key);
-            if (editor != null) {
-                OutputStream outputStream = editor.newOutputStream(0);
-                if (callBack.onGetStream(outputStream)) {
-                    editor.commit();
-                } else {
-                    editor.abort();
-                }
-            }
-            mDiskLruCache.flush();
-            mDiskLruCache.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static interface CallBack {
     }
 
-
-    public abstract static class RemoveCallBack {
+    public abstract static class RemoveCallBack implements CallBack {
         /**
          * get the dir name, if is null, will cache at cache/
          *
@@ -226,9 +294,9 @@ public class DiskLruCacheHelper {
         public abstract String key();
     }
 
-    public abstract static class ReadCallBack {
+    public abstract static class ReadCallBack implements CallBack {
         /**
-         * get the dir name, if is null, will cache at cache/
+         * get the dir name, if is null, will cache at /cache/
          *
          * @return the dir name
          */
@@ -245,9 +313,9 @@ public class DiskLruCacheHelper {
         public abstract void onGetInputStream(InputStream is);
     }
 
-    public abstract static class WriteCallBack {
+    public abstract static class WriteCallBack implements CallBack {
         /**
-         * get the dir name, if is null, will cache at cache/
+         * get the dir name, if is null, will cache at /cache/
          *
          * @return the dir name
          */
@@ -276,6 +344,18 @@ public class DiskLruCacheHelper {
         public abstract boolean onGetStream(OutputStream os);
     }
 
+    public abstract static class SizeCallBack implements CallBack {
+        public void onGetSize(long size) {
+        }
+
+        public void onGetSize(String size) {
+        }
+    }
+
+    public interface IRemoveListener extends CallBack {
+        void onRemoveFin();//will call at a new thread
+    }
+
 
     /**
      * /sdcard/Android/data/<application package>/cache
@@ -297,7 +377,6 @@ public class DiskLruCacheHelper {
         return new File(cachePath + File.separator + uniqueName);
     }
 
-
     private static int getAppVersion() {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -307,7 +386,6 @@ public class DiskLruCacheHelper {
         }
         return 1;
     }
-
 
     private static String hashKeyForDisk(String key) {
         if (key == null)

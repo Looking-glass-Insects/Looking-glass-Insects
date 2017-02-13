@@ -1,11 +1,8 @@
 package com.example.heyong.eeyeswindow;
 
 import android.app.Application;
-import android.content.Context;
 
-
-
-
+import com.example.heyong.eeyeswindow.Cache.DiskLruCacheHelper;
 
 
 public class EeyesWindow extends Application {
@@ -20,6 +17,13 @@ public class EeyesWindow extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //refWatcher = LeakCanary.install(this);
+        DiskLruCacheHelper.init(getApplicationContext());
     }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+
 }

@@ -30,6 +30,7 @@ import com.example.heyong.eeyeswindow.UI.Adapter.SearchFragmentHotAdapter;
 import com.example.heyong.lib.flowLayout.FlowLayout;
 
 
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -74,7 +75,11 @@ public class FindFragment extends Fragment {
         presenter.nextData(new INetworkCallBack() {
             @Override
             public void onGetData(int code) {
+                if(code == INetworkCallBack.SUCCESS){
+                    presenter.startCache((LinkedList<String>) dataHolder.flowList,(LinkedList<HotPublisherBean>) dataHolder.beans);
+                }else if(code == INetworkCallBack.DATA_FINISH){
 
+                }
             }
         });
         super.onCreate(savedInstanceState);

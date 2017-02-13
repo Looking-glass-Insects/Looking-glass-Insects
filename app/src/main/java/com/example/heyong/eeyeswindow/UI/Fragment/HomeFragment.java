@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.HeaderViewListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -178,9 +177,11 @@ public class HomeFragment extends Fragment {
             public void onGetData(int code) {
                 if (code == INetworkCallBack.SUCCESS) {
                     srlHomeLecture.setRefreshing(false);
+                    cacheLecture();
                 }else if(code == INetworkCallBack.DATA_FINISH){
                     srlHomeLecture.setRefreshing(false);
                     footerLecture.setText(FOOTER_FINISH);
+                    cacheLecture();
                 }
             }
         }, 10);
@@ -194,23 +195,26 @@ public class HomeFragment extends Fragment {
             public void onGetData(int code) {
                 if (code == INetworkCallBack.SUCCESS) {
                     srlHomeActivity.setRefreshing(false);
+                    cacheActivity();
                 }else if(code == INetworkCallBack.DATA_FINISH){
                     srlHomeActivity.setRefreshing(false);
                     footerActivity.setText(FOOTER_FINISH);
+                    cacheActivity();
                 }
             }
-        }, 0);
+        }, 10);
     }
 
     /**
      * 缓存
      */
 
-    private void cache() {
-        HomePageLectureAdapter adapter = (HomePageLectureAdapter) ((HeaderViewListAdapter) lvHomeLecture.getAdapter()).getWrappedAdapter();
-        presenterLecture.startCache(adapter.getData());
+    private void cacheLecture() {
+        presenterLecture.startCache(lectureAdapter.getData());
     }
-
+    private void cacheActivity(){
+        presenterActivity.startCache(activityAdapter.getData());
+    }
 
     class MyViewPageAdapter extends PagerAdapter {
 

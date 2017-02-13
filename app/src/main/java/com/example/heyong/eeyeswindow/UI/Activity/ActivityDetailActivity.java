@@ -15,6 +15,7 @@ import com.example.heyong.lib.swipeBackActivity.SwipeBackActivity;
 import java.util.Arrays;
 
 public class ActivityDetailActivity extends SwipeBackActivity {
+    HomeActivityBean bean;
     ActivityDetailViewHolder viewHolder;
 
     @Override
@@ -28,16 +29,21 @@ public class ActivityDetailActivity extends SwipeBackActivity {
     }
 
     private void setupContent() {
-        viewHolder.yeildText(Arrays.asList(new String[]{"标签1", "标签2", "标签3"}));
-        viewHolder.setContentTitle("活动详情:");
-        viewHolder.setBannerImage(R.drawable.banner2);
+        viewHolder.setTitle(bean.getTitle());
+        viewHolder.setTime(bean.getTime());
+        viewHolder.setTvLocation(bean.getLocation());
+//        viewHolder.setSpeechMaker();
+        viewHolder.setPublisher(bean.getPublisher());
+        viewHolder.yeildText(Arrays.asList(new String[]{bean.getTv1(),bean.getTv2(),bean.getTv3()}));
+        viewHolder.setContentTitle("讲座详情:");
+        viewHolder.setBannerImage(R.drawable.banner1);
         viewHolder.setContent("什么也没有,喵喵喵");
     }
 
     private void setupHeader() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
-        HomeActivityBean bean = (HomeActivityBean) intent.getSerializableExtra(HomePageLectureAdapter.BEAN);
+        bean = (HomeActivityBean) intent.getSerializableExtra(HomePageLectureAdapter.BEAN);
         toolbar.setTitle("活动详情");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

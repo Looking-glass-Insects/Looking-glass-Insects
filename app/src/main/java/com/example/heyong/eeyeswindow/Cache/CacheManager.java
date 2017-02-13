@@ -49,7 +49,7 @@ public class CacheManager {
     }
 
     /**
-     * 坑：我尝试新建线程执行，但奔溃
+     *
      *
      * @param uniqueName 文件夹目录
      * @param URL_OR_STR 最终文件名

@@ -82,7 +82,11 @@ public class HomePageActivityAdapter  extends BaseAdapter implements HomePageAct
         data.clear();
         notifyDataSetChanged();
     }
-
+    public LinkedList<HomeActivityBean> getData(){
+        LinkedList<HomeActivityBean> l = new LinkedList<>();
+        l.addAll(data);
+        return l;
+    }
     @Override
     public void onGetData(List<HomeActivityBean> list) {
         data.addAll(list);
