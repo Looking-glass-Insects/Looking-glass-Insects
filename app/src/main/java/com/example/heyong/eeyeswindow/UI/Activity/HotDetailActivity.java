@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -64,10 +65,14 @@ public class HotDetailActivity extends SwipeBackActivity {
     }
 
     private void initView1() {
+
         EmptyRecyclerView recyclerView = (EmptyRecyclerView) views[1].findViewById(R.id.rc_hot_detail_lecture);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view,null,false));
+        NestedScrollView layout = new NestedScrollView(this);
+        layout.setLayoutParams(new NestedScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.addView(LayoutInflater.from(this).inflate(R.layout.empty_view,null,false));
+        recyclerView.setEmptyView(layout);
         activityAdapter = new ActivityBeanRecyclerViewAdapter(this);
         List<HomeActivityBean> l = new LinkedList<>();
         for(int i = 0;i<5;i++)
@@ -80,7 +85,10 @@ public class HotDetailActivity extends SwipeBackActivity {
         EmptyRecyclerView recyclerView = (EmptyRecyclerView) views[0].findViewById(R.id.rc_hot_detail_lecture);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view,null,false));
+        NestedScrollView layout = new NestedScrollView(this);
+        layout.setLayoutParams(new NestedScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.addView(LayoutInflater.from(this).inflate(R.layout.empty_view,null,false));
+        recyclerView.setEmptyView(layout);
         adapter = new LectureBeanRecyclerViewAdapter(this);
         List<HomeLectureBean> l = new LinkedList<>();
         for(int i = 0;i<10;i++)

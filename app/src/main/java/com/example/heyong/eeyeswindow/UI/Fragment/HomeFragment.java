@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
     String[] titles = {"讲座", "活动"};
     View[] views = {
             null, null
-    };//thisView pager 视图
+    };//View pager 视图
 
 
     /**
@@ -177,7 +177,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onGetData(int code) {
                     if(code == INetworkCallBack.SUCCESS){
-                        srlHomeLecture.setRefreshing(false);
+                        srlHomeActivity.setRefreshing(false);
                     }
                 }
             },0);
