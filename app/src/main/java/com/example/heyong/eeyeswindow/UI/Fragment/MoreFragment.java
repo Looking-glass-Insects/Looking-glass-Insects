@@ -17,6 +17,8 @@ import com.example.heyong.eeyeswindow.R;
 import com.example.heyong.eeyeswindow.Tools.CacheUtil;
 import com.example.heyong.eeyeswindow.Tools.SimpleDialogFactory;
 import com.example.heyong.eeyeswindow.UI.Activity.AboutActivity;
+import com.example.heyong.eeyeswindow.UI.Activity.CallBackActivity;
+import com.example.heyong.eeyeswindow.UI.Activity.MoreProductActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,11 +29,18 @@ public class MoreFragment extends Fragment {
     static String TAG = "MoreFragment";
     @BindView(R.id.tv_cache_size)
     TextView tvCacheSize;
+    //缓存清理
     @BindView(R.id.rl_clear_cache)
     RelativeLayout rlClearCache;
+    //关于
     @BindView(R.id.rl_about)
     RelativeLayout rlAbout;
-
+    //意见反馈
+    @BindView(R.id.rl_call_back)
+    RelativeLayout rlCallBack;
+    //更多产品
+    @BindView(R.id.rl_more_production)
+    RelativeLayout rlMoreProduction;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,4 +82,15 @@ public class MoreFragment extends Fragment {
     public void onClickAbout() {
         startActivity(new Intent(this.getContext(),AboutActivity.class));
     }
+
+    @OnClick(R.id.rl_call_back)
+    public void onClickCallBack(){
+        startActivity(new Intent(this.getContext(), CallBackActivity.class));
+    }
+    @OnClick(R.id.rl_more_production)
+    public void onClickMore(){
+        startActivity(new Intent(this.getContext(), MoreProductActivity.class));
+    }
+
+
 }

@@ -36,7 +36,7 @@ public class ActivityDetailActivity extends SwipeBackActivity {
         viewHolder.setPublisher(bean.getPublisher());
         viewHolder.yeildText(Arrays.asList(new String[]{bean.getTv1(),bean.getTv2(),bean.getTv3()}));
         viewHolder.setContentTitle("讲座详情:");
-        viewHolder.setBannerImage(R.drawable.banner1);
+        viewHolder.setBannerImage(R.drawable.banner2);
         viewHolder.setContent("什么也没有,喵喵喵");
     }
 
