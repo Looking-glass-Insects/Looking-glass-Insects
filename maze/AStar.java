@@ -162,6 +162,10 @@ public class AStar {
         }
     }
 
+    public LinkedList<Maze.Point> getAnsList() {
+        return ansList;
+    }
+
 
     private class ThreeDPoint implements Comparable<ThreeDPoint>, Cloneable {
         int x;//元素本身
