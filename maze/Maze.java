@@ -4,11 +4,12 @@ import java.util.*;
 
 /**
  * Created by Heyong on 2016/12/30.
- *
+ * <p>
  * 迷宫类
  * 起点为0，终点为 width*height-1
  */
 public class Maze {
+
     private int width;
     private int height;
     /**
@@ -20,12 +21,13 @@ public class Maze {
     /**
      * 邻接表
      */
-    private List<Set<Integer>> adjacencyList = new LinkedList<>();
+    private List<Set<Integer>> adjacencyList;
 
     public Maze(int width, int height) {
         this.width = width;
         this.height = height;
         set = new UnionFindSet(width * height);
+        adjacencyList = new ArrayList<>(width*height);
         notWalls = new HashSet<Point>() {
             @Override
             public boolean contains(Object o) {
@@ -42,7 +44,6 @@ public class Maze {
         };
         initAdjacencyList();
     }
-
 
 
     /**
@@ -64,8 +65,7 @@ public class Maze {
      * 打印数据
      */
     public void print() {
-        for (Point p :
-                notWalls) {
+        for (Point p : notWalls) {
             p.print();
         }
     }
@@ -77,7 +77,7 @@ public class Maze {
      * @return
      */
     public List<Integer> getNextChoicesByEle(int x) {
-        List<Integer> list = new LinkedList<>();
+        List<Integer> list = new ArrayList<>(4);
         assert x >= 0 && x < width * height : "参数范围错误";
         Set<Integer> set = adjacencyList.get(x);
         set.forEach(list::add);
@@ -122,6 +122,10 @@ public class Maze {
 
     public int getHeight() {
         return height;
+    }
+
+    public Set<Point> getNotWalls() {
+        return notWalls;
     }
 
     /**
