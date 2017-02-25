@@ -20,9 +20,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * {@link #init(Context)}
- * <p>
- * {@link #destroy()}
- * <p>
  * start to cache
  * {@link #writeCache(WriteCallBack)}
  * <p>
@@ -45,7 +42,8 @@ public class DiskLruCacheHelper {
     private static Context context;
     private static Queue<CallBack> workQueue = new ConcurrentLinkedQueue<>();
     private static boolean isRunning;
-
+    private static boolean canFin = false;
+    private static FinishCallBack finishCallBack;
 
     private DiskLruCacheHelper() {
     }
@@ -67,8 +65,18 @@ public class DiskLruCacheHelper {
      * to finish the work thread.
      */
     public static void destroy() {
-        isRunning = false;
+        canFin = true;
     }
+
+    public static void setOnWrokFinListener(FinishCallBack callBack){
+        finishCallBack = callBack;
+    }
+
+    public interface FinishCallBack{
+        void onFinish();
+    }
+
+
 
     /**
      * to see the work thread is running.
@@ -142,7 +150,9 @@ public class DiskLruCacheHelper {
         }
     }
 
-
+    /**
+     * work thread
+     */
     static class WorkThread implements Runnable {
         @Override
         public void run() {
@@ -160,6 +170,11 @@ public class DiskLruCacheHelper {
                     } else if (callBack instanceof SizeCallBack) {
                         workAtThread((SizeCallBack) callBack);
                     }
+                }else {
+                    if(finishCallBack != null)
+                        finishCallBack.onFinish();
+                    if(canFin)
+                        isRunning = false;
                 }
             }
         }
@@ -249,12 +264,16 @@ public class DiskLruCacheHelper {
         }
     }
 
+
+    /**
+     * the operate, include write,read,remove,get size,
+     */
     public static interface CallBack {
     }
 
     public abstract static class RemoveCallBack implements CallBack {
         /**
-         * get the dir name, if is null, will cache at cache/
+         * get the dir name
          *
          * @return the dir name
          */
