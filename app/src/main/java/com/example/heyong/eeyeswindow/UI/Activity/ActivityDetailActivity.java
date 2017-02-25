@@ -2,6 +2,7 @@ package com.example.heyong.eeyeswindow.UI.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +46,9 @@ public class ActivityDetailActivity extends SwipeBackActivity {
         Intent intent = getIntent();
         bean = (HomeActivityBean) intent.getSerializableExtra(HomePageLectureAdapter.BEAN);
         toolbar.setTitle("活动详情");
+        CoordinatorLayout root = (CoordinatorLayout) findViewById(R.id.activity_detail);
         setSupportActionBar(toolbar);
+//        toolbar.setOverScrollMode(Toolbar.OVER_SCROLL_NEVER);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

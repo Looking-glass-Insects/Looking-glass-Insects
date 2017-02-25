@@ -47,6 +47,7 @@ public class LectureDetailActivity extends SwipeBackActivity {
         Intent intent = getIntent();
         bean = (HomeLectureBean)intent.getSerializableExtra(HomePageLectureAdapter.BEAN);
         toolbar.setTitle("讲座详情");
+        toolbar.setOverScrollMode(Toolbar.OVER_SCROLL_NEVER);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);

@@ -56,8 +56,16 @@ public class DiskLruCacheHelper {
         new Thread(new WorkThread()).start();
     }
 
+
+
     public static void destroy() {
-        isRunning = false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!workQueue.isEmpty());
+                isRunning = true;
+            }
+        }).start();
     }
 
 
