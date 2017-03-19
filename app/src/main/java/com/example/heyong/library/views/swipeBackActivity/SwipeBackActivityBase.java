@@ -1,5 +1,5 @@
 
-package com.example.heyong.library.customView.swipeBackActivity;
+package com.example.heyong.library.views.swipeBackActivity;
 
 public interface SwipeBackActivityBase {
     /**

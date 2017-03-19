@@ -1,4 +1,4 @@
-package com.example.heyong.library.customView.pulltozoomview;
+package com.example.heyong.library.views.pulltozoomview;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;

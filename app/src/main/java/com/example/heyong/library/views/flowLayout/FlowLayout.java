@@ -1,4 +1,4 @@
-package com.example.heyong.library.customView.flowLayout;
+package com.example.heyong.library.views.flowLayout;
 
 import android.content.Context;
 import android.content.res.TypedArray;

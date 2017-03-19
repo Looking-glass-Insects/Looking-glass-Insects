@@ -1,4 +1,4 @@
-package com.example.heyong.library.customView.swipeBackActivity;
+package com.example.heyong.library.views.swipeBackActivity;
 
 import android.app.Activity;
 import android.app.ActivityOptions;

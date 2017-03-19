@@ -1,4 +1,4 @@
-package com.example.heyong.library.customView.swipeBackActivity;
+package com.example.heyong.library.views.swipeBackActivity;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;

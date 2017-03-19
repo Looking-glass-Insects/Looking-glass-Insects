@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.heyong.library.customView.EmptyRecyclerView;
-import com.example.heyong.library.customView.swipeBackActivity.SwipeBackActivity;
+import com.example.heyong.library.views.EmptyRecyclerView;
+import com.example.heyong.library.views.swipeBackActivity.SwipeBackActivity;
 
 public class MainActivity extends SwipeBackActivity {
     static String TAG = "MainActivity";
@@ -24,6 +24,8 @@ public class MainActivity extends SwipeBackActivity {
         }
     });
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,7 @@ public class MainActivity extends SwipeBackActivity {
         rc.setAdapter(new MyAdapter());
         rc.setLayoutManager(new LinearLayoutManager(this));
         rc.setEmptyView(emptyView);
+
     }
 
 

@@ -1,4 +1,4 @@
-package com.example.heyong.library.customView;
+package com.example.heyong.library.views;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
