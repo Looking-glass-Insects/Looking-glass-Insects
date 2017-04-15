@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -17,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import com.example.heyong.library.views.swipeBackActivity.SwipeBackActivity;
 import com.example.heyong.myreader.R;
 
 import butterknife.BindView;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 
 import static com.example.heyong.myreader.MyApplication.myApplication;
 
-public class WebActivity extends AppCompatActivity {
+public class WebActivity extends SwipeBackActivity {
     public static final String WebView = "WebView";
 
     @BindView(R.id.web_view)

@@ -11,6 +11,7 @@ import com.example.heyong.myreader.R;
 
 /**
  * Created by Heyong on 2017/4/14.
+ *
  */
 @Deprecated
 public class LoadingWindow {
