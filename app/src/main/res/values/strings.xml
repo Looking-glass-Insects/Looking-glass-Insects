@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyReader</string>
+    <string name="time">时间</string>
+    <string name="next">换一波</string>
+    <string name="error">加载失败了QAQ</string>
+    <string name="copy_url">复制链接</string>
+    <string name="open_browser">打开浏览器</string>
+</resources>

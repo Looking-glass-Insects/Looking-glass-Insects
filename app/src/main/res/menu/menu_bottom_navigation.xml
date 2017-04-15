@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:orderInCategory="10"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="书房"/>
+    <item
+        android:id="@+id/menu_search"
+        android:orderInCategory="20"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="发现"/>
+    <item
+        android:id="@+id/menu_more"
+        android:orderInCategory="30"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:title="设置"/>
+</menu>
