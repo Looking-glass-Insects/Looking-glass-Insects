@@ -7,6 +7,7 @@ import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.nodes.CCAnimation;
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.opengl.CCTexture2D;
@@ -14,9 +15,11 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * 带有小尾巴的弹， bullet3 第5，6行
+ *
  */
 
 public class BaseTailBullet extends BaseItem {
@@ -44,15 +47,21 @@ public class BaseTailBullet extends BaseItem {
         this.runAction(action);
     }
 
-//    @Override
-//    public boolean isTouched(CGPoint point) {
-//        float dx = point.x - this.position_.x;
-//        float dy = point.y - this.position_.y;
-//        return dx * dx + dy * dy <= radius * radius;
-//    }
+
 
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
+    }
+
+    @Override
+    protected void initFreezeEffort() {
+        freezeEffort = new CCSprite(Config.Ice);
+        freezeEffort.setOpacity(192);
+        freezeEffort.setPosition(16,16);
+        freezeEffort.setTextureRect(CGRect.make(0, 0, 64, 64), false);
+        freezeEffort.setRotation(new Random().nextInt(360));
+        freezeEffort.setVisible(false);
+        super.initFreezeEffort();
     }
 }

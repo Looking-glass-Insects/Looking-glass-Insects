@@ -3,14 +3,17 @@ package com.example.heyong.shootit.sprite.bullet;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
 
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
+
+import java.util.Random;
 
 /**
  * bullet2 第一行 星星弹
  */
 
-public class BaseStarBullet extends BaseItem {
+public  class BaseStarBullet extends BaseItem {
     public static final int GRAY = 0;
     public static final int RED = 32 ;
     public static final int PINK = 32 * 2;
@@ -27,12 +30,16 @@ public class BaseStarBullet extends BaseItem {
         setTextureRect(CGRect.make(color, 0, 32, 32), false);
     }
 
-//    @Override
-//    public boolean isTouched(CGPoint point) {
-//        float dx = point.x - this.position_.x;
-//        float dy = point.y - this.position_.y;
-//        return dx * dx + dy * dy <= radius * radius;
-//    }
+    @Override
+    protected void initFreezeEffort() {
+        freezeEffort = new CCSprite(Config.Ice);
+        freezeEffort.setOpacity(192);
+        freezeEffort.setPosition(16,16);
+        freezeEffort.setTextureRect(CGRect.make(0, 0, 64, 64), false);
+        freezeEffort.setRotation(new Random().nextInt(360));
+        freezeEffort.setVisible(false);
+        super.initFreezeEffort();
+    }
 
     @Override
     public void onHandleTouchEvent(CGPoint point) {

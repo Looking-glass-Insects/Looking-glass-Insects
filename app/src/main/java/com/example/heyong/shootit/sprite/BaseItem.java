@@ -12,7 +12,9 @@ import org.cocos2d.types.CGPoint;
 
 public abstract class BaseItem extends CCSprite implements OnHandleTouchEventListener {
 
-    public float speedY = 0.05f;
+
+    protected CCSprite freezeEffort = null;
+    public float speedY = 2f;
     public float speedX = 0f;
 
     protected int radius = 0;
@@ -20,6 +22,12 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
     public BaseItem(String file) {
         super(file);
         this.getTexture().setAntiAliasTexParameters();
+        initFreezeEffort();
+    }
+
+    protected void initFreezeEffort() {
+        if (freezeEffort != null)
+            this.addChild(freezeEffort);
     }
 
     /**
@@ -31,5 +39,16 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
         return dx * dx + dy * dy <= (radius + Config.USER_RADIUS) * (radius + Config.USER_RADIUS);
     }
 
+
+    public void setFrozen(boolean frozen) {
+        if (freezeEffort == null) {
+            throw new IllegalStateException("冰冻效果未添加");
+        }
+        if (frozen) {
+            freezeEffort.setVisible(true);
+        } else {
+            freezeEffort.setVisible(false);
+        }
+    }
 
 }

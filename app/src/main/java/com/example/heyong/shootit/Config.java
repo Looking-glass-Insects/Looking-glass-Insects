@@ -8,8 +8,8 @@ public class Config {
     /**
      * 屏幕宽高
      */
-    public static int WINDOW_HEIGHT = 800;
-    public static int WINDOW_WIDTH = 400;
+    public static int WINDOW_HEIGHT = 1024;
+    public static int WINDOW_WIDTH = 512;
     /**
      * 加载资源目录字符串
      */
@@ -19,6 +19,11 @@ public class Config {
     public static String Bullet4 = "bullet4.png";
     public static String Bullet5 = "bullet5.png";
     public static String item = "item.png";
+    public static String eff_maple = "eff_maple.png";
+    public static String bg_3 = "bg/bg03.png";
+    public static String bg_2 = "bg/bg02.png";
+    public static String bg_1 = "bg/bg01.png";
+    public static String Ice = "ice00.png";
     /**
      * 默认判定点大小
      */

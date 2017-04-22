@@ -3,14 +3,17 @@ package com.example.heyong.shootit.sprite.bullet;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
 
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 
+import java.util.Random;
+
 /**
- * 高亮弹 bullet1 倒数第一行
+ * 高亮弹 bullet1 倒数第二行
  */
 
-public class BaseLightBullet extends BaseItem {
+public  class BaseLightBullet extends BaseItem {
 
     public static final int GRAY = 0;
     public static final int RED = 32 ;
@@ -39,5 +42,17 @@ public class BaseLightBullet extends BaseItem {
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
+    }
+
+
+    @Override
+    protected void initFreezeEffort() {
+        freezeEffort = new CCSprite(Config.Ice);
+        freezeEffort.setOpacity(192);
+        freezeEffort.setPosition(16,16);
+        freezeEffort.setTextureRect(CGRect.make(0, 0, 64, 64), false);
+        freezeEffort.setRotation(new Random().nextInt(360));
+        freezeEffort.setVisible(false);
+        super.initFreezeEffort();
     }
 }

@@ -3,8 +3,11 @@ package com.example.heyong.shootit.sprite.bullet;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
 
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
+
+import java.util.Random;
 
 /**
  * 方块弹，bullet1 8行
@@ -37,5 +40,16 @@ public  class BaseCubeBullet extends BaseItem {
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
+    }
+
+    @Override
+    protected void initFreezeEffort() {
+        freezeEffort = new CCSprite(Config.Ice);
+        freezeEffort.setOpacity(192);
+        freezeEffort.setPosition(8,8);
+        freezeEffort.setTextureRect(CGRect.make(0, 128, 32, 32), false);
+        freezeEffort.setRotation(new Random().nextInt(360));
+        freezeEffort.setVisible(false);
+        super.initFreezeEffort();
     }
 }

@@ -4,18 +4,21 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.example.heyong.shootit.layer.GameLayer;
-import com.example.heyong.shootit.orbit.GravityOrbitController;
+import com.example.heyong.shootit.layer.StartLayer;
 
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.sound.SoundEngine;
 
 public class MainActivity extends Activity {
 
+    static String TAG = "MainActivity";
 
+    private static SoundEngine engine;
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -35,24 +38,51 @@ public class MainActivity extends Activity {
         director.attachInView(surfaceView);
         director.setDeviceOrientation(CCDirector.kCCDeviceOrientationPortrait);
         director.setScreenSize(Config.WINDOW_WIDTH, Config.WINDOW_HEIGHT);
-        GameLayer gameLayer = new GameLayer();
-        gameLayer.setHandler(handler);
         director.setDisplayFPS(true);
+        setupMainWindow();
+        initBgm();
+    }
+
+    private void setupMainWindow() {
         CCScene scene = CCScene.node();
-        scene.addChild(gameLayer);
-        
-
-        GravityOrbitController orbitController = new GravityOrbitController(30, 64);
-        //GravityOrbitController orbitController1 = new GravityOrbitController(60, 64);
-        gameLayer.addOrbits(orbitController);
-        //gameLayer.addOrbits(orbitController1);
-
-
-        orbitController.addItem(null);
-        //orbitController1.addItem(null);
-
-
+        scene.addChild(new StartLayer());
         director.runWithScene(scene);
     }
 
+    private void initBgm() {
+        engine = SoundEngine.sharedEngine();
+        engine.preloadSound(this, R.raw.bgm1);
+        engine.preloadSound(this, R.raw.bgm2);
+    }
+
+    @Override
+    protected void onStart() {
+        engine.resumeSound();
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG,"onPause");
+        engine.pauseSound();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        engine.realesAllSounds();
+        super.onDestroy();
+    }
+
+    public static SoundEngine getEngine() {
+        if (engine == null){
+            throw new IllegalStateException("音乐播放器未加载完成");
+        }
+        return engine;
+    }
 }

@@ -12,6 +12,7 @@ import org.cocos2d.types.CGSize;
  */
 
 public class BaseLayer extends CCLayer {
+
     protected CGSize cgSize ;
     protected Handler handler;
 

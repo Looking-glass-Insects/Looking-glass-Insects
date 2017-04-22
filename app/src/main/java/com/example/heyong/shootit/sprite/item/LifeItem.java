@@ -21,4 +21,5 @@ public class LifeItem extends BaseItem {
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
     }
+
 }

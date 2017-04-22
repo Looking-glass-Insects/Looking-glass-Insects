@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
 import com.example.heyong.shootit.sprite.bullet.BaseBigBullet;
-import com.example.heyong.shootit.sprite.item.LifeItem;
+import com.example.heyong.shootit.sprite.bullet.BaseTailBullet;
 
 import org.cocos2d.types.CGPoint;
 
@@ -40,7 +40,8 @@ public class GravityOrbitController extends BaseOrbitController {
 
     @Override
     public void addItem(BaseItem item) {
-        LifeItem b = new LifeItem();
+        BaseTailBullet b = new BaseTailBullet(BaseTailBullet.RED);
+        b.setFrozen(true);
         b.setPosition(start_x, Config.WINDOW_HEIGHT);
         super.addItem(b);
         items.add(b);
@@ -94,7 +95,7 @@ public class GravityOrbitController extends BaseOrbitController {
             BaseItem item = iterator.next();
             CGPoint point = item.getPosition();
             if (point.y < -64) {
-                item.speedY = 0.05f;
+                item.speedY = 1.0f;
                 item.setPosition(start_x, Config.WINDOW_HEIGHT + 32);
                 break;
             }

@@ -7,6 +7,7 @@ import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
 import org.cocos2d.actions.interval.CCAnimate;
 import org.cocos2d.nodes.CCAnimation;
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.nodes.CCSpriteFrame;
 import org.cocos2d.nodes.CCTextureCache;
 import org.cocos2d.opengl.CCTexture2D;
@@ -14,12 +15,13 @@ import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGRect;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
- * Created by Heyong on 2017/4/21.
+ * 音符弹
  */
 
-public class BaseMusicBullet extends BaseItem {
+public  class BaseMusicBullet extends BaseItem {
 
     public static final int RED = 0;
     public static final int YELLOW = 1;
@@ -68,5 +70,17 @@ public class BaseMusicBullet extends BaseItem {
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
+    }
+
+
+    @Override
+    protected void initFreezeEffort() {
+        freezeEffort = new CCSprite(Config.Ice);
+        freezeEffort.setOpacity(192);
+        freezeEffort.setPosition(16,16);
+        freezeEffort.setTextureRect(CGRect.make(0, 0, 64, 64), false);
+        freezeEffort.setRotation(new Random().nextInt(360));
+        freezeEffort.setVisible(false);
+        super.initFreezeEffort();
     }
 }

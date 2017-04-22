@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by Heyong on 2017/4/20.
  */
-
+@Deprecated
 public class Bullets {
 
     static String TAG = "Bullets";

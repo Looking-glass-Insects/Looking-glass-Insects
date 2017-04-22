@@ -16,23 +16,13 @@ import java.util.List;
  */
 
 public class GameLayer extends BaseLayer {
+
     static final String TAG = "GameLayer";
-    //CCSprite handle;
-    //BasePlayer player;
-    private List<BaseOrbitController> orbits = new ArrayList<>(10);
+    protected List<BaseOrbitController> orbits = new ArrayList<>(10);
 
     public GameLayer() {
         this.setIsTouchEnabled(true);
         this.scheduleUpdate();
-        //CCSprite bigCircle = new CCSprite(Config.BIG_CIRCLE);
-        //handle = new CCSprite(Config.LITTLE_CIRCLE);
-        //handle.setPosition(Config.handle_x, Config.handle_y);
-        // bigCircle.setPosition(Config.handle_x, Config.handle_y);
-        // bigCircle.setScale(2);
-        // this.addChild(bigCircle, 99);
-        //this.addChild(handle, 100);
-        //player = new BasePlayer();
-        // this.addChild(player, 1);
     }
 
     /**

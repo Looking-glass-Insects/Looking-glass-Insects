@@ -11,7 +11,7 @@ import org.cocos2d.types.CGRect;
 /**
  * Created by Heyong on 2017/4/20.
  */
-
+@Deprecated
 public class Test extends CCSprite {
 
     public Test() {
