@@ -3,8 +3,9 @@ package com.example.heyong.shootit.orbit;
 import android.util.Log;
 
 import com.example.heyong.shootit.Config;
-import com.example.heyong.shootit.sprite.BaseBigBullet;
 import com.example.heyong.shootit.sprite.BaseItem;
+import com.example.heyong.shootit.sprite.bullet.BaseBigBullet;
+import com.example.heyong.shootit.sprite.item.LifeItem;
 
 import org.cocos2d.types.CGPoint;
 
@@ -19,17 +20,17 @@ import java.util.Random;
 
 public class GravityOrbitController extends BaseOrbitController {
     static String TAG = "GravityOrbitController";
-    private List<BaseItem> items = new ArrayList<>();
+    protected List<BaseItem> items = new ArrayList<>();
     /**
      * 下落起始x坐标
      */
-    private int start_x;
+    protected int start_x;
     /**
      * 判定宽度
      */
-    private int width;
+    protected int width;
 
-    private float g = 9.8f / 120;//重力加速度
+    protected float g = 0;//重力加速度
 
 
     public GravityOrbitController(int start_x, int width) {
@@ -39,16 +40,8 @@ public class GravityOrbitController extends BaseOrbitController {
 
     @Override
     public void addItem(BaseItem item) {
-        Random random = new Random();
-        int ran = random.nextInt(3);
-        BigGravityBullet b = null;
-        if (ran == 0) {
-            b = new BigGravityBullet(BaseBigBullet.BULE);
-        } else if (ran == 1) {
-            b = new BigGravityBullet(BaseBigBullet.RED);
-        } else if (ran == 2) {
-            b = new BigGravityBullet(BaseBigBullet.YELLOW);
-        }
+        LifeItem b = new LifeItem();
+        b.setPosition(start_x, Config.WINDOW_HEIGHT);
         super.addItem(b);
         items.add(b);
     }
@@ -62,7 +55,9 @@ public class GravityOrbitController extends BaseOrbitController {
     public void onHandleTouchEvent(CGPoint point) {
         Iterator<BaseItem> iterator = items.iterator();
         while (iterator.hasNext()) {
+            Log.d(TAG, "touch-->" + point.x + "," + point.y);
             BaseItem item = iterator.next();
+            Log.d(TAG, "item-->" + item.getPosition().x + "," + item.getPosition().y);
             if (item.isTouched(point)) {
                 item.onHandleTouchEvent(point);
                 break;
@@ -78,10 +73,10 @@ public class GravityOrbitController extends BaseOrbitController {
     @Override
     public boolean isTouched(CGPoint point) {
         if (Math.abs(point.x - start_x) > width / 2) {
-            Log.d(TAG, "false");
+            //Log.d(TAG, "false");
             return false;
         } else {
-            Log.d(TAG, "true");
+            //Log.d(TAG, "true");
             return true;
         }
     }
@@ -96,19 +91,20 @@ public class GravityOrbitController extends BaseOrbitController {
     public void onGetClock() {
         Iterator<BaseItem> iterator = items.iterator();
         while (iterator.hasNext()) {
-            BigGravityBullet item = (BigGravityBullet) iterator.next();
+            BaseItem item = iterator.next();
             CGPoint point = item.getPosition();
             if (point.y < -64) {
-                item.speed = 0;
+                item.speedY = 0.05f;
                 item.setPosition(start_x, Config.WINDOW_HEIGHT + 32);
                 break;
             }
-            item.speed += g;
-            item.setPosition(start_x, point.y - item.speed);
+            item.speedY += g;
+            item.setPosition(start_x, point.y - item.speedY);
         }
     }
 
     class BigGravityBullet extends BaseBigBullet {
+
         static final int r = 64;
         float speed = 0;
         Random random = new Random();
@@ -124,13 +120,6 @@ public class GravityOrbitController extends BaseOrbitController {
             this.speed = 0;
             this.position_.x = start_x;
             this.position_.y = Config.WINDOW_HEIGHT + random.nextInt(128);
-        }
-
-        @Override
-        public boolean isTouched(CGPoint point) {
-            float dx = point.x - this.position_.x;
-            float dy = point.y - this.position_.y;
-            return dx * dx + dy * dy <= r * r;
         }
     }
 

@@ -1,36 +1,35 @@
 package com.example.heyong.shootit.sprite;
 
+import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.OnHandleTouchEventListener;
 
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
 
 /**
- * Created by Heyong on 2017/4/20.
+ * 基础类,包括子弹，人物
  */
 
-public abstract class BaseItem extends CCSprite implements OnHandleTouchEventListener{
-//    /**
-//     * 红色大弹 bullet2.png 最后一行第一个
-//     */
-//    public static final int BIG_BULLET_1 = 0;
-//
-//    public static BaseItem getItem(int type){
-//        if (type == BIG_BULLET_1){
-//            BaseItem baseItem = new BaseItem(Config.Bullet2);
-//            baseItem.setTextureRect(CGRect.make(0, 194, 64, 64), false);
-//            return baseItem;
-//        }else return null;
-//    }
-//
+public abstract class BaseItem extends CCSprite implements OnHandleTouchEventListener {
+
+    public float speedY = 0.05f;
+    public float speedX = 0f;
+
+    protected int radius = 0;
+
     public BaseItem(String file) {
         super(file);
+        this.getTexture().setAntiAliasTexParameters();
     }
 
     /**
-     *
      * @return true if is touched
      */
-    public abstract boolean isTouched(CGPoint point);
-//
+    public boolean isTouched(CGPoint point) {
+        float dx = point.x - this.position_.x;
+        float dy = point.y - this.position_.y;
+        return dx * dx + dy * dy <= (radius + Config.USER_RADIUS) * (radius + Config.USER_RADIUS);
+    }
+
+
 }

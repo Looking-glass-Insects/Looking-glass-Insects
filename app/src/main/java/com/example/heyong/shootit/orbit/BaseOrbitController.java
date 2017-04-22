@@ -13,7 +13,7 @@ public abstract class BaseOrbitController implements IOrbitController {
 
     public void addItem(BaseItem item) {
         assertParent();
-        parent.addChild(item);
+        parent.addChild(item,getZ());
     }
 
     protected void assertParent() {

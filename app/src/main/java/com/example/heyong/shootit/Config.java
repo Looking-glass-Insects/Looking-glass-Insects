@@ -5,12 +5,43 @@ package com.example.heyong.shootit;
  */
 
 public class Config {
-
-    public static int WINDOW_HEIGHT = 600;
-    public static int WINDOW_WIDTH = 300;
-
+    /**
+     * 屏幕宽高
+     */
+    public static int WINDOW_HEIGHT = 800;
+    public static int WINDOW_WIDTH = 400;
+    /**
+     * 加载资源目录字符串
+     */
     public static String Bullet1 = "bullet1.png";
     public static String Bullet2 = "bullet2.png";
     public static String Bullet3 = "bullet3.png";
+    public static String Bullet4 = "bullet4.png";
+    public static String Bullet5 = "bullet5.png";
+    public static String item = "item.png";
+    /**
+     * 默认判定点大小
+     */
+    public static float USER_RADIUS = 20f;
+    public static float PLAYER_RADIUS = 5f;
+    /**
+     * 手柄位置
+     */
+    public static float handle_x = 64;
+    public static float handle_y = 64;
+    public static float handle_radius = 64;
 
+    public static String BIG_CIRCLE = "bigCircle.png";
+    public static String LITTLE_CIRCLE = "littleCircle.png";
+    /**
+     * 操控区位置
+     */
+    public static float CUT_LINE = handle_y + handle_radius;
+    /**
+     * 人物角色
+     */
+    public static String LING_MENG = "pl00.png";
+    public static float start_y = 160;
+    public static float start_x = WINDOW_WIDTH / 2;
+    public static String EFFECT = "eff_sloweffect.png";
 }

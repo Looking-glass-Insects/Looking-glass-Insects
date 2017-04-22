@@ -20,7 +20,6 @@ public class MainActivity extends Activity {
         @Override
         public boolean handleMessage(Message msg) {
             Toast.makeText(MainActivity.this, "click", Toast.LENGTH_SHORT).show();
-
             return false;
         }
     });
@@ -41,10 +40,18 @@ public class MainActivity extends Activity {
         director.setDisplayFPS(true);
         CCScene scene = CCScene.node();
         scene.addChild(gameLayer);
-        GravityOrbitController orbitController = new GravityOrbitController(Config.WINDOW_WIDTH / 2, 64);
+        
+
+        GravityOrbitController orbitController = new GravityOrbitController(30, 64);
+        //GravityOrbitController orbitController1 = new GravityOrbitController(60, 64);
         gameLayer.addOrbits(orbitController);
-        for (int i = 0; i < 3; i++)
-            orbitController.addItem(null);
+        //gameLayer.addOrbits(orbitController1);
+
+
+        orbitController.addItem(null);
+        //orbitController1.addItem(null);
+
+
         director.runWithScene(scene);
     }
 
