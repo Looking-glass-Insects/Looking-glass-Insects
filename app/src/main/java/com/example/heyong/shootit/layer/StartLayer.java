@@ -62,10 +62,10 @@ public class StartLayer extends BaseLayer {
         stage1.addOrbits(controller);
         stage1.addOrbits(controller2);
 
-//        for (int i = 0; i < 50; i++) {
-//            controller.addItem(Config.WINDOW_HEIGHT + i * 64);
-//            controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
-//        }
+        for (int i = 0; i < 5; i++) {
+            controller.addItem(Config.WINDOW_HEIGHT + i * 64);
+            controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
+        }
 
         CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
         CCDirector.sharedDirector().replaceScene(transition);

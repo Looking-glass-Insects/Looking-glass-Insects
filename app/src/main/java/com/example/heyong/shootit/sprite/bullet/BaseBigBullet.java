@@ -35,7 +35,7 @@ public class BaseBigBullet extends BaseItem {
 
     @Override
     public void onHandleTouchEvent(CGPoint point) {
-        this.setVisible(false);
+       // this.setVisible(false);
     }
 //
     @Override

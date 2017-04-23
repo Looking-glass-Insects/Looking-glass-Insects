@@ -24,6 +24,7 @@ public class Config {
     public static String bg_2 = "bg/bg02.png";
     public static String bg_1 = "bg/bg01.png";
     public static String Ice = "ice00.png";
+    public static String bomb = "eff_magicsquare.png";
     /**
      * 默认判定点大小
      */

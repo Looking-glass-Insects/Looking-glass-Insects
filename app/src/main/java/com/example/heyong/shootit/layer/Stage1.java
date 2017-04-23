@@ -27,10 +27,14 @@ public class Stage1 extends GameLayer {
         MainActivity.getEngine().playSound(getContext(), R.raw.bgm1, true);
     }
 
+    /**
+     * 回调
+     * @param dt
+     */
     @Override
     public void update(float dt) {
         super.update(dt);
-        time++;
+        //time++;
         if (time >= 60 * 10) {
             if (!isFin) {
                 isFin = true;
@@ -40,7 +44,7 @@ public class Stage1 extends GameLayer {
     }
 
     protected void showClear() {
-        CCLabel singleStart = CCLabel.makeLabel("Next Stage", "Roboto_Thin.ttf", 48);//创建字体，中间参数为ttf文件，20为字体大小
+        CCLabel singleStart = CCLabel.makeLabel("Next Stage", "Roboto_Thin.ttf", 24);//创建字体，中间参数为ttf文件，20为字体大小
         singleStart.setColor(ccColor3B.ccc3(255, 228, 255));//初始值
         singleStart.setTag(NEXT);
         singleStart.setPosition(Config.WINDOW_WIDTH / 2, Config.WINDOW_HEIGHT / 2);

@@ -8,10 +8,7 @@ import com.example.heyong.shootit.sprite.bullet.BaseBigBullet;
 
 import org.cocos2d.types.CGPoint;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 /**
  * 重力自由落体
@@ -19,7 +16,7 @@ import java.util.Random;
 
 public class GravityOrbitController extends BaseOrbitController {
     static String TAG = "GravityOrbitController";
-    protected List<BaseItem> items = new ArrayList<>();
+
     /**
      * 下落起始x坐标
      */
@@ -31,6 +28,7 @@ public class GravityOrbitController extends BaseOrbitController {
 
     protected float g = 0;//重力加速度
 
+    protected int deadItemCount = 0;
 
     public GravityOrbitController(int start_x, int width) {
         this.start_x = start_x;
@@ -39,14 +37,10 @@ public class GravityOrbitController extends BaseOrbitController {
 
     @Override
     public void addItem(BaseItem item) {
-//        BaseTailBullet b = new BaseTailBullet(BaseTailBullet.RED);
-//        b.setFrozen(true);
-//        b.setPosition(start_x, Config.WINDOW_HEIGHT);
         super.addItem(item);
-        items.add(item);
     }
 
-    public void addItem(float y){
+    public void addItem(float y) {
         BaseBigBullet b = new BaseBigBullet(BaseBigBullet.RED);
         b.setPosition(start_x, y);
         addItem(b);
@@ -66,6 +60,7 @@ public class GravityOrbitController extends BaseOrbitController {
             BaseItem item = iterator.next();
             Log.d(TAG, "item-->" + item.getPosition().x + "," + item.getPosition().y);
             if (item.isTouched(point)) {
+                deadItemCount++;
                 item.onHandleTouchEvent(point);
                 break;
             }
@@ -80,10 +75,8 @@ public class GravityOrbitController extends BaseOrbitController {
     @Override
     public boolean isTouched(CGPoint point) {
         if (Math.abs(point.x - start_x) > width / 2) {
-            //Log.d(TAG, "false");
             return false;
         } else {
-            //Log.d(TAG, "true");
             return true;
         }
     }
@@ -91,11 +84,13 @@ public class GravityOrbitController extends BaseOrbitController {
 
     @Override
     public boolean canBeDestroyed() {
-        return false;
+        //当所有item不可见时该轨道可销毁
+        return deadItemCount >= getItemCount();
     }
 
     @Override
     public void onGetClock() {
+        super.onGetClock();
         Iterator<BaseItem> iterator = items.iterator();
         while (iterator.hasNext()) {
             BaseItem item = iterator.next();
@@ -107,26 +102,6 @@ public class GravityOrbitController extends BaseOrbitController {
             }
             item.speedY += g;
             item.setPosition(start_x, point.y - item.speedY);
-        }
-    }
-
-    class BigGravityBullet extends BaseBigBullet {
-
-        static final int r = 64;
-        float speed = 0;
-        Random random = new Random();
-
-        public BigGravityBullet(int color) {
-            super(color);
-            this.position_.x = start_x;
-            this.position_.y = Config.WINDOW_HEIGHT + 32 + random.nextInt(256);
-        }
-
-        @Override
-        public void onHandleTouchEvent(CGPoint point) {
-            this.speed = 0;
-            this.position_.x = start_x;
-            this.position_.y = Config.WINDOW_HEIGHT + random.nextInt(128);
         }
     }
 

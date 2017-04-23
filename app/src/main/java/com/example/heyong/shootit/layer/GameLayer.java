@@ -1,8 +1,11 @@
 package com.example.heyong.shootit.layer;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.orbit.BaseOrbitController;
+import com.example.heyong.shootit.sprite.item.BombEffect;
 
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGPoint;
@@ -34,10 +37,13 @@ public class GameLayer extends BaseLayer {
             BaseOrbitController orbit = iterator.next();
             if (orbit.canBeDestroyed()) {
                 iterator.remove();
+                orbit.onDestroy();
+                Log.d(TAG, "dead");
             } else {
                 orbit.onGetClock();
             }
         }
+        bombEffect.onGetClock();
     }
 
     public void addOrbits(BaseOrbitController orbitController) {
@@ -56,7 +62,6 @@ public class GameLayer extends BaseLayer {
             y = event.getY(i);
             CGPoint p1 = CGPoint.ccp(x, y);
             CGPoint p2 = CCDirector.sharedDirector().convertToGL(p1);
-            //Log.d(TAG, "p2.x: " + p2.x + ",p2.y: " + p2.y);//左下角原点
             for (BaseOrbitController orbit : orbits) {
                 if (orbit.isTouched(p2)) {
                     orbit.onHandleTouchEvent(p2);
@@ -64,8 +69,45 @@ public class GameLayer extends BaseLayer {
                 }
             }
         }
+
+        //test
+        //loadFreezeEffect();
+        loadBombEffect();
         return true;
     }
+
+
+    /**
+     * 为所有子弹加冰冻效果
+     */
+    protected void loadFreezeEffect() {
+        for (BaseOrbitController controller : orbits) {
+            controller.onGetFreezeSpellCard();
+        }
+    }
+
+    /**
+     * 消弹
+     */
+    protected BombEffect bombEffect;
+
+    protected void loadBombEffect() {
+        if (bombEffect == null){
+            prepareBombEffect();
+        }
+        bombEffect.fresh();
+        CGPoint point = CGPoint.ccp(Config.WINDOW_WIDTH / 2,Config.WINDOW_HEIGHT / 2);
+        bombEffect.setPosition(point);
+        for (BaseOrbitController controller : orbits) {
+            controller.onGetBombSpellCard(point);
+        }
+    }
+
+    protected void prepareBombEffect() {
+        bombEffect = new BombEffect();
+        this.addChild(bombEffect, bombEffect.getZ());
+    }
+
 
     @Override
     public boolean ccTouchesMoved(MotionEvent event) {

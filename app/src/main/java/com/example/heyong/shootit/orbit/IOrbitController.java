@@ -39,4 +39,8 @@ public interface IOrbitController extends OnHandleTouchEventListener ,OnClockGet
      */
     boolean canBeDestroyed();
 
+    /**
+     * 销毁该轨道
+     */
+    void onDestroy();
 }
