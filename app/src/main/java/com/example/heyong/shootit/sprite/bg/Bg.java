@@ -31,30 +31,28 @@ public abstract class Bg extends CCLayer implements OnClockGetListener {
 
     static class Bg3 extends Bg {
 
-        private CCSprite[][] sprites = new CCSprite[6][2];
+        private CCSprite[] sprites = new CCSprite[4];
         private float speed = 2.0f;
 
         public Bg3() {
             this.scheduleUpdate();
-            for (int i = 0; i < 2; i++)
-                for (int j = 0; j < 6; j++) {
-                    sprites[j][i] = new CCSprite(Config.bg_3);
-                    sprites[j][i].setPosition(256 * i + 128, 256 * j + 128);
-                    this.addChild(sprites[j][i]);
-                }
+            for (int j = 0; j < sprites.length; j++) {
+                sprites[j] = new CCSprite(Config.bg_3);
+                sprites[j].setPosition(128, 256 * j + 128);
+                this.addChild(sprites[j]);
+            }
         }
 
         @Override
         public void onGetClock() {
-            for (int i = 0; i < 6; i++)
-                for (int j = 0; j < 2; j++) {
-                    CGPoint points = sprites[i][j].getPosition();
-                    if (points.y <= -128) {
-                        sprites[i][j].setPosition(points.x, 1024 + 128);
-                    } else {
-                        sprites[i][j].setPosition(points.x, points.y - speed);
-                    }
+            for (int i = 0; i < sprites.length; i++) {
+                CGPoint points = sprites[i].getPosition();
+                if (points.y <= -128) {
+                    sprites[i].setPosition(points.x, 512 + 128);
+                } else {
+                    sprites[i].setPosition(points.x, points.y - speed);
                 }
+            }
         }
 
         public void update(float dt) {
@@ -71,7 +69,8 @@ public abstract class Bg extends CCLayer implements OnClockGetListener {
             this.scheduleUpdate();
             for (int j = 0; j < sprites.length; j++) {
                 sprites[j] = new CCSprite(Config.bg_2);
-                sprites[j].setPosition(256, 128 * j + 64);
+                sprites[j].setScale(0.5);
+                sprites[j].setPosition(128, 64 * j + 32);
                 this.addChild(sprites[j]);
             }
         }
@@ -80,8 +79,8 @@ public abstract class Bg extends CCLayer implements OnClockGetListener {
         public void onGetClock() {
             for (int i = 0; i < sprites.length; i++) {
                 CGPoint points = sprites[i].getPosition();
-                if (points.y <= -64) {
-                    sprites[i].setPosition(points.x, 1024 + 64);
+                if (points.y <= -32) {
+                    sprites[i].setPosition(points.x, 512 + 32);
                 } else {
                     sprites[i].setPosition(points.x, points.y - speed);
                 }
@@ -96,30 +95,28 @@ public abstract class Bg extends CCLayer implements OnClockGetListener {
 
     static class Bg1 extends Bg {
 
-        private CCSprite[][] sprites = new CCSprite[6][2];
+        private CCSprite[] sprites = new CCSprite[3];
         private float speed = 2.0f;
 
         public Bg1() {
             this.scheduleUpdate();
-            for (int i = 0; i < 2; i++)
-                for (int j = 0; j < 6; j++) {
-                    sprites[j][i] = new CCSprite(Config.bg_1);
-                    sprites[j][i].setPosition(256 * i + 128, 256 * j + 128);
-                    this.addChild(sprites[j][i]);
-                }
+            for (int j = 0; j < 3; j++) {
+                sprites[j] = new CCSprite(Config.bg_1);
+                sprites[j].setPosition(128, 256 * j + 128);
+                this.addChild(sprites[j]);
+            }
         }
 
         @Override
         public void onGetClock() {
-            for (int i = 0; i < 6; i++)
-                for (int j = 0; j < 2; j++) {
-                    CGPoint points = sprites[i][j].getPosition();
-                    if (points.y <= -128) {
-                        sprites[i][j].setPosition(points.x, 1024 + 128);
-                    } else {
-                        sprites[i][j].setPosition(points.x, points.y - speed);
-                    }
+            for (int i = 0; i < 3; i++) {
+                CGPoint points = sprites[i].getPosition();
+                if (points.y <= -128) {
+                    sprites[i].setPosition(points.x, 1024 / 2 + 128);
+                } else {
+                    sprites[i].setPosition(points.x, points.y - speed);
                 }
+            }
         }
 
         public void update(float dt) {

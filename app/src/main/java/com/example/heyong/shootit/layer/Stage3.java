@@ -24,7 +24,7 @@ public class Stage3 extends Stage1 {
 
     @Override
     protected void nextStage() {
-        MainActivity.getEngine().pauseSound();
+        MainActivity.getEngine().realesAllSounds();
         CCScene scene = CCScene.node();
         StartLayer startLayer = new StartLayer();
         scene.addChild(startLayer);

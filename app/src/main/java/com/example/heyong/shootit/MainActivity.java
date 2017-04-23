@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.heyong.shootit.layer.StartLayer;
@@ -53,6 +52,7 @@ public class MainActivity extends Activity {
         engine = SoundEngine.sharedEngine();
         engine.preloadSound(this, R.raw.bgm1);
         engine.preloadSound(this, R.raw.bgm2);
+        engine.preloadSound(this, R.raw.bgm3);
     }
 
     @Override
@@ -63,7 +63,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
-        Log.d(TAG,"onPause");
         engine.pauseSound();
         super.onPause();
     }
@@ -75,12 +74,12 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        engine.realesAllSounds();
+        SoundEngine.purgeSharedEngine();
         super.onDestroy();
     }
 
     public static SoundEngine getEngine() {
-        if (engine == null){
+        if (engine == null) {
             throw new IllegalStateException("音乐播放器未加载完成");
         }
         return engine;
