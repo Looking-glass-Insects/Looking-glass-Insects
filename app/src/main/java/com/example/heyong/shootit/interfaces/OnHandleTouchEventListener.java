@@ -1,4 +1,4 @@
-package com.example.heyong.shootit;
+package com.example.heyong.shootit.interfaces;
 
 import org.cocos2d.types.CGPoint;
 

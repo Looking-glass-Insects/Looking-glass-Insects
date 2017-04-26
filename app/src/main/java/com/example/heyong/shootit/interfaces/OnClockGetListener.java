@@ -1,4 +1,4 @@
-package com.example.heyong.shootit;
+package com.example.heyong.shootit.interfaces;
 
 /**
  * Created by Heyong on 2017/4/20.

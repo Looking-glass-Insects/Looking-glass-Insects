@@ -24,6 +24,11 @@ public class Stage2 extends Stage1 {
     }
 
     @Override
+    protected void load() {
+
+    }
+
+    @Override
     protected void nextStage() {
         CCScene scene = CCScene.node();
         Stage3 stage3 = new Stage3();

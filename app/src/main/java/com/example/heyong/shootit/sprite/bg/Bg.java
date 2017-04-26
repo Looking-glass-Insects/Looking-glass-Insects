@@ -1,7 +1,7 @@
 package com.example.heyong.shootit.sprite.bg;
 
 import com.example.heyong.shootit.Config;
-import com.example.heyong.shootit.OnClockGetListener;
+import com.example.heyong.shootit.interfaces.OnClockGetListener;
 
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.nodes.CCSprite;

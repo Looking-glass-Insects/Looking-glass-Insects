@@ -8,7 +8,7 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGSize;
 
 /**
- * Created by Heyong on 2017/4/20.
+ *
  */
 
 public class BaseLayer extends CCLayer {
@@ -23,6 +23,12 @@ public class BaseLayer extends CCLayer {
     public BaseLayer(){
         cgSize = CCDirector.sharedDirector().getWinSize();
     }
+
+    protected void assertHandler(){
+        if (handler == null)
+            throw new IllegalStateException("handler is null");
+    }
+
 
     protected static Activity getContext() {
         return CCDirector.sharedDirector().getActivity();

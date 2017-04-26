@@ -2,6 +2,7 @@ package com.example.heyong.shootit.sprite.bullet;
 
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
+import com.example.heyong.shootit.util.ScoreManager;
 
 import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
@@ -70,6 +71,7 @@ public  class BaseMusicBullet extends BaseItem {
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
+        ScoreManager.getInstance().onGetScore(3);
     }
 
 

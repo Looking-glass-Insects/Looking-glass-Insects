@@ -1,6 +1,6 @@
 package com.example.heyong.shootit.orbit;
 
-import com.example.heyong.shootit.OnSpellCardListener;
+import com.example.heyong.shootit.interfaces.OnSpellCardListener;
 import com.example.heyong.shootit.sprite.BaseItem;
 
 import org.cocos2d.layers.CCLayer;

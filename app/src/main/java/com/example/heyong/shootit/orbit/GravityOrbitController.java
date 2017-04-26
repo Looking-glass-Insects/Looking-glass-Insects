@@ -1,10 +1,9 @@
 package com.example.heyong.shootit.orbit;
 
-import android.util.Log;
-
-import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
 import com.example.heyong.shootit.sprite.bullet.BaseBigBullet;
+import com.example.heyong.shootit.util.ContinuousTapManager;
+import com.example.heyong.shootit.util.LifeManager;
 
 import org.cocos2d.types.CGPoint;
 
@@ -15,22 +14,23 @@ import java.util.Iterator;
  */
 
 public class GravityOrbitController extends BaseOrbitController {
+
     static String TAG = "GravityOrbitController";
 
     /**
      * 下落起始x坐标
      */
-    protected int start_x;
+    protected float start_x;
     /**
      * 判定宽度
      */
-    protected int width;
+    protected float width;
 
     protected float g = 0;//重力加速度
 
     protected int deadItemCount = 0;
 
-    public GravityOrbitController(int start_x, int width) {
+    public GravityOrbitController(float start_x, float width) {
         this.start_x = start_x;
         this.width = width;
     }
@@ -41,7 +41,15 @@ public class GravityOrbitController extends BaseOrbitController {
     }
 
     public void addItem(float y) {
-        BaseBigBullet b = new BaseBigBullet(BaseBigBullet.RED);
+        BaseBigBullet b = new BaseBigBullet(BaseBigBullet.RED){
+            @Override
+            public void setVisible(boolean v) {
+                super.setVisible(v);
+                if (!v){
+                    deadItemCount++;
+                }
+            }
+        };
         b.setPosition(start_x, y);
         addItem(b);
     }
@@ -55,16 +63,16 @@ public class GravityOrbitController extends BaseOrbitController {
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         Iterator<BaseItem> iterator = items.iterator();
+        boolean flag = false;
         while (iterator.hasNext()) {
-            Log.d(TAG, "touch-->" + point.x + "," + point.y);
             BaseItem item = iterator.next();
-            Log.d(TAG, "item-->" + item.getPosition().x + "," + item.getPosition().y);
             if (item.isTouched(point)) {
-                deadItemCount++;
                 item.onHandleTouchEvent(point);
+                flag = true;
                 break;
             }
         }
+        ContinuousTapManager.getInstance().onGetTap(flag);
     }
 
     @Override
@@ -94,11 +102,21 @@ public class GravityOrbitController extends BaseOrbitController {
         Iterator<BaseItem> iterator = items.iterator();
         while (iterator.hasNext()) {
             BaseItem item = iterator.next();
+            if (!item.getVisible())
+                continue;
             CGPoint point = item.getPosition();
-            if (point.y < -64) {
-                item.speedY = 1.0f;
-                item.setPosition(start_x, Config.WINDOW_HEIGHT + 32);
-                break;
+            if (point.y < -32) {
+                //item.speedY = 1.0f;
+                //item.setPosition(start_x, Config.WINDOW_HEIGHT + 32);
+                //iterator.remove();
+                //synchronized (item){
+                if (item.getVisible()) {
+                    LifeManager.getInstance().subLife(1);
+                    item.setVisible(false);
+
+                }
+                //}
+                continue;
             }
             item.speedY += g;
             item.setPosition(start_x, point.y - item.speedY);

@@ -2,6 +2,7 @@ package com.example.heyong.shootit.sprite.bullet;
 
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
+import com.example.heyong.shootit.util.ScoreManager;
 
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
@@ -35,7 +36,8 @@ public class BaseBigBullet extends BaseItem {
 
     @Override
     public void onHandleTouchEvent(CGPoint point) {
-       // this.setVisible(false);
+        this.setVisible(false);
+        ScoreManager.getInstance().onGetScore();
     }
 //
     @Override

@@ -2,6 +2,7 @@ package com.example.heyong.shootit.sprite.bullet;
 
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
+import com.example.heyong.shootit.util.ScoreManager;
 
 import org.cocos2d.actions.base.CCAction;
 import org.cocos2d.actions.base.CCRepeatForever;
@@ -26,10 +27,10 @@ public class BaseTailBullet extends BaseItem {
 
     public static final int RED = 128;
     public static final int PURPLE = 160;
-    public int radius = 10;
 
     public BaseTailBullet(int color) {
         super(Config.Bullet3);
+        this.radius = 10;
         setTextureRect(CGRect.make(0, color, 32, 32), false);
         CCTexture2D texture = CCTextureCache.sharedTextureCache().addImage(Config.Bullet3);
         ArrayList<CCSpriteFrame> frames = new ArrayList<>(4);
@@ -52,6 +53,7 @@ public class BaseTailBullet extends BaseItem {
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
+        ScoreManager.getInstance().onGetScore(2);
     }
 
     @Override

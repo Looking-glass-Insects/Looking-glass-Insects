@@ -38,6 +38,7 @@ public class BombEffect extends BaseItem {
             Log.d(TAG, "remove");
         } else {
             this.setOpacity((int) (lastTime / LAST_TIME * 255));
+            this.setRotation(720 * lastTime / LAST_TIME);
             lastTime--;
         }
 

@@ -1,4 +1,4 @@
-package com.example.heyong.shootit;
+package com.example.heyong.shootit.util;
 
 import android.view.MotionEvent;
 

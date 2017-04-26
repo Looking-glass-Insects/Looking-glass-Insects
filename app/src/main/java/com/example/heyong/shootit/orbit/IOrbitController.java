@@ -1,7 +1,7 @@
 package com.example.heyong.shootit.orbit;
 
-import com.example.heyong.shootit.OnClockGetListener;
-import com.example.heyong.shootit.OnHandleTouchEventListener;
+import com.example.heyong.shootit.interfaces.OnClockGetListener;
+import com.example.heyong.shootit.interfaces.OnHandleTouchEventListener;
 
 import org.cocos2d.types.CGPoint;
 

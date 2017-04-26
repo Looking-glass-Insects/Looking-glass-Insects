@@ -8,8 +8,8 @@ public class Config {
     /**
      * 屏幕宽高
      */
-    public static int WINDOW_HEIGHT = 1024/2;
-    public static int WINDOW_WIDTH = 512/2;
+    public static float WINDOW_HEIGHT = 1024/2;
+    public static float WINDOW_WIDTH = 512/2;
     /**
      * 加载资源目录字符串
      */

@@ -2,6 +2,7 @@ package com.example.heyong.shootit.sprite.bullet;
 
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.sprite.BaseItem;
+import com.example.heyong.shootit.util.ScoreManager;
 
 import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGPoint;
@@ -23,7 +24,7 @@ public  class BaseLittlePointBullet extends BaseItem {
     public static final int YELLOW = 32 * 6;
 
 
-//    public  int radius = 5;
+
 
     public BaseLittlePointBullet(int color) {
         super(Config.Bullet3);
@@ -41,6 +42,7 @@ public  class BaseLittlePointBullet extends BaseItem {
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
+        ScoreManager.getInstance().onGetScore(3);
     }
 
 
