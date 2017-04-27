@@ -8,9 +8,11 @@ import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.heyong.shootit.layer.OnlineLayer;
 import com.example.heyong.shootit.layer.StartLayer;
 import com.example.heyong.shootit.online.GameClient;
 import com.example.heyong.shootit.online.GameServer;
+import com.example.heyong.shootit.online.SendThread;
 import com.example.heyong.shootit.util.ScoreManager;
 
 import org.cocos2d.layers.CCScene;
@@ -26,30 +28,46 @@ public class MainActivity extends Activity {
 
     private CCDirector director;
 
+    public static int GAME_START = 942;
+
 
     public Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             if (msg.what == StartLayer.TAG_ONLINE_SERVER) {
+                //开启服务器
                 GameServer server = GameServer.getInstance();
+                server.setHandler(handler);
                 server.startServer(5251);
             } else if (msg.what == StartLayer.TAG_ONLINE_CLINET) {
+                //连接服务器
                 GameClient client = GameClient.getInstance();
                 client.setHandler(handler);
                 client.setContext(MainActivity.this);
                 client.connect(5251);
-            } else if (msg.what == 999){
-                Toast.makeText(MainActivity.this, "success", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == SendThread.TAG_ON_CONNECTED) {
+                //client已连接
+                Toast.makeText(MainActivity.this, "已连接", Toast.LENGTH_SHORT).show();
+                GameServer.getInstance().writeObj(SendThread.TAG_GAME_START);
+
+                OnlineLayer.isConnected = true;
+            } else if (msg.what == SendThread.TAG_GAME_START) {
+                //服务器向client发送开始标志
+                Toast.makeText(MainActivity.this, "已连接", Toast.LENGTH_SHORT).show();
+
+                OnlineLayer.isConnected = true;
             }
             return true;
         }
     });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         changeConfig();
         CCGLSurfaceView surfaceView = new CCGLSurfaceView(this);
+        surfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
         setContentView(surfaceView);
         director = CCDirector.sharedDirector();
         director.attachInView(surfaceView);
@@ -86,7 +104,6 @@ public class MainActivity extends Activity {
         layer.setHandler(handler);
         director.runWithScene(scene);
     }
-
 
     private void initBgm() {
         engine = SoundEngine.sharedEngine();
@@ -137,4 +154,5 @@ public class MainActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

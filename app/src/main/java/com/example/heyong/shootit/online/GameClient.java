@@ -46,18 +46,18 @@ public class GameClient {
             @Override
             public void run() {
                 try {
-                    Log.d(TAG,"ip-->"+serverAddress);
                     Socket client = new Socket(serverAddress, port);
-                    Log.d(TAG,"connected");
+                    Log.d(TAG, "connect");
                     clientSendThread = new SendThread(client);
                     clientSendThread.start();
                     clientReceiveThread = new ReceiveThread(client);
                     clientReceiveThread.setHandler(handler);
                     clientReceiveThread.start();
-                    Log.d(TAG,"connected");
+
+                    clientSendThread.write(SendThread.TAG_ON_CONNECTED);//向服务器发送连接成功标志
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.d(TAG,"bug");
+                    Log.d(TAG, "bug");
                 }
             }
         }).start();

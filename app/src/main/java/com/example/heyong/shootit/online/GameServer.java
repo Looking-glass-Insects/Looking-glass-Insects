@@ -1,5 +1,6 @@
 package com.example.heyong.shootit.online;
 
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.IOException;
@@ -9,12 +10,16 @@ import java.net.Socket;
 /**
  */
 public class GameServer {
-    static String TAG = "GameServer";
 
+    static String TAG = "GameServer";
+    private Handler handler;
 
     private GameServer() {
     }
 
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
 
     public static GameServer getInstance() {
         return Factory.server;
@@ -27,6 +32,10 @@ public class GameServer {
     private SendThread serverSendThread;
     private ReceiveThread serverReceiveThread;
 
+
+    public void writeObj(Object o){
+        serverSendThread.write(o);
+    }
     /**
      * 开启服务器
      */
@@ -44,6 +53,7 @@ public class GameServer {
                     serverSendThread.start();
                     serverReceiveThread = new ReceiveThread(client);
                     serverReceiveThread.start();
+                    serverReceiveThread.setHandler(handler);
                     Log.d(TAG, "-->start");
                 } catch (IOException e) {
                     Log.d(TAG, "-->bug");
@@ -62,11 +72,5 @@ public class GameServer {
             serverSendThread.close();
         Log.d(TAG, "-->close");
     }
-
-
-
-
-
-
 
 }

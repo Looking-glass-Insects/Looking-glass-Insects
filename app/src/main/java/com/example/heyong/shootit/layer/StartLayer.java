@@ -12,6 +12,8 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.types.ccColor3B;
 
+import java.util.Random;
+
 /**
  * 初始界面
  */
@@ -59,8 +61,31 @@ public class StartLayer extends BaseLayer {
             setupGameLayer();
         } else if (Util.isClicke(event, this, this.getChildByTag(TAG_START_ONLINE_SERVER))) {
             this.handler.sendEmptyMessage(TAG_ONLINE_SERVER);
+
+            CCScene scene = CCScene.node();
+            OnlineLayer layer = new OnlineLayer();
+            int i = new Random().nextInt(3);
+
+            scene.addChild(Bg.getBg(i));
+            scene.addChild(layer);
+
+            layer.setHandler(handler);
+            CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
+            CCDirector.sharedDirector().pushScene(transition);
+
         }else if(Util.isClicke(event, this, this.getChildByTag(TAG_START_ONLINE_CLIENT))){
             this.handler.sendEmptyMessage(TAG_ONLINE_CLINET);
+
+            CCScene scene = CCScene.node();
+            OnlineLayer layer = new OnlineLayer();
+
+            int i = new Random().nextInt(3);
+            scene.addChild(Bg.getBg(i));
+            scene.addChild(layer);
+
+            layer.setHandler(handler);
+            CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
+            CCDirector.sharedDirector().pushScene(transition);
         }
         return super.ccTouchesEnded(event);
     }

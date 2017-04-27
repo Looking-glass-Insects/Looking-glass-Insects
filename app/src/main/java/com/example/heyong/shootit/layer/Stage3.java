@@ -3,8 +3,6 @@ package com.example.heyong.shootit.layer;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.MainActivity;
 import com.example.heyong.shootit.R;
-import com.example.heyong.shootit.util.ContinuousTapManager;
-import com.example.heyong.shootit.util.ScoreManager;
 
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
@@ -48,9 +46,7 @@ public class Stage3 extends Stage1 {
     }
 
     private void onGameFinal() {
-        ContinuousTapManager.getInstance().onDestroy();
-        ScoreManager.getInstance().saveHighScore();
-        ScoreManager.getInstance().init();
+        this.finish();
 
     }
 

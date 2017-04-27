@@ -12,6 +12,10 @@ public class SpellCardManager {
     private SpellCardManager() {
     }
 
+    public void init() {
+        this.count = DEFAULT_COUNT;
+    }
+
     public int getCount() {
         return count;
     }

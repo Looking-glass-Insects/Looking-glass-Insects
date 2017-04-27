@@ -35,6 +35,7 @@ public class GameLayer extends BaseLayer {
 
 
     static final String TAG = "GameLayer";
+
     protected List<BaseOrbitController> orbits = new ArrayList<>(10);
 
 
@@ -75,7 +76,6 @@ public class GameLayer extends BaseLayer {
 
     @Override
     public boolean ccTouchesBegan(MotionEvent event) {
-
         float x = event.getX();
         float y = event.getY();
         CGPoint p1 = CGPoint.ccp(x, y);
@@ -86,14 +86,9 @@ public class GameLayer extends BaseLayer {
                 break;
             }
         }
-
         if (Util.isClicke(event,this,spellCardLogo)){
             loadBombEffect();
         }
-
-        //test
-        //loadFreezeEffect();
-        //loadBombEffect();
         return true;
     }
 
@@ -193,5 +188,11 @@ public class GameLayer extends BaseLayer {
         this.addChild(bombEffect, bombEffect.getZ());
     }
 
+    protected void finish(){
+        ContinuousTapManager.getInstance().onDestroy();
+        ScoreManager.getInstance().init();
+        SpellCardManager.getInstance().init();
+        LifeManager.getInstance().init();
+    }
 
 }

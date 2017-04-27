@@ -68,6 +68,9 @@ public class ScoreManager {
         return score;
     }
 
+    /**
+     * 刷新记分板
+     */
     public void init(){
         this.score = 0;
         loadHighScore();

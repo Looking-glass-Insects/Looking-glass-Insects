@@ -27,6 +27,7 @@ public class Stage1 extends GameLayer {
 
 
     public Stage1() {
+        super();
         load();
         MainActivity.getEngine().playSound(getContext(), R.raw.bgm1, true);
     }

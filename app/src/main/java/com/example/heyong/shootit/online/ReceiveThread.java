@@ -1,20 +1,27 @@
 package com.example.heyong.shootit.online;
 
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  *
  */
 
 public class ReceiveThread extends Thread {
-    Socket client;
-    ObjectInputStream ois;
-    boolean isRunning = true;
-    Handler handler;
+
+    static String TAG = "ReceiveThread";
+
+
+    private Socket client;
+    private ObjectInputStream ois;
+    private boolean isRunning = true;
+    private Handler handler;
+    private ConcurrentLinkedDeque workQueue = new ConcurrentLinkedDeque();
 
     public void setHandler(Handler handler) {
         this.handler = handler;
@@ -33,18 +40,56 @@ public class ReceiveThread extends Thread {
 
     @Override
     public void run() {
-        while (isRunning) {
-
-            try {
-                double d = ois.readDouble();
-                if (d == 6.25){
-                    handler.sendEmptyMessage(999);
+        try {
+            /**
+             * 由client向服务器发送已连接标志
+             */
+            Object o = ois.readObject();
+            Log.d(TAG, "-->" + o.getClass().getName());
+            if (o instanceof Integer) {
+                int tag = (int) o;
+                if (tag == SendThread.TAG_ON_CONNECTED) {
+                    if (handler != null) {
+                        handler.sendEmptyMessage(SendThread.TAG_ON_CONNECTED);
+                    }
                 }
+            }
+            /**
+             * 由服务器向client发送游戏开始标志
+             */
+            o = ois.readObject();
+            if (o instanceof Integer) {
+                int tag = (int) o;
+                if (tag == SendThread.TAG_GAME_START) {
+                    if (handler != null) {
+                        handler.sendEmptyMessage (SendThread.TAG_GAME_START );
+                    }
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while (isRunning) {
+            try {
+                Object o = ois.readObject();
+                if (o instanceof NetBean) {
+                    NetBean bean = (NetBean) o;
+                    if (!bean.isRecieved) {
+                        bean.setRecieved(true);
+                        workQueue.add(bean);
+                    }
+                }
+                Log.d(TAG, o.getClass().getName());
+                Log.d(TAG, "workQueue-->" + workQueue.size());
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
             try {
-                sleep(500);
+                sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
