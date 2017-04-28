@@ -47,7 +47,7 @@ public class ContinuousTapManager {
             if (continuousTapTime == MAX_CONTINOUS_TIME) {
                 Log.d(TAG, "sendMessage");
                 if (gameLayer != null)
-                    gameLayer.loadFreezeEffect();
+                    gameLayer.loadFreezeEffect();//调用冰冻效果
                 continuousTapTime = 0;
             }
         } else {

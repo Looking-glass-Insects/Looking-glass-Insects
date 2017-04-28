@@ -11,7 +11,7 @@ import org.cocos2d.types.CGPoint;
 
 public interface IOrbitController extends OnHandleTouchEventListener ,OnClockGetListener{
     /**
-     * @return 该轨道的z坐标值
+     * @return 该轨道的z坐标值，10-20，可以重复
      */
     int getZ();
 

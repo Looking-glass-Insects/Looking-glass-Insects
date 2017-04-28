@@ -51,11 +51,13 @@ public class MainActivity extends Activity {
                 GameServer.getInstance().writeObj(SendThread.TAG_GAME_START);
 
                 OnlineLayer.isConnected = true;
+                OnlineLayer.status = OnlineLayer.STATUS_SERVER;
             } else if (msg.what == SendThread.TAG_GAME_START) {
                 //服务器向client发送开始标志
                 Toast.makeText(MainActivity.this, "已连接", Toast.LENGTH_SHORT).show();
 
                 OnlineLayer.isConnected = true;
+                OnlineLayer.status = OnlineLayer.STATUS_CLIENT;
             }
             return true;
         }
@@ -97,9 +99,10 @@ public class MainActivity extends Activity {
     /**
      * 初始化初始界面
      */
+
     private void setupMainWindow() {
         CCScene scene = CCScene.node();
-        StartLayer layer = new StartLayer();
+        StartLayer layer = StartLayer.getStartLayer();
         scene.addChild(layer);
         layer.setHandler(handler);
         director.runWithScene(scene);

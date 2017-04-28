@@ -1,9 +1,10 @@
 package com.example.heyong.shootit.online;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  */
 
 public class SendThread extends Thread {
-
+    static String TAG = "SendThread";
     /**
      * client 以连接
      */
@@ -40,21 +41,41 @@ public class SendThread extends Thread {
     @Override
     public void run() {
         while (isRunning) {
-            Iterator iterator = workQueue.iterator();
-            while (iterator.hasNext()) {
-                Object o = iterator.next();
+//            Iterator iterator = workQueue.iterator();
+//            synchronized (iterator){
+//                while (iterator.hasNext()) {
+//                    Object o = iterator.next();
+//                    try {
+//                        oos.writeObject(o);
+//                        Log.d(TAG, "workQueue-->" + workQueue.size());
+//                        iterator.remove();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+            if (workQueue.size() != 0){
+                Object o = workQueue.remove();
                 try {
                     oos.writeObject(o);
+                    oos.flush();
+                    Log.d(TAG, "workQueue-->" + workQueue.size());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
+
         }
     }
 
 
     public void write(Object o) {
-        workQueue.add(o);
+        synchronized (workQueue){
+            workQueue.add(o);
+        }
+        Log.d(TAG, "write-->" + o.getClass().getName());
     }
 
     public void close() {

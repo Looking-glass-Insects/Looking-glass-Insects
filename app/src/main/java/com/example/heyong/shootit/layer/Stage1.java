@@ -40,7 +40,7 @@ public class Stage1 extends GameLayer {
         this.addOrbits(controller);
         this.addOrbits(controller2);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5; i++) {
             controller.addItem(Config.WINDOW_HEIGHT + i * 64);
             controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
         }

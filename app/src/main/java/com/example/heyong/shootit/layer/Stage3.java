@@ -31,10 +31,8 @@ public class Stage3 extends Stage1 {
 
     @Override
     protected void nextStage() {
-        MainActivity.getEngine().realesAllSounds();
         CCScene scene = CCScene.node();
-        StartLayer startLayer = new StartLayer();
-        scene.addChild(startLayer);
+        scene.addChild(StartLayer.getStartLayer());
         CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
         CCDirector.sharedDirector().replaceScene(transition);
         onGameFinal();
@@ -47,7 +45,7 @@ public class Stage3 extends Stage1 {
 
     private void onGameFinal() {
         this.finish();
-
+        MainActivity.getEngine().pauseSound();
     }
 
 }

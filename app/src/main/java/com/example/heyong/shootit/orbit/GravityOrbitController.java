@@ -57,7 +57,7 @@ public class GravityOrbitController extends BaseOrbitController {
 
     @Override
     public int getZ() {
-        return 2;
+        return 11;
     }
 
     @Override
@@ -73,11 +73,6 @@ public class GravityOrbitController extends BaseOrbitController {
             }
         }
         ContinuousTapManager.getInstance().onGetTap(flag);
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
     }
 
     @Override
@@ -106,16 +101,11 @@ public class GravityOrbitController extends BaseOrbitController {
                 continue;
             CGPoint point = item.getPosition();
             if (point.y < -32) {
-                //item.speedY = 1.0f;
-                //item.setPosition(start_x, Config.WINDOW_HEIGHT + 32);
-                //iterator.remove();
-                //synchronized (item){
                 if (item.getVisible()) {
                     LifeManager.getInstance().subLife(1);
                     item.setVisible(false);
-
+                    iterator.remove();
                 }
-                //}
                 continue;
             }
             item.speedY += g;

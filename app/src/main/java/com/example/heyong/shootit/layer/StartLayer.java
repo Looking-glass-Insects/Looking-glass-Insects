@@ -12,8 +12,6 @@ import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.types.ccColor3B;
 
-import java.util.Random;
-
 /**
  * 初始界面
  */
@@ -28,9 +26,17 @@ public class StartLayer extends BaseLayer {
     public static final int TAG_ONLINE_SERVER = 233;
     public static final int TAG_ONLINE_CLINET = 234;
 
-    public StartLayer() {
+    private StartLayer() {
         this.setIsTouchEnabled(true);
         setupStrings();
+    }
+
+    public static StartLayer getStartLayer() {
+        return Factory.startLayer;
+    }
+
+    private static class Factory {
+        private static StartLayer startLayer = new StartLayer();
     }
 
     private void setupStrings() {
@@ -64,23 +70,23 @@ public class StartLayer extends BaseLayer {
 
             CCScene scene = CCScene.node();
             OnlineLayer layer = new OnlineLayer();
-            int i = new Random().nextInt(3);
 
-            scene.addChild(Bg.getBg(i));
+
+            scene.addChild(Bg.getBg(0));
             scene.addChild(layer);
 
             layer.setHandler(handler);
             CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
             CCDirector.sharedDirector().pushScene(transition);
 
-        }else if(Util.isClicke(event, this, this.getChildByTag(TAG_START_ONLINE_CLIENT))){
+        } else if (Util.isClicke(event, this, this.getChildByTag(TAG_START_ONLINE_CLIENT))) {
             this.handler.sendEmptyMessage(TAG_ONLINE_CLINET);
 
             CCScene scene = CCScene.node();
             OnlineLayer layer = new OnlineLayer();
 
-            int i = new Random().nextInt(3);
-            scene.addChild(Bg.getBg(i));
+           ;
+            scene.addChild(Bg.getBg(0));
             scene.addChild(layer);
 
             layer.setHandler(handler);

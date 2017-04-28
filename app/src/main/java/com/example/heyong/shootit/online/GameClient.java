@@ -38,6 +38,17 @@ public class GameClient {
         private static GameClient client = new GameClient();
     }
 
+
+    public void writeObj(Object o) {
+        clientSendThread.write(o);
+    }
+
+    public Object readObj() {
+        return clientReceiveThread.readObj();
+    }
+
+
+
     public void connect(final int port) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         DhcpInfo info = wifiManager.getDhcpInfo();//得到主机IP地址

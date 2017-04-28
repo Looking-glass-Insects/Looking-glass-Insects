@@ -15,10 +15,15 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
 
 
     protected CCSprite freezeEffort = null;
+
     public float speedY = 2f;
-    public float speedX = 0f;
+    public float speedX = 2f;
+
     protected float oldSpeedX = 0;
     protected float oldSpeedY = 0;
+
+    protected int id;
+
 
     protected int radius = 0;
 
@@ -89,4 +94,11 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

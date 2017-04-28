@@ -3,34 +3,41 @@ package com.example.heyong.shootit.online;
 import java.io.Serializable;
 
 /**
- *
+ * 网络数据交换
  */
 
 public class NetBean implements Serializable {
-    boolean isRecieved = false;
-    String data = "";
+
+    boolean isReceived = false;
+    String bulletClass;
+    int count;
+
+
 
     public NetBean() {
     }
 
-    public NetBean(boolean isRecieved, String data) {
-        this.isRecieved = isRecieved;
-        this.data = data;
+    public boolean isReceived() {
+        return isReceived;
     }
 
-    public boolean isRecieved() {
-        return isRecieved;
+    public void setReceived(boolean received) {
+        isReceived = received;
     }
 
-    public void setRecieved(boolean recieved) {
-        isRecieved = recieved;
+    public int getCount() {
+        return count;
     }
 
-    public String getData() {
-        return data;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public String getBulletClass() {
+        return bulletClass;
+    }
+
+    public void setBulletClass(String bulletClass) {
+        this.bulletClass = bulletClass;
     }
 }

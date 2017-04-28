@@ -37,32 +37,33 @@ public class ReceiveThread extends Thread {
         }
     }
 
+    public Object readObj() {
+        Object o = null;
+        if (workQueue.size() != 0) {
+            o = workQueue.remove();
+            Log.d(TAG, "readObj-->" + o.getClass().getName());
+            assert o != null;
+        }
+        return o;
+    }
+
 
     @Override
     public void run() {
         try {
             /**
-             * 由client向服务器发送已连接标志
+             * 游戏开始标志
              */
             Object o = ois.readObject();
-            Log.d(TAG, "-->" + o.getClass().getName());
             if (o instanceof Integer) {
                 int tag = (int) o;
                 if (tag == SendThread.TAG_ON_CONNECTED) {
                     if (handler != null) {
                         handler.sendEmptyMessage(SendThread.TAG_ON_CONNECTED);
                     }
-                }
-            }
-            /**
-             * 由服务器向client发送游戏开始标志
-             */
-            o = ois.readObject();
-            if (o instanceof Integer) {
-                int tag = (int) o;
-                if (tag == SendThread.TAG_GAME_START) {
+                }else if (tag == SendThread.TAG_GAME_START){
                     if (handler != null) {
-                        handler.sendEmptyMessage (SendThread.TAG_GAME_START );
+                        handler.sendEmptyMessage(SendThread.TAG_GAME_START);
                     }
                 }
             }
@@ -76,8 +77,8 @@ public class ReceiveThread extends Thread {
                 Object o = ois.readObject();
                 if (o instanceof NetBean) {
                     NetBean bean = (NetBean) o;
-                    if (!bean.isRecieved) {
-                        bean.setRecieved(true);
+                    if (!bean.isReceived) {
+                        bean.setReceived(true);
                         workQueue.add(bean);
                     }
                 }
@@ -86,11 +87,6 @@ public class ReceiveThread extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

@@ -20,7 +20,7 @@ public abstract class BaseOrbitController implements IOrbitController, OnSpellCa
 
 
     /**
-     * 添加item
+     * 添加item,you should always call it when you want to add item to this orbit.
      *
      * @param item
      */
@@ -50,6 +50,10 @@ public abstract class BaseOrbitController implements IOrbitController, OnSpellCa
         return parent;
     }
 
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
 
     /**
      * 销毁该轨道，将item从父容器移除

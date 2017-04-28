@@ -33,9 +33,14 @@ public class GameServer {
     private ReceiveThread serverReceiveThread;
 
 
-    public void writeObj(Object o){
+    public void writeObj(Object o) {
         serverSendThread.write(o);
     }
+
+    public Object readObj() {
+        return serverReceiveThread.readObj();
+    }
+
     /**
      * 开启服务器
      */

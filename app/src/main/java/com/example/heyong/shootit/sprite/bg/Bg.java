@@ -18,14 +18,14 @@ public abstract class Bg extends CCLayer implements OnClockGetListener {
 
     public static Bg getBg(int stage) {
         CCLayer bg = CCLayer.node();
-        if (stage == 1) {
+        if (stage == 0) {
             return new Bg1();
-        } else if (stage == 2) {
+        } else if (stage == 1) {
             return new Bg2();
-        } else if (stage == 3) {
+        } else if (stage == 2) {
             return new Bg3();
         }
-        throw new IllegalStateException("No such bg");
+        throw new IllegalStateException("No such bg" + stage);
     }
 
 
