@@ -3,6 +3,7 @@ package com.example.heyong.shootit.layer;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.MainActivity;
 import com.example.heyong.shootit.R;
+import com.example.heyong.shootit.orbit.GravityOrbitController;
 import com.example.heyong.shootit.sprite.bg.Bg;
 
 import org.cocos2d.layers.CCScene;
@@ -18,7 +19,7 @@ import org.cocos2d.types.ccColor3B;
 public class Stage2 extends Stage1 {
 
     public Stage2() {
-        MainActivity.getEngine().playSound(getContext(), R.raw.bgm2, true);
+        super();
     }
 
 
@@ -32,7 +33,20 @@ public class Stage2 extends Stage1 {
 
 
     protected void load() {
+        MainActivity.getEngine().playSound(getContext(), R.raw.bgm2, true);
+        MainActivity.getEngine().playSound(getContext(), R.raw.bgm1, true);
 
+        GravityOrbitController controller = new GravityOrbitController(Config.WINDOW_WIDTH / 3, 128);
+        GravityOrbitController controller2 = new GravityOrbitController(Config.WINDOW_WIDTH * 2 / 3, 128);
+
+
+        this.addOrbits(controller);
+        this.addOrbits(controller2);
+
+        for (int i = 0; i < 5; i++) {
+            controller.addItem(Config.WINDOW_HEIGHT + i * 64);
+            controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
+        }
     }
 
 

@@ -83,7 +83,6 @@ public class GameLayer extends BaseLayer {
         for (BaseOrbitController orbit : orbits) {
             if (orbit.isTouched(p2)) {
                 orbit.onHandleTouchEvent(p2);
-                break;
             }
         }
         if (Util.isClicke(event,this,spellCardLogo)){
