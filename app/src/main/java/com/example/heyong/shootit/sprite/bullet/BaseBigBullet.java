@@ -27,6 +27,17 @@ public class BaseBigBullet extends BaseItem {
         setTextureRect(CGRect.make(color, 192, 64, 64), false);
     }
 
+    /**
+     * 随机颜色
+     */
+    public BaseBigBullet() {
+        super(Config.Bullet2);
+        this.radius = 24;
+        int i = new Random().nextInt(4);
+        setTextureRect(CGRect.make(64*i, 192, 64, 64), false);
+    }
+
+
 //    @Override
 //    public boolean isTouched(CGPoint point) {
 //        float dx = point.x - this.position_.x;

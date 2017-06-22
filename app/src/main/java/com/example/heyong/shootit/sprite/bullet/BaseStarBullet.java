@@ -32,6 +32,13 @@ public class BaseStarBullet extends BaseItem {
         setTextureRect(CGRect.make(color, 0, 32, 32), false);
     }
 
+    public BaseStarBullet() {
+        super(Config.Bullet2);
+        this.radius = 12;
+        int i = new Random().nextInt(7);
+        setTextureRect(CGRect.make(i*32, 64, 32, 32), false);
+    }
+
     @Override
     protected void initFreezeEffort() {
         freezeEffort = new CCSprite(Config.Ice);

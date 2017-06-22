@@ -33,6 +33,12 @@ public  class BaseLightBullet extends BaseItem {
         setTextureRect(CGRect.make(color, 208, 32, 32), false);
     }
 
+    public BaseLightBullet( ) {
+        super(Config.Bullet1);
+        this.radius = 10;
+        int i = new Random().nextInt(7);
+        setTextureRect(CGRect.make(i*32, 208, 32, 32), false);
+    }
 //    @Override
 //    public boolean isTouched(CGPoint point) {
 //        float dx = point.x - this.position_.x;

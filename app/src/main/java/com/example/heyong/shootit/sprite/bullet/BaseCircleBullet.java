@@ -30,6 +30,14 @@ public class BaseCircleBullet extends BaseItem {
         setTextureRect(CGRect.make(color, 32, 32, 32), false);
     }
 
+    public BaseCircleBullet() {
+        super(Config.Bullet2);
+        this.radius = 15;
+        int i = new Random().nextInt(7);
+        setTextureRect(CGRect.make(i*32, 32, 32, 32), false);
+    }
+
+
 //    @Override
 //    public boolean isTouched(CGPoint point) {
 //        float dx = point.x - this.position_.x;

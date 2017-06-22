@@ -20,7 +20,6 @@ import java.util.Random;
 
 /**
  * 带有小尾巴的弹， bullet3 第5，6行
- *
  */
 
 public class BaseTailBullet extends BaseItem {
@@ -31,6 +30,21 @@ public class BaseTailBullet extends BaseItem {
     public BaseTailBullet(int color) {
         super(Config.Bullet3);
         this.radius = 10;
+        initByColor(color);
+    }
+
+    public BaseTailBullet() {
+        super(Config.Bullet3);
+        this.radius = 10;
+        int i = new Random().nextInt(2);
+        if (i == 0) {
+            initByColor(RED);
+        } else {
+            initByColor(PURPLE);
+        }
+    }
+
+    public void initByColor(int color) {
         setTextureRect(CGRect.make(0, color, 32, 32), false);
         CCTexture2D texture = CCTextureCache.sharedTextureCache().addImage(Config.Bullet3);
         ArrayList<CCSpriteFrame> frames = new ArrayList<>(4);
@@ -48,8 +62,6 @@ public class BaseTailBullet extends BaseItem {
         this.runAction(action);
     }
 
-
-
     @Override
     public void onHandleTouchEvent(CGPoint point) {
         this.setVisible(false);
@@ -60,7 +72,7 @@ public class BaseTailBullet extends BaseItem {
     protected void initFreezeEffort() {
         freezeEffort = new CCSprite(Config.Ice);
         freezeEffort.setOpacity(192);
-        freezeEffort.setPosition(16,16);
+        freezeEffort.setPosition(16, 16);
         freezeEffort.setTextureRect(CGRect.make(0, 0, 64, 64), false);
         freezeEffort.setRotation(new Random().nextInt(360));
         freezeEffort.setVisible(false);

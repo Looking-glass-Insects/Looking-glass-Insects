@@ -33,8 +33,18 @@ public  class BaseMusicBullet extends BaseItem {
     public BaseMusicBullet(int color) {
         super(Config.Bullet5);
         this.radius = 5;
-        CCTexture2D texture = CCTextureCache.sharedTextureCache().addImage(Config.Bullet5);
+        initByColor(color);
+    }
 
+    public BaseMusicBullet() {
+        super(Config.Bullet5);
+        this.radius = 5;
+        int i = new Random().nextInt(4);
+        initByColor(i);
+    }
+
+    public void initByColor(int color){
+        CCTexture2D texture = CCTextureCache.sharedTextureCache().addImage(Config.Bullet5);
         CCSpriteFrame frame0 = null;
         CCSpriteFrame frame1 = null;
         CCSpriteFrame frame2 = null;

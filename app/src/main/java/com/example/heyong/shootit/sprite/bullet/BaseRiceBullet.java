@@ -34,6 +34,13 @@ public  class BaseRiceBullet extends BaseItem {
         setTextureRect(CGRect.make(color, 128, 32, 32), false);
     }
 
+    public BaseRiceBullet() {
+        super(Config.Bullet2);
+        this.radius = 5;
+        int i = new Random().nextInt(7);
+        setTextureRect(CGRect.make(i*32, 64, 32, 32), false);
+    }
+
 //    @Override
 //    public boolean isTouched(CGPoint point) {
 //        float dx = point.x - this.position_.x;

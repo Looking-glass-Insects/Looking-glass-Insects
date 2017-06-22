@@ -31,6 +31,12 @@ public  class BaseLittlePointBullet extends BaseItem {
         this.radius = 5;
         setTextureRect(CGRect.make(color, 64, 32, 32), false);
     }
+    public BaseLittlePointBullet( ) {
+        super(Config.Bullet3);
+        this.radius = 5;
+        int i = new Random().nextInt(7);
+        setTextureRect(CGRect.make(i*32, 64, 32, 32), false);
+    }
 
 //    @Override
 //    public boolean isTouched(CGPoint point) {

@@ -14,7 +14,7 @@ import java.util.Random;
  * 方块弹，bullet1 8行
  */
 
-public  class BaseCubeBullet extends BaseItem {
+public class BaseCubeBullet extends BaseItem {
     public static final int GRAY = 0;
     public static final int RED = 16;
     public static final int PINK = 48;
@@ -22,12 +22,17 @@ public  class BaseCubeBullet extends BaseItem {
     public static final int GREEN = 128 + 16 << 2;
 
 
-
-
     public BaseCubeBullet(int color) {
         super(Config.Bullet1);
         this.radius = 5;
         setTextureRect(CGRect.make(color, 112, 16, 16), false);
+    }
+
+    public BaseCubeBullet() {
+        super(Config.Bullet1);
+        this.radius = 5;
+        int i = new Random().nextInt(16);
+        setTextureRect(CGRect.make(i * 16, 112, 16, 16), false);
     }
 
 
@@ -48,7 +53,7 @@ public  class BaseCubeBullet extends BaseItem {
     protected void initFreezeEffort() {
         freezeEffort = new CCSprite(Config.Ice);
         freezeEffort.setOpacity(192);
-        freezeEffort.setPosition(8,8);
+        freezeEffort.setPosition(8, 8);
         freezeEffort.setTextureRect(CGRect.make(0, 128, 32, 32), false);
         freezeEffort.setRotation(new Random().nextInt(360));
         freezeEffort.setVisible(false);
