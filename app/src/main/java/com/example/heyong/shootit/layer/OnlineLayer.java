@@ -25,8 +25,8 @@ public class OnlineLayer extends GameLayer {
 
     public static boolean isConnected = false;
     private static final int DEFAULT_CLOCK_COUNT = 180;
-    private int clockCount = DEFAULT_CLOCK_COUNT;
 
+    private int clockCount = DEFAULT_CLOCK_COUNT;
 
     public static final int STATUS_CLIENT = 3242;
     public static final int STATUS_SERVER = 322;
@@ -72,7 +72,6 @@ public class OnlineLayer extends GameLayer {
         if (clockCount <= 0) {
             onExchangeInfo();
             clockCount = DEFAULT_CLOCK_COUNT;
-
         }
     }
 

@@ -65,7 +65,7 @@ public class GameLayer extends BaseLayer {
         if (bombEffect != null)
             bombEffect.onGetClock();
         loadScore();
-        loadLifeAndSpell();
+        loadLifeAndBomb();
     }
 
     public void addOrbits(BaseOrbitController orbitController) {
@@ -176,11 +176,11 @@ public class GameLayer extends BaseLayer {
         this.addChild(lifeLogo,2);
     }
 
-    public void loadLifeAndSpell() {
+    public void loadLifeAndBomb() {
         int life = LifeManager.getInstance().getLife();
-        lifeLabel.setString("生命值：" + life);
+        lifeLabel.setString("player：" + life);
         int count = SpellCardManager.getInstance().getCount();
-        spellCardLabel.setString("SpellCard：" + count);
+        spellCardLabel.setString("Bomb：" + count);
     }
 
     protected void prepareBombEffect() {

@@ -85,7 +85,6 @@ public class StartLayer extends BaseLayer {
             CCScene scene = CCScene.node();
             OnlineLayer layer = new OnlineLayer();
 
-           ;
             scene.addChild(Bg.getBg(0));
             scene.addChild(layer);
 
@@ -102,7 +101,7 @@ public class StartLayer extends BaseLayer {
     private void setupGameLayer() {
         CCScene scene = CCScene.node();
         Stage1 stage1 = new Stage1();
-        scene.addChild(Bg.getBg(1));
+        scene.addChild(Bg.getBg(0));
         scene.addChild(stage1);
         CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
         CCDirector.sharedDirector().replaceScene(transition);

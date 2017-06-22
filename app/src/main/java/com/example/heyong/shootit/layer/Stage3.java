@@ -20,7 +20,7 @@ public class Stage3 extends Stage1 {
         MainActivity.getEngine().playSound(getContext(), R.raw.bgm3, true);
     }
 
-    @Override
+
     protected void showClear() {
         CCLabel singleStart = CCLabel.makeLabel("返回主界面", "Roboto_Thin.ttf", 24);//创建字体，中间参数为ttf文件，20为字体大小
         singleStart.setColor(ccColor3B.ccc3(255, 228, 255));//初始值
@@ -29,7 +29,7 @@ public class Stage3 extends Stage1 {
         this.addChild(singleStart, 99);
     }
 
-    @Override
+
     protected void nextStage() {
         CCScene scene = CCScene.node();
         scene.addChild(StartLayer.getStartLayer());
@@ -38,7 +38,7 @@ public class Stage3 extends Stage1 {
         onGameFinal();
     }
 
-    @Override
+
     protected void load() {
 
     }

@@ -29,10 +29,11 @@ public class Stage1 extends GameLayer {
     public Stage1() {
         super();
         load();
-        MainActivity.getEngine().playSound(getContext(), R.raw.bgm1, true);
     }
 
     protected void load() {
+        MainActivity.getEngine().playSound(getContext(), R.raw.bgm1, true);
+
         GravityOrbitController controller = new GravityOrbitController(Config.WINDOW_WIDTH / 3, 128);
         GravityOrbitController controller2 = new GravityOrbitController(Config.WINDOW_WIDTH * 2 / 3, 128);
 
@@ -74,7 +75,7 @@ public class Stage1 extends GameLayer {
     protected void nextStage() {
         CCScene scene = CCScene.node();
         Stage2 gameLayer = new Stage2();
-        scene.addChild(Bg.getBg(2));
+        scene.addChild(Bg.getBg(1));
         scene.addChild(gameLayer);
         CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
         CCDirector.sharedDirector().replaceScene(transition);
