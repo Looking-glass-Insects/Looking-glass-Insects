@@ -26,7 +26,7 @@ public class CircleOrbit extends BaseOrbitController {
     private float startY = Config.WINDOW_HEIGHT / 2;
     private int R = 100;
     private final int DELAY = 360;
-    private int deadCount = 0;
+
 
     @Override
     public int getZ() {
@@ -39,7 +39,6 @@ public class CircleOrbit extends BaseOrbitController {
             BaseItem item = items.get(n);
             if (item.isTouched(point)) {
                 item.onHandleTouchEvent(point);
-                deadCount++;
                 break;
             }
         }
@@ -55,7 +54,6 @@ public class CircleOrbit extends BaseOrbitController {
                 if (item.getVisible()){
                     LifeManager.getInstance().subLife(1);
                     item.setVisible(false);
-                    deadCount++;
                 }
             }
             item.onGetClock();
@@ -95,6 +93,11 @@ public class CircleOrbit extends BaseOrbitController {
 
     @Override
     public boolean canBeDestroyed() {
+        int deadCount =0;
+        for(int i=0;i<getItemCount();i++){
+            if (!items.get(i).getVisible())
+                deadCount++;
+        }
         return i > LONG_PERIOD && deadCount >= getItemCount();
     }
 }
