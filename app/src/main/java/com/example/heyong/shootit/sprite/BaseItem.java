@@ -16,16 +16,19 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
 
     protected CCSprite freezeEffort = null;
 
-    public float speedY = 2f;
-    public float speedX = 2f;
+    public float speedY = 0;
+    public float speedX = 0;
 
-    protected float oldSpeedX = 0;
-    protected float oldSpeedY = 0;
+    public float oldSpeedX = 0;
+    public float oldSpeedY = 0;
 
     protected int id;
 
 
     protected int radius = 0;
+
+
+
 
     public BaseItem(String file) {
         super(file);
@@ -36,6 +39,26 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
     protected void initFreezeEffort() {
         if (freezeEffort != null)
             this.addChild(freezeEffort);
+    }
+    //计时器
+    public int timer;
+    //复写方法
+    public void f(){
+
+    }
+
+
+    public void replaceSpeed(float speedX,float speedY){
+        this.oldSpeedY = this.speedY;
+        this.oldSpeedX = this.speedX;
+        this.speedX = speedX;
+        this.speedY = speedY;
+    }
+
+
+    public void resumeSpeed(){
+        this.speedX = this.oldSpeedX;
+        this.speedY = this.oldSpeedY;
     }
 
     /**
@@ -59,6 +82,8 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
         if (freezeLastTime-- <= 0) {
             setFrozen(false);
         }
+        CGPoint point = getPosition();
+        setPosition(point.x + speedX, point.y + speedY);
     }
 
     public void loadFrozenEffert() {

@@ -26,8 +26,6 @@ public class GravityOrbitController extends BaseOrbitController {
      */
     protected float width;
 
-    protected float g = 0;//重力加速度
-
     protected int deadItemCount = 0;
 
     public GravityOrbitController(float start_x, float width) {
@@ -50,6 +48,7 @@ public class GravityOrbitController extends BaseOrbitController {
                 }
             }
         };
+        b.speedY = -0.2f;
         b.setPosition(start_x, y);
         addItem(b);
     }
@@ -108,8 +107,7 @@ public class GravityOrbitController extends BaseOrbitController {
                 }
                 continue;
             }
-            item.speedY += g;
-            item.setPosition(start_x, point.y - item.speedY);
+            item.onGetClock();
         }
     }
 

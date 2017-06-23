@@ -44,7 +44,7 @@ public class Stage2 extends Stage1 {
         this.addOrbits(controller2);
 
         for (int i = 0; i < 5; i++) {
-            controller.addItem(Config.WINDOW_HEIGHT + i * 64);
+            controller.addItem(Config.WINDOW_HEIGHT -i * 64);
             controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
         }
     }

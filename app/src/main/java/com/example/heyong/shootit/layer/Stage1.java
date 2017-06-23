@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.MainActivity;
 import com.example.heyong.shootit.R;
-import com.example.heyong.shootit.orbit.GravityOrbitController;
+import com.example.heyong.shootit.orbit.CircleOrbit;
 import com.example.heyong.shootit.sprite.bg.Bg;
 import com.example.heyong.shootit.util.ContinuousTapManager;
 import com.example.heyong.shootit.util.Util;
@@ -33,18 +33,8 @@ public class Stage1 extends GameLayer {
 
     protected void load() {
         MainActivity.getEngine().playSound(getContext(), R.raw.bgm1, true);
-
-        GravityOrbitController controller = new GravityOrbitController(Config.WINDOW_WIDTH / 3, 128);
-        GravityOrbitController controller2 = new GravityOrbitController(Config.WINDOW_WIDTH * 2 / 3, 128);
-
-
+        CircleOrbit controller = new CircleOrbit();
         this.addOrbits(controller);
-        this.addOrbits(controller2);
-
-        for (int i = 0; i < 5; i++) {
-            controller.addItem(Config.WINDOW_HEIGHT + i * 64);
-            controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
-        }
     }
 
     /**
