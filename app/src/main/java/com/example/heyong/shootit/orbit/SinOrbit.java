@@ -16,11 +16,23 @@ import java.util.Iterator;
 
 public class SinOrbit extends BaseOrbitController {
 
+    private float startX = Config.WINDOW_WIDTH / 2;
+    private float startY = Config.WINDOW_HEIGHT / 2;
     private int i = 0;
     private float speed = 5.0f / 20;
     private final int INTERVAL = 5;//角度间隔
     private int flag = 1;
     private final int LONG_PERIOD = 3600;
+
+
+    public SinOrbit() {
+    }
+
+
+    public SinOrbit(float startX, float startY) {
+        this.startX = startX;
+        this.startY = startY;
+    }
 
     @Override
     public void onGetClock() {
@@ -39,7 +51,7 @@ public class SinOrbit extends BaseOrbitController {
         i++;
         if (i % 20 == 0) {
             BaseCircleBullet b = new BaseCircleBullet();
-            b.setPosition(Config.WINDOW_WIDTH / 2, Config.WINDOW_HEIGHT / 2);
+            b.setPosition(startX, startY);
             int count = items.size();
             b.speedX = (float) (flag * speed * Math.sin(INTERVAL * count));
             b.speedY = (float) (speed * Math.cos(INTERVAL * count));

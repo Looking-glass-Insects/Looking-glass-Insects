@@ -3,6 +3,8 @@ package com.example.heyong.shootit.layer;
 import com.example.heyong.shootit.Config;
 import com.example.heyong.shootit.MainActivity;
 import com.example.heyong.shootit.R;
+import com.example.heyong.shootit.orbit.CircleOrbit;
+import com.example.heyong.shootit.orbit.RotaryCircleOrbit;
 
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
@@ -40,7 +42,19 @@ public class Stage3 extends Stage1 {
 
 
     protected void load() {
+        RotaryCircleOrbit a=new RotaryCircleOrbit(Config.WINDOW_WIDTH/2,b1*2,0.0f,-b1/180,1.5f,0,3,4,1);
+        this.addOrbits(a);
+        for(int i=0;i<8;i++){
+            a.addItem1(Config.WINDOW_WIDTH/2,b1*2,(float)(1.5f*Math.cos(pi/4*i)),(float)(1.5f*Math.sin(pi/4*i)),i);
+        }
 
+//        RotaryCircleOrbit b=new RotaryCircleOrbit(Config.WINDOW_WIDTH/2,b1*2,0.0f,-b1/360,1.0f,0,3,4,1);
+//        this.addOrbits(b);
+//        for(int i=0;i<8;i++){
+//            b.addItem1(Config.WINDOW_WIDTH/2,b1*2,(float)(1.0f*Math.cos(pi/4*i)),(float)(1.0f*Math.sin(pi/4*i)),i);
+//        }
+
+        this.addOrbits(new CircleOrbit());
     }
 
     private void onGameFinal() {

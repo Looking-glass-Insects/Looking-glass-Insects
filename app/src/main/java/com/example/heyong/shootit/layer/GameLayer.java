@@ -14,15 +14,19 @@ import com.example.heyong.shootit.util.ScoreManager;
 import com.example.heyong.shootit.util.SpellCardManager;
 import com.example.heyong.shootit.util.Util;
 
+import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCLabel;
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.ccColor3B;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 主游戏界面
@@ -33,6 +37,7 @@ public class GameLayer extends BaseLayer {
 
     public static final int TAG_GET_FREEZE = 46;
 
+    protected boolean gameOver = false;
 
     static final String TAG = "GameLayer";
 
@@ -43,6 +48,7 @@ public class GameLayer extends BaseLayer {
         this.setIsTouchEnabled(true);
         this.scheduleUpdate();
         ContinuousTapManager.getInstance().registerGameLayer(this);
+        LifeManager.getInstance().registerGameLayer(this);
         initScore();
         initLifeAndSpell();
     }
@@ -73,9 +79,28 @@ public class GameLayer extends BaseLayer {
         orbitController.setParent(this);
     }
 
+    public void addOrbits(final BaseOrbitController orbitController,long delayTime){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                orbitController.setParent(GameLayer.this);
+                orbits.add(orbitController);
+            }
+        },delayTime);
+    }
 
     @Override
     public boolean ccTouchesBegan(MotionEvent event) {
+        if (gameOver) {
+            if (Util.isClicke(event, this, gameOverLabel)) {
+                CCScene scene = CCScene.node();
+                scene.addChild(StartLayer.getStartLayer());
+                CCFadeTransition transition = CCFadeTransition.transition(0.5F, scene);
+                CCDirector.sharedDirector().replaceScene(transition);
+                this.finish();
+            }
+        }
         float x = event.getX();
         float y = event.getY();
         CGPoint p1 = CGPoint.ccp(x, y);
@@ -85,9 +110,10 @@ public class GameLayer extends BaseLayer {
                 orbit.onHandleTouchEvent(p2);
             }
         }
-        if (Util.isClicke(event,this,spellCardLogo)){
+        if (Util.isClicke(event, this, spellCardLogo)) {
             loadBombEffect();
         }
+
         return true;
     }
 
@@ -107,7 +133,7 @@ public class GameLayer extends BaseLayer {
     protected BombEffect bombEffect;
 
     protected void loadBombEffect() {
-        if (!SpellCardManager.getInstance().requireSpellCard()){
+        if (!SpellCardManager.getInstance().requireSpellCard()) {
             return;
         }
         if (bombEffect == null) {
@@ -139,6 +165,19 @@ public class GameLayer extends BaseLayer {
         this.addChild(currScoreLabel, 2);
     }
 
+    /**
+     *
+     */
+    protected CCLabel gameOverLabel;
+
+    public void gameOver() {
+        gameOverLabel = CCLabel.makeLabel("游戏结束，点击返回", "Roboto_Thin.ttf", 24);
+        gameOverLabel.setColor(ccColor3B.ccc3(255, 228, 255));//初始值
+        gameOverLabel.setPosition(Config.WINDOW_WIDTH / 2, Config.WINDOW_HEIGHT / 2);
+        this.addChild(gameOverLabel, 99);
+        gameOver = true;
+    }
+
     public void loadScore() {
         ScoreManager manager = ScoreManager.getInstance();
         long highScore = manager.getHighScore();
@@ -153,6 +192,7 @@ public class GameLayer extends BaseLayer {
     protected CCLabel lifeLabel;
     protected CCLabel spellCardLabel;
     protected CCSprite spellCardLogo;
+
     protected void initLifeAndSpell() {
         lifeLabel = CCLabel.makeLabel("生命值：", "Roboto_Thin.ttf", textSize);//创建字体，中间参数为ttf文件，20为字体大小
         lifeLabel.setColor(ccColor3B.ccc3(255, 228, 255));//初始值
@@ -164,15 +204,15 @@ public class GameLayer extends BaseLayer {
         spellCardLabel.setPosition(Config.WINDOW_WIDTH - 48, 10);
 
         spellCardLogo = new SpellItem();
-        spellCardLogo.setPosition(Config.WINDOW_WIDTH - 48,30);
+        spellCardLogo.setPosition(Config.WINDOW_WIDTH - 48, 30);
         spellCardLogo.setScale(0.5);
         CCSprite lifeLogo = new LifeItem();
-        lifeLogo.setPosition(Config.WINDOW_WIDTH - 96,30);
+        lifeLogo.setPosition(Config.WINDOW_WIDTH - 96, 30);
         lifeLogo.setScale(0.5);
         this.addChild(lifeLabel, 2);
         this.addChild(spellCardLabel, 2);
-        this.addChild(spellCardLogo,2);
-        this.addChild(lifeLogo,2);
+        this.addChild(spellCardLogo, 2);
+        this.addChild(lifeLogo, 2);
     }
 
     public void loadLifeAndBomb() {
@@ -187,7 +227,7 @@ public class GameLayer extends BaseLayer {
         this.addChild(bombEffect, bombEffect.getZ());
     }
 
-    protected void finish(){
+    protected void finish() {
         ContinuousTapManager.getInstance().onDestroy();
         ScoreManager.getInstance().init();
         SpellCardManager.getInstance().init();

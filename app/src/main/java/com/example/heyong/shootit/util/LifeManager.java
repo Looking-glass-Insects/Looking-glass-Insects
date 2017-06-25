@@ -1,5 +1,7 @@
 package com.example.heyong.shootit.util;
 
+import com.example.heyong.shootit.layer.GameLayer;
+
 /**
  *
  */
@@ -8,6 +10,7 @@ public class LifeManager {
     public static final int INIT_LIFE = 10;
 
     private int life;
+    private GameLayer layer;
 
 
     private LifeManager() {
@@ -23,7 +26,16 @@ public class LifeManager {
             this.life -= sub;
         } else {
             //gg
+            //layer.gameOver();
         }
+    }
+
+    /**
+     *
+     * @param layer
+     */
+    public void registerGameLayer(GameLayer layer){
+        this.layer = layer;
     }
 
     public void addLife(int add) {

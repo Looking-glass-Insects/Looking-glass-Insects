@@ -41,7 +41,6 @@ public class BombEffect extends BaseItem {
             this.setRotation(720 * lastTime / LAST_TIME);
             lastTime--;
         }
-
     }
 
     public int getZ() {

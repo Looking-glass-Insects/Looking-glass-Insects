@@ -49,13 +49,11 @@ public class MainActivity extends Activity {
                 //client已连接
                 Toast.makeText(MainActivity.this, "已连接", Toast.LENGTH_SHORT).show();
                 GameServer.getInstance().writeObj(SendThread.TAG_GAME_START);
-
                 OnlineLayer.isConnected = true;
                 OnlineLayer.status = OnlineLayer.STATUS_SERVER;
             } else if (msg.what == SendThread.TAG_GAME_START) {
                 //服务器向client发送开始标志
                 Toast.makeText(MainActivity.this, "已连接", Toast.LENGTH_SHORT).show();
-
                 OnlineLayer.isConnected = true;
                 OnlineLayer.status = OnlineLayer.STATUS_CLIENT;
             }

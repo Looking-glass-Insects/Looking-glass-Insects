@@ -16,19 +16,18 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
 
     protected CCSprite freezeEffort = null;
 
+    public float seita = 0;
     public float speedY = 0;
     public float speedX = 0;
+
+    protected boolean selfMoing = true;
 
     public float oldSpeedX = 0;
     public float oldSpeedY = 0;
 
     protected int id;
 
-
     protected int radius = 0;
-
-
-
 
     public BaseItem(String file) {
         super(file);
@@ -47,8 +46,11 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
 
     }
 
+    public void allowSelfMoving(boolean selfMoing) {
+        this.selfMoing = selfMoing;
+    }
 
-    public void replaceSpeed(float speedX,float speedY){
+    public void replaceSpeed(float speedX, float speedY){
         this.oldSpeedY = this.speedY;
         this.oldSpeedX = this.speedX;
         this.speedX = speedX;
@@ -82,12 +84,14 @@ public abstract class BaseItem extends CCSprite implements OnHandleTouchEventLis
         if (freezeLastTime-- <= 0) {
             setFrozen(false);
         }
-        CGPoint point = getPosition();
-        setPosition(point.x + speedX, point.y + speedY);
+        if (selfMoing){
+            CGPoint point = getPosition();
+            setPosition(point.x + speedX, point.y + speedY);
+        }
     }
 
-    public void loadFrozenEffert() {
-        freezeLastTime = 3 * 60;// 3s
+    public void loadFrozenEffect() {
+        freezeLastTime = 1 * 60;// 1s
         setFrozen(true);
     }
 

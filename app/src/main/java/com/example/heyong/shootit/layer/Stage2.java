@@ -1,9 +1,9 @@
 package com.example.heyong.shootit.layer;
 
 import com.example.heyong.shootit.Config;
-import com.example.heyong.shootit.MainActivity;
-import com.example.heyong.shootit.R;
-import com.example.heyong.shootit.orbit.GravityOrbitController;
+import com.example.heyong.shootit.orbit.DiffusedCircleOrbit;
+import com.example.heyong.shootit.orbit.guidao3;
+import com.example.heyong.shootit.orbit.guidao4;
 import com.example.heyong.shootit.sprite.bg.Bg;
 
 import org.cocos2d.layers.CCScene;
@@ -13,7 +13,7 @@ import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.types.ccColor3B;
 
 /**
- *  第二关
+ * 第二关
  */
 
 public class Stage2 extends Stage1 {
@@ -33,19 +33,28 @@ public class Stage2 extends Stage1 {
 
 
     protected void load() {
-        MainActivity.getEngine().playSound(getContext(), R.raw.bgm2, true);
-        MainActivity.getEngine().playSound(getContext(), R.raw.bgm1, true);
+        guidao3 guidao30 = new guidao3(128);
+        this.addOrbits(guidao30);
+        guidao4 guidao40 = new guidao4(128);
+        this.addOrbits(guidao40);
+//        this.addOrbits(controller);
+//        this.addOrbits(controller2);
+        DiffusedCircleOrbit b = new DiffusedCircleOrbit(a1, b1 * 2, 0.0f, -b1 / 360, 0);
+        this.addOrbits(b);
+        for (int i = 0; i < 8; i++) {
+            b.addItem1(a1, b1 * 2, (float) (1.0f * Math.cos(pi / 4 * i)), (float) (1.0f * Math.sin(pi / 4 * i)));
+        }
+        DiffusedCircleOrbit a = new DiffusedCircleOrbit(a1, b1 * 2, 0.0f, -b1 / 120, 0);
+        this.addOrbits(a);
+        for (int i = 0; i < 8; i++) {
+            a.addItem1(a1, b1 * 2, (float) (1.0f * Math.cos(pi / 4 * i)), (float) (1.0f * Math.sin(pi / 4 * i)));
+        }
 
-        GravityOrbitController controller = new GravityOrbitController(Config.WINDOW_WIDTH / 3, 128);
-        GravityOrbitController controller2 = new GravityOrbitController(Config.WINDOW_WIDTH * 2 / 3, 128);
-
-
-        this.addOrbits(controller);
-        this.addOrbits(controller2);
-
-        for (int i = 0; i < 5; i++) {
-            controller.addItem(Config.WINDOW_HEIGHT -i * 64);
-            controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
+        for (int i = 0; i < 30; i++) {
+            guidao30.addItem(a1 + i * 24, (-4 * b1 * (a1 + i * 24 - a1 / 2) * (a1 + i * 24 - a1 / 2)) / (a1 * a1) + 2 * b1);
+            guidao40.addItem(a1 - i * 24, (-4 * b1 * (a1 + i * 24 - (3 * a1) / 2) * (a1 + i * 24 - (3 * a1) / 2)) / (a1 * a1) + 2 * b1);
+//            controller.addItem(Config.WINDOW_HEIGHT + i * 64);
+//            controller2.addItem(Config.WINDOW_HEIGHT + i * 64);
         }
     }
 

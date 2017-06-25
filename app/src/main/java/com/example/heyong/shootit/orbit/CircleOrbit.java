@@ -21,12 +21,23 @@ public class CircleOrbit extends BaseOrbitController {
     private float speed = 5.0f / 20;
     private final int INTERVAL = 10;//角度间隔
     private int flag = 1;
-    private final int LONG_PERIOD = 60 * 30;
+    private  int LONG_PERIOD = 60 * 30;
     private float startX = Config.WINDOW_WIDTH / 2;
     private float startY = Config.WINDOW_HEIGHT / 2;
     private int R = 100;
     private final int DELAY = 360;
 
+    public CircleOrbit() {
+    }
+
+    public CircleOrbit(float startX, float startY) {
+        this.startX = startX;
+        this.startY = startY;
+    }
+
+    public void setLONG_PERIOD(int LONG_PERIOD) {
+        this.LONG_PERIOD = LONG_PERIOD;
+    }
 
     @Override
     public int getZ() {

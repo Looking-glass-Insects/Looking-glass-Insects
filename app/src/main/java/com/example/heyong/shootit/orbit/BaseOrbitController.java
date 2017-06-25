@@ -94,7 +94,7 @@ public abstract class BaseOrbitController implements IOrbitController, OnSpellCa
         Iterator<BaseItem> iterator = items.iterator();
         while (iterator.hasNext()) {
             BaseItem item = iterator.next();
-            item.loadFrozenEffert();
+            item.loadFrozenEffect();
         }
     }
 

@@ -44,7 +44,7 @@ public class RandomOrbit extends BaseOrbitController {
         item.setId(getItemCount());
 
         item.setRotation(random.nextFloat() * 360);
-
+        item.allowSelfMoving(false);
         super.addItem(item);
     }
 
@@ -59,9 +59,8 @@ public class RandomOrbit extends BaseOrbitController {
 
     @Override
     public void onHandleTouchEvent(CGPoint point) {
-        Iterator<BaseItem> iterator = items.iterator();
-        while (iterator.hasNext()) {
-            BaseItem item = iterator.next();
+        for(int i = getItemCount()-1;i>=0;i--){
+            BaseItem item = items.get(i);
             if (item.isTouched(point)) {
                 onlineLayer.addTap();
                 item.onHandleTouchEvent(point);
@@ -92,7 +91,6 @@ public class RandomOrbit extends BaseOrbitController {
         while (iterator.hasNext()) {
             BaseItem item = iterator.next();
             if (!item.getVisible()) {
-                iterator.remove();
                 continue;
             }
             CGPoint point = item.getPosition();
